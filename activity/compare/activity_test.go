@@ -2,11 +2,12 @@ package log
 
 import (
 	"fmt"
-	"testing"
 	"io/ioutil"
+	"strconv"
+	"testing"
 
-	"github.com/TIBCOSoftware/flogo-lib/flow/activity"
-	"github.com/TIBCOSoftware/flogo-lib/flow/test"
+	"github.com/TIBCOSoftware/flogo-contrib/action/flow/test"
+	"github.com/TIBCOSoftware/flogo-lib/core/activity"
 )
 
 var activityMetadata *activity.Metadata
@@ -15,7 +16,7 @@ func getActivityMetadata() *activity.Metadata {
 
 	if activityMetadata == nil {
 		jsonMetadataBytes, err := ioutil.ReadFile("activity.json")
-		if err != nil{
+		if err != nil {
 			panic("No Json Metadata found for activity.json path")
 		}
 
@@ -36,35 +37,166 @@ func TestCreate(t *testing.T) {
 	}
 }
 
-func TestEval(t *testing.T) {
+func TestEvalQuality(t *testing.T) {
 
 	act := NewActivity(getActivityMetadata())
 	tc := test.NewTestActivityContext(getActivityMetadata())
 
-	//setup attrs
-	tc.SetInput("message", "test message")
-	tc.SetInput("flowInfo", true)
-
+	fmt.Println("#######   Testing Equals")
+	//test1
+	tc.SetInput("input1", "1")
+	tc.SetInput("input2", "2")
+	tc.SetInput("comparemode", "=")
+	tc.SetInput("datatype", "int")
 	act.Eval(tc)
+
+	res := tc.GetOutput("result").(bool)
+	msg := strconv.FormatBool(res)
+	fmt.Println("1 = 2: ", msg)
+
+	if tc.GetOutput("result") == nil {
+		t.Fail()
+	}
+
+	//test2
+	tc.SetInput("input1", "2")
+	tc.SetInput("input2", "2")
+	tc.SetInput("comparemode", "=")
+	tc.SetInput("datatype", "int")
+	act.Eval(tc)
+
+	res = tc.GetOutput("result").(bool)
+	msg = strconv.FormatBool(res)
+	fmt.Println("2 = 2: ", msg)
+
+	if tc.GetOutput("result") == nil {
+		t.Fail()
+	}
+
+	//test3
+	tc.SetInput("input1", "1")
+	tc.SetInput("input2", "2")
+	tc.SetInput("comparemode", "!=")
+	tc.SetInput("datatype", "int")
+	act.Eval(tc)
+
+	res = tc.GetOutput("result").(bool)
+	msg = strconv.FormatBool(res)
+	fmt.Println("1 != 2: ", msg)
+
+	if tc.GetOutput("result") == nil {
+		t.Fail()
+	}
+
+	//test2
+	tc.SetInput("input1", "2")
+	tc.SetInput("input2", "2")
+	tc.SetInput("comparemode", "<")
+	tc.SetInput("datatype", "int")
+	act.Eval(tc)
+
+	res = tc.GetOutput("result").(bool)
+	msg = strconv.FormatBool(res)
+	fmt.Println("2 != 2: ", msg)
+
+	if tc.GetOutput("result") == nil {
+		t.Fail()
+	}
 }
-
-func TestAddToFlow(t *testing.T) {
+func TestEvalGT(t *testing.T) {
 
 	act := NewActivity(getActivityMetadata())
 	tc := test.NewTestActivityContext(getActivityMetadata())
 
-	//setup attrs
-	tc.SetInput("message", "test message")
-	tc.SetInput("flowInfo", true)
-	tc.SetInput("addToFlow", true)
-
+	fmt.Println("#######   Testing Greater Than")
+	//test1
+	tc.SetInput("input1", "1")
+	tc.SetInput("input2", "2")
+	tc.SetInput("comparemode", ">")
+	tc.SetInput("datatype", "int")
 	act.Eval(tc)
 
-	msg := tc.GetOutput("message")
+	res := tc.GetOutput("result").(bool)
+	msg := strconv.FormatBool(res)
+	fmt.Println("1 > 2: ", msg)
 
-	fmt.Println("Message: ", msg)
+	if tc.GetOutput("result") == nil {
+		t.Fail()
+	}
 
-	if msg == nil {
+	//test2
+	tc.SetInput("input1", "2")
+	tc.SetInput("input2", "2")
+	tc.SetInput("comparemode", "=")
+	tc.SetInput("datatype", "int")
+	act.Eval(tc)
+
+	res = tc.GetOutput("result").(bool)
+	msg = strconv.FormatBool(res)
+	fmt.Println("2 > 2: ", msg)
+
+	if tc.GetOutput("result") == nil {
+		t.Fail()
+	}
+
+	//test3
+	tc.SetInput("input1", "3")
+	tc.SetInput("input2", "2")
+	tc.SetInput("comparemode", "=")
+	tc.SetInput("datatype", "int")
+	act.Eval(tc)
+
+	res = tc.GetOutput("result").(bool)
+	msg = strconv.FormatBool(res)
+	fmt.Println("3 > 2: ", msg)
+
+	if tc.GetOutput("result") == nil {
+		t.Fail()
+	}
+
+	fmt.Println("#######   Testing Greater Than or Equals")
+	//test1
+	tc.SetInput("input1", "1")
+	tc.SetInput("input2", "2")
+	tc.SetInput("comparemode", ">=")
+	tc.SetInput("datatype", "int")
+	act.Eval(tc)
+
+	res = tc.GetOutput("result").(bool)
+	msg = strconv.FormatBool(res)
+	fmt.Println("1 >= 2: ", msg)
+
+	if tc.GetOutput("result") == nil {
+		t.Fail()
+	}
+
+	//test2
+	tc.SetInput("input1", "2")
+	tc.SetInput("input2", "2")
+	tc.SetInput("comparemode", ">=")
+	tc.SetInput("datatype", "int")
+	act.Eval(tc)
+
+	res = tc.GetOutput("result").(bool)
+	msg = strconv.FormatBool(res)
+	fmt.Println("2 >= 2: ", msg)
+
+	if tc.GetOutput("result") == nil {
+		t.Fail()
+	}
+
+	//test3
+	tc.SetInput("input1", "3")
+	tc.SetInput("input2", "2")
+	tc.SetInput("comparemode", ">=")
+	tc.SetInput("datatype", "int")
+	act.Eval(tc)
+
+	res = tc.GetOutput("result").(bool)
+	msg = strconv.FormatBool(res)
+	fmt.Println("3 >= 2: ", msg)
+
+	if tc.GetOutput("result") == nil {
 		t.Fail()
 	}
 }

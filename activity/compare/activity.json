@@ -1,32 +1,39 @@
 {
-  "name": "tibco-log",
+  "name": "compare",
   "type": "flogo:activity",
-  "ref": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+  "ref": "github.com/ayh20/flogo-components/activity/compare",
   "version": "0.0.1",
-  "title": "Log Message",
-  "description": "Simple Log Activity",
-  "homepage": "https://github.com/TIBCOSoftware/flogo-contrib/tree/master/activity/log",
+  "title": "Compare utility",
+  "description": "Value Compare Tool",
+  "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/compare",
   "inputs":[
     {
-      "name": "message",
+      "name": "input1",
+      "required": true,
+      "type": "string"
+    },
+    {
+      "name": "input2",
+      "required": true,
+      "type": "string"
+    },
+    {
+      "name": "datatype",
       "type": "string",
-      "value": ""
+      "required": true,
+      "allowed" : ["int", "uint", "float"]
     },
     {
-      "name": "flowInfo",
-      "type": "boolean",
-      "value": "false"
-    },
-    {
-      "name": "addToFlow",
-      "type": "boolean",
-      "value": "false"
+      "name": "comparemode",
+      "required": true,
+      "type": "string",
+      "allowed" : [">", "<", "=", ">=", "<=", "!=" ]
     }
   ],
   "outputs": [
     {
-      "name": "message",
-      "type": "string"
+      "name": "result",
+      "type": "boolean"
     }
   ]
 }
