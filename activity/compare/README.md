@@ -46,7 +46,11 @@ Inputs and Outputs:
 | input2      | The second value  |
 | comparemode | Compare operation |
 
-
+```
+## Outputs
+| Output      | Description                             |
+|:------------|:----------------------------------------|
+| result      | Bool result based on input comparison   |
 
 ## Configuration Examples
 ### Simple
