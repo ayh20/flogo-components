@@ -1,11 +1,11 @@
-# tibco-log
-This activity provides your flogo application with rudementary logging.
+# compare
+This activity allows you to compare two values and return a true/false result. Data is passed as a string numeric and operation (i.e. "=", "<=", ">".
 
 
 ## Installation
 
 ```bash
-flogo add activity github.com/TIBCOSoftware/flogo-contrib/activity/log
+flogo add activity github.com/ayh20/flogo-components/activity/compare
 ```
 
 ## Schema
@@ -15,64 +15,41 @@ Inputs and Outputs:
 {
   "inputs":[
     {
-      "name": "message",
+      "name": "input1",
+      "required": true,
+      "type": "string"
+    },
+    {
+      "name": "input2",
+      "required": true,
+      "type": "string"
+    },
+    {
+      "name": "comparemode",
+      "required": true,
       "type": "string",
-      "value": ""
-    },
-    {
-      "name": "flowInfo",
-      "type": "boolean",
-      "value": "false"
-    },
-    {
-      "name": "addToFlow",
-      "type": "boolean",
-      "value": "false"
+      "allowed" : [">", "<", "=", "==", ">=", "<=", "!=" ]
     }
   ],
   "outputs": [
     {
-      "name": "message",
-      "type": "string"
+      "name": "result",
+      "type": "boolean"
     }
   ]
 }
 ```
 ## Settings
-| Setting   | Description    |
-|:----------|:---------------|
-| message   | The message to log |         
-| flowInfo  | Append the flow information to the log message |
-| addToFlow | Add the log message to the 'message' output of the activity |
+| Setting     | Description       |
+|:------------|:------------------|
+| input1      | The first value   |
+| input2      | The second value  |
+| comparemode | Compare operation |
+
 
 
 ## Configuration Examples
 ### Simple
-Configure a task to log a message 'test message':
+Configure a task to compare two values:
 
-```json
-{
-  "id": 3,
-  "type": 1,
-  "activityType": "tibco-log",
-  "name": "Log Message",
-  "attributes": [
-    { "name": "message", "value": "test message" }
-  ]
-}
-```
-### Advanced
-Configure a task to log a 'petId' attribute as a message:
-
-```json
-{
-  "id": 3,
-  "type": 1,
-  "activityType": "tibco-log",
-  "name": "Log PetId",
-  "attributes": [],
-  "inputMappings": [
-    { "type": 1, "value": "petId", "mapTo": "message" }
-  ]
-}
-```
+`

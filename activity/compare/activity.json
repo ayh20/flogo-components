@@ -18,16 +18,10 @@
       "type": "string"
     },
     {
-      "name": "datatype",
-      "type": "string",
-      "required": true,
-      "allowed" : ["int", "uint", "float"]
-    },
-    {
       "name": "comparemode",
       "required": true,
       "type": "string",
-      "allowed" : [">", "<", "=", ">=", "<=", "!=" ]
+      "allowed" : [">", "<", "=", "==", ">=", "<=", "!=" ]
     }
   ],
   "outputs": [
