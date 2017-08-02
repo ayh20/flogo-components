@@ -53,12 +53,12 @@ Inputs and Outputs:
   ]
 }
 ```
-## Settings mode
+## Settings Mode
 | Setting     | Description       |
 |:------------|:------------------|
 | mode        | Verify or Sign    |
 
-```
+
 ## Settings Verify
 | Setting     | Description                                    |
 |:------------|:-----------------------------------------------|
@@ -66,7 +66,7 @@ Inputs and Outputs:
 | secret      | The encryption key (HS*) or public key         |
 | token       | The token to be validated                      |
 
-```
+
 ## Settings Sign
 | Setting     | Description                                    |
 |:------------|:-----------------------------------------------|
@@ -75,7 +75,7 @@ Inputs and Outputs:
 | header      | The json header (used to validate the request) |
 | payload     | The claims string                              |
 
-```
+
 ## Outputs
 | Output      | Description                             |
 |:------------|:----------------------------------------|
@@ -86,4 +86,4 @@ Inputs and Outputs:
 ### Simple
 Configure a task to verify or create a JWT:
 
-`
+
