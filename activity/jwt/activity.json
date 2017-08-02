@@ -27,11 +27,10 @@
       "name": "mode",
       "required": true,
       "type": "string",
-      "allowed" : ["Encrypt", "Verify", "Sign", "Decrypt"]
+      "allowed" : ["Verify", "Sign", "Decrypt"]
     },
     {
       "name": "algorithm",
-      "required": true,
       "type": "string"
     }
   ],
