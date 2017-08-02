@@ -1,0 +1,48 @@
+{
+  "name": "jwt",
+  "type": "flogo:activity",
+  "ref": "github.com/ayh20/flogo-components/activity/jwt",
+  "version": "0.0.1",
+  "title": "Java Web Token Activity",
+  "description": "Tool to 1- create a JWT, 2 - Verify a JWT, 3 - Decrypt a JWT",
+  "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/jwt",
+  "inputs":[
+    {
+      "name": "token",
+      "type": "string"
+    },
+    {
+      "name": "header",
+      "type": "string"
+    },
+    {
+      "name": "payload",
+      "type": "string"
+    },
+    {
+      "name": "secret",
+      "type": "string"
+    },
+    {
+      "name": "mode",
+      "required": true,
+      "type": "string",
+      "allowed" : ["Encrypt", "Verify", "Sign", "Decrypt"]
+    },
+    {
+      "name": "algorithm",
+      "required": true,
+      "type": "string"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "token",
+      "type": "string"
+    },
+     {
+      "name": "valid",
+      "type": "bool"
+    }
+  ]
+}
