@@ -4,8 +4,10 @@ This activity allows you to create or validate a JWT token
 
 ## Installation
 
+Navigate to your Flogo app directory and enter the following command
+
 ```bash
-flogo add activity github.com/ayh20/flogo-components/activity/jwt
+flogo install github.com/ayh20/flogo-components/activity/jwt
 ```
 
 ## Schema
