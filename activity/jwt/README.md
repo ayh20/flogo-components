@@ -73,7 +73,7 @@ Inputs and Outputs:
 | Setting     | Description                                    |
 |:------------|:-----------------------------------------------|
 | algorithm   | The algorithm name ie HS256, ES512, RS256 etc  |
-| secret      | The encryption key (HS*) or public key         |
+| secret      | The encryption key (HS*) or private key (PEM)  |
 | header      | The json header (used to validate the request) |
 | payload     | The claims string                              |
 

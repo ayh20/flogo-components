@@ -64,7 +64,7 @@ func (a *Compare) Eval(context activity.Context) (done bool, err error) {
 
 func compareFloat(num1, num2 float64, compare string) bool {
 
-	activityLog.Info("Compare float64")
+	activityLog.Info("Compare ", num1, compare, num2)
 
 	switch compare {
 	case "=", "==":

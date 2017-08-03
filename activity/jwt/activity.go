@@ -2,7 +2,6 @@ package jwt
 
 import (
 	"encoding/json"
-	"fmt"
 	"strings"
 
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
@@ -50,7 +49,7 @@ func (a *JWT) Metadata() *activity.Metadata {
 // Eval implements api.Activity.Eval - Logs the Message
 func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 
-	activityLog.Info("In Eval")
+	activityLog.Debug("In Eval")
 	// Get the runtime values
 	tokenstring, _ := context.GetInput(ivToken).(string)
 	header, _ := context.GetInput(ivHeader).(string)
@@ -110,22 +109,32 @@ func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 			return sharedEncryptionKey, nil
 		})
 
-		// if the token is invalid the return a false
+		if err != nil {
+			activityLog.Debug("Parse Failed: ", err)
+			context.SetOutput(ovValid, false)
+			return false, err
+		}
+
+		// if the token is invalid then return a false
 		if token.Valid {
 			activityLog.Debug(token.Claims, token.Header)
 		} else {
-			activityLog.Debug("Token invalid: ", err)
+			activityLog.Info("Token invalid: ", err)
 			context.SetOutput(ovValid, false)
+			context.SetOutput(ovToken, "")
+			return false, nil
 		}
 
 		// Take the decoded claims
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-			fmt.Println(claims)
+			activityLog.Debug("Valid Token, claims are: ", claims)
 			context.SetOutput(ovValid, true)
+			return true, nil
 		} else {
-			activityLog.Debug("Token invalid: ", err)
+			activityLog.Info("Token invalid: ", err)
 			context.SetOutput(ovValid, false)
 		}
+		context.SetOutput(ovToken, "")
 		return true, nil
 
 	case "Sign":
@@ -139,14 +148,14 @@ func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 			// take the payload (claims) string and unmarshall it into a byte slice
 			if err := json.Unmarshal([]byte(payload), &claims); err != nil {
 				activityLog.Info("Invalid Payload: ", err)
-				panic(err)
+				return false, err
 			}
 			activityLog.Debug("Unmarshalled JSON payload", claims)
 
 			// Take the header string and unmarshall
 			if err := json.Unmarshal([]byte(header), &hdr); err != nil {
 				activityLog.Info("Invalid Header: ", err)
-				panic(err)
+				return false, err
 			}
 			activityLog.Debug("Unmarshalled JSON header ", hdr)
 
@@ -173,11 +182,13 @@ func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 			if isEs(alg) {
 				key, err = jwt.ParseECPrivateKeyFromPEM(sharedEncryptionKey)
 				if err != nil {
+					activityLog.Info("Bad ECDSA key", err)
 					return false, err
 				}
 			} else if isRs(alg) {
 				key, err = jwt.ParseRSAPrivateKeyFromPEM(sharedEncryptionKey)
 				if err != nil {
+					activityLog.Info("Bad RSA key", err)
 					return false, err
 				}
 			} else {
@@ -189,18 +200,16 @@ func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 
 			// if we don't have an error pass it back
 			if err == nil {
-				activityLog.Debug("Token String created")
-				activityLog.Info(tokenString, err)
-
+				activityLog.Debug("Token String created", tokenString)
 				context.SetOutput(ovToken, tokenString)
+				return true, nil
 			} else {
+				activityLog.Info("Signing error: ", err)
 				return false, err
 			}
 
 		}
 	}
-
-	//context.SetOutput(ovResult, res)
 
 	return true, nil
 }

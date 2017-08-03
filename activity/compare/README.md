@@ -1,5 +1,5 @@
 # compare
-This activity allows you to compare two values and return a true/false result. Data is passed as a string numeric and operation (i.e. "=", "<=", ">".
+This activity allows you to compare two values and return a true/false result. Data is passed as a string numeric and operation ( i.e. "=", "<=", ">",.... ).
 
 
 ## Installation

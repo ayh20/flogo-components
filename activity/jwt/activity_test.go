@@ -55,30 +55,34 @@ func TestDecrypt(t *testing.T) {
 	   	} */
 
 	//test2
+	fmt.Println("===> Test2")
 	tc.SetInput("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ")
 	tc.SetInput("secret", "secret")
 	tc.SetInput("mode", "Verify")
 	tc.SetInput("algorithm", "HS256")
 	act.Eval(tc)
 
-	if tc.GetOutput("result") == nil {
+	if tc.GetOutput("valid") == nil {
+		fmt.Println("******** Test Failed  ********")
 		t.Fail()
 	}
 
-	fmt.Println("#######   Testing JWT Sign")
-
 	//test3
+	fmt.Println("===> Test3")
 	tc.SetInput("header", `{"typ":"JWT","alg":"HS256"}`)
 	tc.SetInput("payload", `{"foo":"bar","nbf":1444478400}`)
 	tc.SetInput("secret", "secret")
 	tc.SetInput("mode", "Sign")
+	tc.SetInput("algorithm", "HS256")
 	act.Eval(tc)
 
 	if tc.GetOutput("token") == nil {
+		fmt.Println("******** Test Failed  ********")
 		t.Fail()
 	}
 
 	//Test 4 - validate returned token
+	fmt.Println("===> Test4")
 	var lasttoken = tc.GetOutput("token").(string)
 	tc.SetInput("token", lasttoken)
 	tc.SetInput("secret", "secret")
@@ -87,9 +91,11 @@ func TestDecrypt(t *testing.T) {
 	act.Eval(tc)
 
 	if tc.GetOutput("valid") == nil {
+		fmt.Println("******** Test Failed  ********")
 		t.Fail()
 	}
 
+	fmt.Println("===> Test5")
 	tc.SetInput("token", lasttoken+"x")
 	tc.SetInput("secret", "secret")
 	tc.SetInput("mode", "Verify")
@@ -97,11 +103,14 @@ func TestDecrypt(t *testing.T) {
 	act.Eval(tc)
 
 	if tc.GetOutput("token") == nil {
+		fmt.Println("******** Test Failed  ********")
 		t.Fail()
 	}
 
-	//test3
+	//test6
+	fmt.Println("===> Test6")
 	tc.SetInput("header", `{"typ":"JWT","alg":"RS256"}`)
+	tc.SetInput("algorithm", "RS256")
 	tc.SetInput("payload", `{"foo":"bar","nbf":1444478400}`)
 	tc.SetInput("secret", `-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEA4f5wg5l2hKsTeNem/V41fGnJm6gOdrj8ym3rFkEU/wT8RDtn
@@ -134,10 +143,12 @@ CKuHRG+AP579dncdUnOMvfXOtkdM4vk0+hWASBQzM9xzVcztCa+koAugjVaLS9A+
 	act.Eval(tc)
 
 	if tc.GetOutput("token") == nil {
+		fmt.Println("******** Test Failed  ********")
 		t.Fail()
 	}
 
-	//Test 4 - validate returned token
+	//Test 7 - validate returned token
+	fmt.Println("===> Test7")
 	lasttoken = tc.GetOutput("token").(string)
 	tc.SetInput("token", lasttoken)
 	//tc.SetInput("secret", "secret")
@@ -155,6 +166,7 @@ ODIRe1AuTyHceAbewn8b462yEWKARdpd9AjQW5SIVPfdsz5B6GlYQ5LdYKtznTuy
 	act.Eval(tc)
 
 	if tc.GetOutput("valid") == nil {
+		fmt.Println("******** Test Failed  ********")
 		t.Fail()
 	}
 }
