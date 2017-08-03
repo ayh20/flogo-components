@@ -4,8 +4,10 @@ This activity allows you to compare two values and return a true/false result. D
 
 ## Installation
 
+Navigate to the Flogo app directory [Essential !] and issue the following command
+
 ```bash
-flogo add activity github.com/ayh20/flogo-components/activity/compare
+flogo install github.com/ayh20/flogo-components/activity/compare
 ```
 
 ## Schema
@@ -39,6 +41,7 @@ Inputs and Outputs:
   ]
 }
 ```
+
 ## Settings
 | Setting     | Description       |
 |:------------|:------------------|
@@ -46,7 +49,6 @@ Inputs and Outputs:
 | input2      | The second value  |
 | comparemode | Compare operation |
 
-```
 ## Outputs
 | Output      | Description                             |
 |:------------|:----------------------------------------|
@@ -55,5 +57,3 @@ Inputs and Outputs:
 ## Configuration Examples
 ### Simple
 Configure a task to compare two values:
-
-`
