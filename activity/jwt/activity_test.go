@@ -65,6 +65,23 @@ func TestDecrypt(t *testing.T) {
 	if tc.GetOutput("valid") == nil {
 		fmt.Println("******** Test Failed  ********")
 		t.Fail()
+	} else {
+		fmt.Println("******** Result: ", tc.GetOutput("valid"), tc.GetOutput("claims"))
+	}
+
+	//test2a
+	fmt.Println("===> Test2A")
+	tc.SetInput("token", "xeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ")
+	tc.SetInput("secret", "secret")
+	tc.SetInput("mode", "Verify")
+	tc.SetInput("algorithm", "HS256")
+	act.Eval(tc)
+
+	if tc.GetOutput("valid") == nil {
+		fmt.Println("******** Test Failed  ********")
+		t.Fail()
+	} else {
+		fmt.Println("******** Result: ", tc.GetOutput("valid"), tc.GetOutput("claims"))
 	}
 
 	//test3
@@ -79,6 +96,8 @@ func TestDecrypt(t *testing.T) {
 	if tc.GetOutput("token") == nil {
 		fmt.Println("******** Test Failed  ********")
 		t.Fail()
+	} else {
+		fmt.Println("******** Result: ", tc.GetOutput("token"))
 	}
 
 	//Test 4 - validate returned token
@@ -93,6 +112,8 @@ func TestDecrypt(t *testing.T) {
 	if tc.GetOutput("valid") == nil {
 		fmt.Println("******** Test Failed  ********")
 		t.Fail()
+	} else {
+		fmt.Println("******** Result: ", tc.GetOutput("valid"), tc.GetOutput("claims"))
 	}
 
 	fmt.Println("===> Test5")
@@ -168,5 +189,7 @@ ODIRe1AuTyHceAbewn8b462yEWKARdpd9AjQW5SIVPfdsz5B6GlYQ5LdYKtznTuy
 	if tc.GetOutput("valid") == nil {
 		fmt.Println("******** Test Failed  ********")
 		t.Fail()
+	} else {
+		fmt.Println("******** Result: ", tc.GetOutput("valid"), tc.GetOutput("claims"))
 	}
 }

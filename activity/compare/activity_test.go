@@ -47,12 +47,11 @@ func TestEvalQuality(t *testing.T) {
 	tc.SetInput("input1", "1")
 	tc.SetInput("input2", "2")
 	tc.SetInput("comparemode", "=")
-	tc.SetInput("datatype", "int")
 	act.Eval(tc)
 
 	res := tc.GetOutput("result").(bool)
-	msg := strconv.FormatBool(res)
-	fmt.Println("1 = 2: ", msg)
+	negres := tc.GetOutput("negativeresult").(bool)
+	fmt.Println("1 = 2: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -66,8 +65,8 @@ func TestEvalQuality(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("2 = 2: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("2 = 2: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -81,8 +80,8 @@ func TestEvalQuality(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("1 != 2: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("1 != 2: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -96,8 +95,8 @@ func TestEvalQuality(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("2 != 2: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("2 != 2: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -116,8 +115,8 @@ func TestEvalGT(t *testing.T) {
 	act.Eval(tc)
 
 	res := tc.GetOutput("result").(bool)
-	msg := strconv.FormatBool(res)
-	fmt.Println("1 > 2: ", msg)
+	negres := tc.GetOutput("negativeresult").(bool)
+	fmt.Println("1 > 2: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -130,8 +129,8 @@ func TestEvalGT(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("2 > 2: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("2 > 2: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -144,8 +143,8 @@ func TestEvalGT(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("3 > 2: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("3 > 2: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -159,8 +158,8 @@ func TestEvalGT(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("1 >= 2: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("1 >= 2: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -173,8 +172,8 @@ func TestEvalGT(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("2 >= 2: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("2 >= 2: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -187,8 +186,8 @@ func TestEvalGT(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("3 >= 2: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("3 >= 2: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -207,8 +206,8 @@ func TestEvalLT(t *testing.T) {
 	act.Eval(tc)
 
 	res := tc.GetOutput("result").(bool)
-	msg := strconv.FormatBool(res)
-	fmt.Println("1 < 2: ", msg)
+	negres := tc.GetOutput("negativeresult").(bool)
+	fmt.Println("1 < 2: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -221,8 +220,8 @@ func TestEvalLT(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("2 < 2: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("2 < 2: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -235,8 +234,8 @@ func TestEvalLT(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("3 < 2: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("3 < 2: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -250,8 +249,8 @@ func TestEvalLT(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("1 <= 2: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("1 <= 2: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -264,8 +263,8 @@ func TestEvalLT(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("2 <= 2: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("2 <= 2: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -278,8 +277,8 @@ func TestEvalLT(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("3 <= 2: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("3 <= 2: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -298,8 +297,8 @@ func TestEvalLTDecimal(t *testing.T) {
 	act.Eval(tc)
 
 	res := tc.GetOutput("result").(bool)
-	msg := strconv.FormatBool(res)
-	fmt.Println("1.234 < 2.345: ", msg)
+	negres := tc.GetOutput("negativeresult").(bool)
+	fmt.Println("1.234 < 2.345: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -312,8 +311,8 @@ func TestEvalLTDecimal(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("2.345 < 2.345: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("2.345 < 2.345: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -326,8 +325,8 @@ func TestEvalLTDecimal(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("3.456 < 2.345: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("3.456 < 2.345: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -341,8 +340,8 @@ func TestEvalLTDecimal(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("1.234 <= 2.345: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("1.234 <= 2.345: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -355,8 +354,8 @@ func TestEvalLTDecimal(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("2.345 <= 2.345: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("2.345 <= 2.345: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()
@@ -369,8 +368,8 @@ func TestEvalLTDecimal(t *testing.T) {
 	act.Eval(tc)
 
 	res = tc.GetOutput("result").(bool)
-	msg = strconv.FormatBool(res)
-	fmt.Println("3.456 <= 2.345: ", msg)
+	negres = tc.GetOutput("negativeresult").(bool)
+	fmt.Println("3.456 <= 2.345: ", strconv.FormatBool(res), " ", strconv.FormatBool(negres))
 
 	if tc.GetOutput("result") == nil {
 		t.Fail()

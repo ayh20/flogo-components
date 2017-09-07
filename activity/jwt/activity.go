@@ -20,8 +20,9 @@ const (
 	ivMode    = "mode"
 	ivAlgo    = "algorithm"
 
-	ovToken = "token"
-	ovValid = "valid"
+	ovToken  = "token"
+	ovValid  = "valid"
+	ovClaims = "claims"
 )
 
 func init() {
@@ -64,7 +65,7 @@ func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 	// Determine code path based on mode
 	switch mode {
 	case "Decrypt":
-		//  Do we need a decrypt and what does it logicall mean anyway !
+		//  Do we need a decrypt and what does it logicaly mean anyway !
 
 		/* 		key := []byte(secret)
 		   		tok, err := jwt.ParseEncrypted(token)
@@ -90,7 +91,12 @@ func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 
 	case "Verify":
 
-		activityLog.Debug("In Verify")
+		activityLog.Info("In Verify")
+
+		// Set default responses
+		context.SetOutput(ovValid, false)
+		context.SetOutput(ovClaims, "")
+		context.SetOutput(ovToken, "")
 
 		// Parse takes the token string and a function for looking up the key. The latter is especially
 		// useful if you use multiple keys for your application.  The standard is to use 'kid' in the
@@ -109,32 +115,35 @@ func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 			return sharedEncryptionKey, nil
 		})
 
+		activityLog.Info("Created Token")
+
 		if err != nil {
-			activityLog.Debug("Parse Failed: ", err)
-			context.SetOutput(ovValid, false)
-			return false, err
+			activityLog.Info("Parse Failed - Token Error: ", err)
+			return true, nil
 		}
 
+		activityLog.Info("Check for Valid Token")
 		// if the token is invalid then return a false
 		if token.Valid {
-			activityLog.Debug(token.Claims, token.Header)
+			activityLog.Info(token.Claims, token.Header)
 		} else {
 			activityLog.Info("Token invalid: ", err)
-			context.SetOutput(ovValid, false)
-			context.SetOutput(ovToken, "")
-			return false, nil
+			return true, nil
 		}
 
+		activityLog.Info("Decode Claims")
 		// Take the decoded claims
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-			activityLog.Debug("Valid Token, claims are: ", claims)
+			claimsJSON, _ := json.Marshal(claims)
+			context.SetOutput(ovClaims, string(claimsJSON))
+			activityLog.Info("Valid Token, claims are: ", string(claimsJSON))
 			context.SetOutput(ovValid, true)
 			return true, nil
 		} else {
-			activityLog.Info("Token invalid: ", err)
-			context.SetOutput(ovValid, false)
+			activityLog.Info("Claims invalid: ", err)
+			return true, nil
 		}
-		context.SetOutput(ovToken, "")
+
 		return true, nil
 
 	case "Sign":

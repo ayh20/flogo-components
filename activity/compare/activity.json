@@ -2,7 +2,7 @@
   "name": "compare",
   "type": "flogo:activity",
   "ref": "github.com/ayh20/flogo-components/activity/compare",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "title": "Compare utility",
   "description": "Value Compare Tool",
   "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/compare",
@@ -27,6 +27,10 @@
   "outputs": [
     {
       "name": "result",
+      "type": "boolean"
+    },
+    {
+      "name": "negativeresult",
       "type": "boolean"
     }
   ]

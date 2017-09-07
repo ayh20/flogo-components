@@ -16,7 +16,8 @@ const (
 	ivInput2      = "input2"
 	ivCompareMode = "comparemode"
 
-	ovResult = "result"
+	ovResult    = "result"
+	ovNegResult = "negativeresult"
 )
 
 func init() {
@@ -55,16 +56,17 @@ func (a *Compare) Eval(context activity.Context) (done bool, err error) {
 	int2, _ := strconv.ParseFloat(input2, 64)
 	res = compareFloat(int1, int2, comparemode)
 
-	activityLog.Info(strings.Join([]string{"Returning result", strconv.FormatBool(res)}, " "))
+	activityLog.Debug(strings.Join([]string{"Returning result", strconv.FormatBool(res)}, " "))
 
 	context.SetOutput(ovResult, res)
+	context.SetOutput(ovNegResult, !res)
 
 	return true, nil
 }
 
 func compareFloat(num1, num2 float64, compare string) bool {
 
-	activityLog.Info("Compare ", num1, compare, num2)
+	activityLog.Debug("Compare ", num1, compare, num2)
 
 	switch compare {
 	case "=", "==":
