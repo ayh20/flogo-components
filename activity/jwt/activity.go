@@ -2,6 +2,7 @@ package jwt
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
 
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
@@ -118,6 +119,7 @@ func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 		activityLog.Info("Created Token")
 
 		if err != nil {
+			context.SetOutput(ovClaims, fmt.Errorf("Token Error: %v", err))
 			activityLog.Info("Parse Failed - Token Error: ", err)
 			return true, nil
 		}
@@ -127,6 +129,7 @@ func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 		if token.Valid {
 			activityLog.Info(token.Claims, token.Header)
 		} else {
+			context.SetOutput(ovClaims, fmt.Errorf("Token Invalid: %v", err))
 			activityLog.Info("Token invalid: ", err)
 			return true, nil
 		}
