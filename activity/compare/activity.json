@@ -1,5 +1,6 @@
 {
   "name": "compare",
+  "author": "Andy Hampshire",
   "type": "flogo:activity",
   "ref": "github.com/ayh20/flogo-components/activity/compare",
   "version": "0.0.2",
@@ -21,6 +22,11 @@
       "name": "comparemode",
       "required": true,
       "type": "string",
+      "display": 
+      {
+          "type":"dropdown",
+          "selection":"single"
+      },
       "allowed" : [">", "<", "=", "==", ">=", "<=", "!=" ]
     }
   ],

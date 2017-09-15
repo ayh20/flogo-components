@@ -1,0 +1,56 @@
+{
+    "name": "datemath",
+    "author": "Andy Hampshire",
+    "type": "flogo:activity",
+    "ref": "github.com/ayh20/flogo-components/activity/datemath",
+    "version": "0.0.1",
+    "title": "Date math functions",
+    "description": "Add and subtract days, times etc from a date and time",
+    "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/datemath",
+    "display": {
+              "description": "Date Mathmatics Utility",
+              "category": "Utility",
+              "uid": "ayh20-datemath",
+              "visible": true
+           },
+    "inputs":[
+      {
+        "name": "date",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "name": "amount",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "name": "unit",
+        "required": true,
+        "type": "string",
+        "display": 
+        {
+            "type":"dropdown",
+            "selection":"single"
+        },
+        "allowed" : ["Day", "Hour", "Min", "Sec"]
+      },
+      {
+        "name": "function",
+        "required": true,
+        "type": "string",
+        "display": 
+        {
+            "type":"dropdown",
+            "selection":"single"
+        },
+        "allowed" : ["Add", "Subtract"]
+      }
+    ],
+    "outputs": [
+      {
+        "name": "result",
+        "type": "string"
+      }
+    ]
+  }

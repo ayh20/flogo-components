@@ -1,8 +1,9 @@
 {
   "name": "jwt",
+  "author": "Andy Hampshire",
   "type": "flogo:activity",
   "ref": "github.com/ayh20/flogo-components/activity/jwt",
-  "version": "0.0.4",
+  "version": "0.0.8",
   "title": "Java Web Token Activity",
   "description": "Tool to Create (sign) a JWT, and Verify a JWT",
   "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/jwt",

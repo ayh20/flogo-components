@@ -92,7 +92,7 @@ func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 
 	case "Verify":
 
-		activityLog.Info("In Verify")
+		activityLog.Info("In Verify - V0.0.8")
 
 		// Set default responses
 		context.SetOutput(ovValid, false)
@@ -147,7 +147,7 @@ func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 			return true, nil
 		}
 
-		return true, nil
+		//return true, nil
 
 	case "Sign":
 		{
