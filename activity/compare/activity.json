@@ -7,6 +7,12 @@
   "title": "Compare utility",
   "description": "Value Compare Tool",
   "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/compare",
+  "display": {
+    "description": "Compare Utility",
+    "category": "Utility",
+    "uid": "ayh20-compare",
+    "visible": true
+ },
   "inputs":[
     {
       "name": "input1",

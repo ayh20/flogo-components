@@ -1,0 +1,39 @@
+{
+    "name": "blackwhitelist",
+    "author": "Andy Hampshire",
+    "type": "flogo:activity",
+    "ref": "github.com/ayh20/flogo-components/activity/blackwhitelist",
+    "version": "0.0.1",
+    "title": "Date math functions",
+    "description": "Checks IP against Blacl/white lists",
+    "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/blackwhitelist",
+    "display": {
+              "description": "Check IP against Black/White list Utility",
+              "category": "Utility",
+              "uid": "ayh20-blackwhitelist",
+              "visible": true
+           },
+    "inputs":[
+      {
+        "name": "whitelist",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "name": "blacklist",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "name": "ipaddress",
+        "required": true,
+        "type": "string"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "isOK",
+        "type": "boolean"
+      }
+    ]
+  }
