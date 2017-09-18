@@ -16,8 +16,7 @@ const (
 	ivInput2      = "input2"
 	ivCompareMode = "comparemode"
 
-	ovResult    = "result"
-	ovNegResult = "negativeresult"
+	ovResult = "result"
 )
 
 func init() {
@@ -59,7 +58,6 @@ func (a *Compare) Eval(context activity.Context) (done bool, err error) {
 	activityLog.Debug(strings.Join([]string{"Returning result", strconv.FormatBool(res)}, " "))
 
 	context.SetOutput(ovResult, res)
-	context.SetOutput(ovNegResult, !res)
 
 	return true, nil
 }

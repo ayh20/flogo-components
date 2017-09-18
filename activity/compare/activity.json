@@ -40,10 +40,6 @@
     {
       "name": "result",
       "type": "boolean"
-    },
-    {
-      "name": "negativeresult",
-      "type": "boolean"
     }
   ]
 }
