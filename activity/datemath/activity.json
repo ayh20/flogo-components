@@ -4,7 +4,7 @@
     "type": "flogo:activity",
     "ref": "github.com/ayh20/flogo-components/activity/datemath",
     "version": "0.0.1",
-    "title": "Date math functions",
+    "title": "Date Math Functions",
     "description": "Add and subtract days, times etc from a date and time",
     "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/datemath",
     "display": {

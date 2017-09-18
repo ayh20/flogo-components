@@ -4,7 +4,7 @@
     "type": "flogo:activity",
     "ref": "github.com/ayh20/flogo-components/activity/blackwhitelist",
     "version": "0.0.1",
-    "title": "Date math functions",
+    "title": "BlackWhite List IP Checker",
     "description": "Checks IP against Blacl/white lists",
     "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/blackwhitelist",
     "display": {
