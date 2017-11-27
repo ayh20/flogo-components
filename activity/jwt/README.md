@@ -1,6 +1,7 @@
-# compare
+# JWT Utilities
 This activity allows you to create or validate a JWT token
 
+See the activity_test.go for examples of the required parameters
 
 ## Installation
 

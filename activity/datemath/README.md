@@ -1,4 +1,4 @@
-# compare
+# Date Math Utility
 This activity gives you the ability to input a datetime string and add or subtract a number of days,Hours,Minutes or seconds to that date
 
 
