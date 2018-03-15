@@ -60,10 +60,10 @@ Outputs and Endpoint:
 
 ## Example Configuration
 
-Triggers are configured via the triggers.json of your application. The following is and example configuration of the GPIO Trigger.
+Triggers are configured via the triggers.json of your application. The following is and example configuration of the UDP Trigger.
 
-### Only once and immediate
-Configure the Trigger to run a flow when pin 7 becomes high, check every 0.5 seconds
+### Read UDP Data 
+Configure the Trigger to capture all data on a given port 
 ```json
 {
   "name": "udp",

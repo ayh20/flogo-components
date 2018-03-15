@@ -25,6 +25,23 @@ func getJsonMetadata() string {
 const testConfig1 string = `{
   "name": "udp",
   "settings": {
+		"port": 22600,
+		"multicast_group": "224.192.32.19"
+  },
+  "handlers": [
+    {
+      "actionId": "local://testFlow2",
+      "settings": {
+        "handler_setting": "xxx"
+      }
+    }
+  ]
+}`
+
+// Listen for F1-2017 data
+const testConfig2 string = `{
+  "name": "udp",
+  "settings": {
 		"port": 20777,
 		"multicast_group": ""
   },
@@ -37,6 +54,7 @@ const testConfig1 string = `{
     }
   ]
 }`
+
 //192.168.1.19
 type TestRunner struct {
 }
@@ -62,7 +80,13 @@ func (tr *TestRunner) Execute(ctx context.Context, act action.Action, inputs map
 func TestTimer(t *testing.T) {
 	log.Info("Testing UDP")
 	config := trigger.Config{}
+
+	//  Owl PV monitor test
 	json.Unmarshal([]byte(testConfig1), &config)
+
+	// F1-2017 Telemtery
+	//json.Unmarshal([]byte(testConfig2), &config)
+
 	f := &udpTriggerFactory{}
 	f.metadata = trigger.NewMetadata(jsonMetadata)
 	tgr := f.New(&config)
