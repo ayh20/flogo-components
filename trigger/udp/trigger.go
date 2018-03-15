@@ -32,7 +32,7 @@ type udpTrigger struct {
 	metadata *trigger.Metadata
 	runner   action.Runner
 	config   *trigger.Config
-	handlers []*trigger.Handler
+	//handlers []*trigger.Handler
 }
 
 // Init implements trigger.Trigger.Init
