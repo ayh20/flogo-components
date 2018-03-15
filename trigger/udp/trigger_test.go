@@ -2,57 +2,75 @@ package udp
 
 import (
 	"context"
-	"io/ioutil"
 	"encoding/json"
+	"io/ioutil"
 	"testing"
 
 	"github.com/TIBCOSoftware/flogo-lib/core/action"
+	"github.com/TIBCOSoftware/flogo-lib/core/data"
 	"github.com/TIBCOSoftware/flogo-lib/core/trigger"
 )
 
-func getJsonMetadata() string{
+var jsonMetadata = getJsonMetadata()
+
+func getJsonMetadata() string {
 	jsonMetadataBytes, err := ioutil.ReadFile("trigger.json")
-	if err != nil{
+	if err != nil {
 		panic("No Json Metadata found for trigger.json path")
 	}
 	return string(jsonMetadataBytes)
 }
 
-type TestRunner struct {
-}
-
-// Run implements action.Runner.Run
-func (tr *TestRunner) Run(context context.Context, action action.Action, uri string, options interface{}) (code int, data interface{}, err error) {
-	return 0, nil, nil
-}
-
-const testConfig string = `{
-  "id": "mytrigger",
+// Run Once, Start Immediately
+const testConfig1 string = `{
+  "name": "udp",
   "settings": {
-    "setting": "somevalue"
+		"port": 20777,
+		"multicast_group": ""
   },
   "handlers": [
     {
-      "actionId": "test_action",
+      "actionId": "local://testFlow2",
       "settings": {
-        "handler_setting": "somevalue"
+        "handler_setting": "xxx"
       }
     }
   ]
 }`
+//192.168.1.19
+type TestRunner struct {
+}
 
-func TestInit(t *testing.T) {
+var Test action.Runner
 
-	// New factory
-	md := trigger.NewMetadata(getJsonMetadata())
-	f := NewFactory(md)
+// Run implements action.Runner.Run
+func (tr *TestRunner) Run(context context.Context, action action.Action, uri string, options interface{}) (code int, data interface{}, err error) {
+	log.Infof("Ran Action (Run): %v", uri)
+	return 0, nil, nil
+}
 
-	// New Trigger
+func (tr *TestRunner) RunAction(ctx context.Context, act action.Action, options map[string]interface{}) (results map[string]*data.Attribute, err error) {
+	log.Infof("Ran Action (RunAction): %v", act)
+	return nil, nil
+}
+
+func (tr *TestRunner) Execute(ctx context.Context, act action.Action, inputs map[string]*data.Attribute) (results map[string]*data.Attribute, err error) {
+	log.Infof("Ran Action (Execute): %v", act)
+	return nil, nil
+}
+
+func TestTimer(t *testing.T) {
+	log.Info("Testing UDP")
 	config := trigger.Config{}
-	json.Unmarshal([]byte(testConfig), config)
+	json.Unmarshal([]byte(testConfig1), &config)
+	f := &udpTriggerFactory{}
+	f.metadata = trigger.NewMetadata(jsonMetadata)
 	tgr := f.New(&config)
-
 	runner := &TestRunner{}
-
 	tgr.Init(runner)
+	tgr.Start()
+	defer tgr.Stop()
+	log.Infof("Press CTRL-C to quit")
+	for {
+	}
 }

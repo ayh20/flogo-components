@@ -2,18 +2,21 @@
   "name": "udp",
   "version": "0.0.1",
   "type": "flogo:trigger",
-  "description": "trigger description",
-  "author": "Your Name <you.name@example.org>",
+  "description": "UDP message handler",
+  "author": "Andy hampshire <ahampshire@tibco.com>",
   "settings":[
     {
-      "name": "setting",
-      "type": "string",
-      "value": "default"
+      "name": "port",
+      "type": "integer"
+    },
+    {
+      "name": "multicast_group",
+      "type": "string"
     }
   ],
   "outputs": [
     {
-      "name": "output",
+      "name": "payload",
       "type": "string"
     }
   ],
