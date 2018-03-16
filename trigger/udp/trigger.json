@@ -21,6 +21,10 @@
     {
       "name": "payload",
       "type": "string"
+    },
+    {
+      "name": "buffer",
+      "type": "any"
     }
   ],
   "handler": {

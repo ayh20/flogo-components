@@ -30,7 +30,7 @@ const testConfig1 string = `{
   },
   "handlers": [
     {
-      "actionId": "local://testFlow2",
+      "actionId": "nextaction",
       "settings": {
         "handler_setting": "xxx"
       }
@@ -47,7 +47,7 @@ const testConfig2 string = `{
   },
   "handlers": [
     {
-      "actionId": "local://testFlow2",
+      "actionId": "NextAction",
       "settings": {
         "handler_setting": "xxx"
       }
@@ -82,10 +82,10 @@ func TestTimer(t *testing.T) {
 	config := trigger.Config{}
 
 	//  Owl PV monitor test
-	json.Unmarshal([]byte(testConfig1), &config)
+	//json.Unmarshal([]byte(testConfig1), &config)
 
 	// F1-2017 Telemtery
-	//json.Unmarshal([]byte(testConfig2), &config)
+	json.Unmarshal([]byte(testConfig2), &config)
 
 	f := &udpTriggerFactory{}
 	f.metadata = trigger.NewMetadata(jsonMetadata)

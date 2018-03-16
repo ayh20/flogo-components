@@ -81,3 +81,21 @@ Configure the Trigger to capture all data on a given port
   ]
 }}
 ```
+Configure the Trigger to capture data for a multicast group/port
+```json
+{
+  "name": "udp",
+  "settings": {
+		"port": 22600,
+		"multicast_group": "224.192.32.19"
+  },
+  "handlers": [
+    {
+      "actionId": "local://testFlow2",
+      "settings": {
+        "handler_setting": "xxx"
+      }
+    }
+  ]
+}}
+```

@@ -66,6 +66,7 @@ func (t *udpTrigger) Start() error {
 	if err != nil {
 		// Handle error
 		log.Errorf("Error resolving address %v", err)
+		return nil;
 	}
 
 	log.Debug("Resolved Addr O/P %v", addr)
@@ -79,36 +80,38 @@ func (t *udpTrigger) Start() error {
 		l, err = net.ListenMulticastUDP("udp", nil, addr)
 	}
 	if err != nil {
-		log.Errorf("ListenUDP failed: %v", err)
-	}
+		log.Errorf("UDP Listen failed: %v", err)
+	} else {
 
-	// common
-	log.Debug("SetRead")
-	l.SetReadBuffer(maxDatagramSize)
+		// common
+		log.Debug("SetRead")
+		l.SetReadBuffer(maxDatagramSize)
 
-	for {
-		buf := make([]byte, maxDatagramSize)
+		for {
+			buf := make([]byte, maxDatagramSize)
 
-		log.Debug("BeforeREAD")
-		n, addr, err := l.ReadFromUDP(buf)
+			log.Debug("BeforeREAD")
+			n, addr, err := l.ReadFromUDP(buf)
 
-		// Read ok ?
-		if err != nil {
-			log.Errorf("ReadFromUDP failed: %v", err)
+			// Read ok ?
+			if err != nil {
+				log.Errorf("ReadFromUDP failed: %v", err)
+			}
+
+			log.Debug("afterRead ")
+			payload := string(buf[0:n])
+			payloadB := buf[0:n]
+
+			log.Infof("Received %v from %v", payload, addr)
+
+			handlers := t.config.Handlers
+
+			log.Debug("Processing handlers")
+			for _, handler := range handlers {
+				t.RunAction(handler, payload, payloadB)
+			}
+
 		}
-
-		log.Debug("afterRead ")
-		payload := string(buf[0:n])
-
-		log.Infof("Received %v from %v", payload, addr)
-
-		handlers := t.config.Handlers
-
-		log.Debug("Processing handlers")
-		for _, handler := range handlers {
-			t.RunAction(handler, payload)
-		}
-
 	}
 	return nil
 }
@@ -119,11 +122,11 @@ func (t *udpTrigger) Stop() error {
 	return nil
 }
 
-func (t *udpTrigger) RunAction(handlerCfg *trigger.HandlerConfig, payload string) {
+func (t *udpTrigger) RunAction(handlerCfg *trigger.HandlerConfig, payload string, payloadB []byte) {
 
 	log.Debug("Starting Payload data action")
 
-	req := t.constructStartRequest(handlerCfg, payload)
+	req := t.constructStartRequest(handlerCfg, payload, payloadB)
 	startAttrs, _ := t.metadata.OutputsToAttrs(req.Data, false)
 	action := action.Get(handlerCfg.ActionId)
 	context := trigger.NewContext(context.Background(), startAttrs)
@@ -137,7 +140,7 @@ func (t *udpTrigger) RunAction(handlerCfg *trigger.HandlerConfig, payload string
 	}
 }
 
-func (t *udpTrigger) constructStartRequest(handlerCfg *trigger.HandlerConfig, payload string) *StartRequest {
+func (t *udpTrigger) constructStartRequest(handlerCfg *trigger.HandlerConfig, payload string, payloadB []byte) *StartRequest {
 
 	log.Debug("Received contstructStartRequest")
 
@@ -145,6 +148,7 @@ func (t *udpTrigger) constructStartRequest(handlerCfg *trigger.HandlerConfig, pa
 
 	data := make(map[string]interface{})
 	data["payload"] = payload
+	data["buffer"] = payloadB
 	req.Data = data
 
 	return req
