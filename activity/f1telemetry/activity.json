@@ -1,0 +1,29 @@
+{
+  "name": "f1telemetry",
+  "author": "Andy Hampshire",
+  "type": "flogo:activity",
+  "ref": "github.com/ayh20/flogo-components/activity/f1telemetry",
+  "version": "0.0.2",
+  "title": "F1 Telemetry decoder",
+  "description": "Value Compare Tool",
+  "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/f1telemetry",
+  "display": {
+    "description": "F1 telemetry decoder",
+    "category": "Utility",
+    "uid": "ayh20-f1telemetry",
+    "visible": true
+ },
+  "inputs":[
+    {
+      "name": "buffer",
+      "required": true,
+      "type": "any"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "data",
+      "type": "string"
+    }
+  ]
+}
