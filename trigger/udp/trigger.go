@@ -102,7 +102,7 @@ func (t *udpTrigger) Start() error {
 			payload := string(buf[0:n])
 			payloadB := buf[0:n]
 
-			log.Infof("Received %v from %v", payload, addr)
+			log.Debugf("Received %v from %v", payload, addr)
 
 			handlers := t.config.Handlers
 
