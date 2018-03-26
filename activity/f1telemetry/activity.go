@@ -1,9 +1,9 @@
 package f1telemetry
 
 import (
+	"bytes"
 	"fmt"
 	"reflect"
-	"bytes"
 	"strings"
 
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
@@ -13,7 +13,7 @@ import (
 )
 
 // activityLog is the default logger for the Log Activity
-var activityLog = logger.GetLogger("activity-f1telemetry")
+var log = logger.GetLogger("activity-f1telemetry")
 
 const (
 	ivInput = "buffer"
@@ -21,6 +21,7 @@ const (
 	ovOutput = "data"
 )
 
+// F1Data - Struct for the unpacking of the UDP data format
 type F1Data struct {
 	Time                 float32 `struc:"float32,little"` //F
 	LapTime              float32 `struc:"float32,little"` //F
@@ -129,7 +130,7 @@ type F1Data struct {
 }
 
 func init() {
-	activityLog.SetLogLevel(logger.InfoLevel)
+	log.SetLogLevel(logger.InfoLevel)
 }
 
 // f1telemetry is an Activity that takes in data from a byte stream and interprets it as data from F1 2017
@@ -173,7 +174,7 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 	//log.Debugf("struct : \n %+v \n", unpackedData)
 
 	// Write the CSV rows.
-	fields := unpackedData.ValueStrings()
+	fields := unpackedData.valueStrings()
 	fieldsstring := strings.Join(fields, ",")
 
 	log.Debugf("CSV data : %v \n", fieldsstring)
@@ -181,7 +182,7 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 
 	return true, nil
 }
-func (f F1Data) ValueStrings() []string {
+func (f F1Data) valueStrings() []string {
 	v := reflect.ValueOf(f)
 	ss := make([]string, v.NumField())
 	for i := range ss {
