@@ -146,6 +146,7 @@ func (t *udpTrigger) constructStartRequest(handlerCfg *trigger.HandlerConfig, pa
 
 	req := &StartRequest{}
 
+	// return bytes payload and string payload for the user to choose from
 	data := make(map[string]interface{})
 	data["payload"] = payload
 	data["buffer"] = payloadB
