@@ -17,7 +17,7 @@ flogo install github.com/ayh20/flogo-components/activity/f1telemetry
 ```
 
 ## Schema
-Inputs and Outputs:
+Inputs and Outputs: 
 
 ```json
 {
