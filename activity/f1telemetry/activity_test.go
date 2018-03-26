@@ -76,34 +76,73 @@ type F1SourceData struct {
 	AiC float32 `struc:"float32,little"`
 	AjD float32 `struc:"float32,little"`
 	AkD float32 `struc:"float32,little"`
-	AlD int `struc:"byte"`
-	AmD int `struc:"byte"`
-	AnD int `struc:"byte"`
-	AoA int `struc:"byte"`
-	ApB int `struc:"byte"`
-	AqC int `struc:"byte"`
-	ArD int `struc:"byte"`
-	AsD int `struc:"byte"`
-	AtD int `struc:"byte"`
-	AuD int `struc:"byte"`
-	AvD int `struc:"byte"`
-	AwA int `struc:"byte"`
-	AxB int `struc:"byte"`
-	AyC int `struc:"byte"`
-	AzD int `struc:"byte"`
-	BaD int `struc:"byte"`
-	BbD int `struc:"byte"`
-	BcD int `struc:"byte"`
-	BdD int `struc:"byte"`
-	BeA int `struc:"byte"`
-	BfB int `struc:"byte"`
-	BgC int `struc:"byte"`
-	BhD int `struc:"byte"`
-	BiD int `struc:"byte"`
-	BjD int `struc:"byte"`
-	BkD int `struc:"byte"`
-	BlD int `struc:"byte"`
-	BmD int `struc:"byte"`
+	BA  float32 `struc:"float32,little"`
+	BB  float32 `struc:"float32,little"`
+	BC  float32 `struc:"float32,little"`
+	BD  float32 `struc:"float32,little"`
+	BE  float32 `struc:"float32,little"`
+	BF  float32 `struc:"float32,little"`
+	BG  float32 `struc:"float32,little"`
+	BH  float32 `struc:"float32,little"`
+	BI  float32 `struc:"float32,little"`
+	BJ  float32 `struc:"float32,little"`
+	BK  float32 `struc:"float32,little"`
+	BL  float32 `struc:"float32,little"`
+	BM  float32 `struc:"float32,little"`
+	BN  float32 `struc:"float32,little"`
+	BO  float32 `struc:"float32,little"`
+	BP  float32 `struc:"float32,little"`
+	BQ  float32 `struc:"float32,little"`
+	BR  float32 `struc:"float32,little"`
+	BS  float32 `struc:"float32,little"`
+	BT  float32 `struc:"float32,little"`
+	BU  float32 `struc:"float32,little"`
+	BV  float32 `struc:"float32,little"`
+	BW  float32 `struc:"float32,little"`
+	BX  float32 `struc:"float32,little"`
+	BY  float32 `struc:"float32,little"`
+	BZ  float32 `struc:"float32,little"`
+	CA  float32 `struc:"float32,little"`
+	CB  float32 `struc:"float32,little"`
+	CC  float32 `struc:"float32,little"`
+	CD  float32 `struc:"float32,little"`
+	CE  float32 `struc:"float32,little"`
+	CF  float32 `struc:"float32,little"`
+	CG  float32 `struc:"float32,little"`
+	CH  float32 `struc:"float32,little"`
+	CI  float32 `struc:"float32,little"`
+	CJ  float32 `struc:"float32,little"`
+	CK  float32 `struc:"float32,little"`
+	CL  float32 `struc:"float32,little"`
+	CM  float32 `struc:"float32,little"`
+	AlD int     `struc:"uint8,little"`
+	AmD int     `struc:"uint8,little"`
+	AnD int     `struc:"uint8,little"`
+	AoA int     `struc:"uint8,little"`
+	ApB int     `struc:"uint8,little"`
+	AqC int     `struc:"uint8,little"`
+	ArD int     `struc:"uint8,little"`
+	AsD int     `struc:"uint8,little"`
+	AtD int     `struc:"uint8,little"`
+	AuD int     `struc:"uint8,little"`
+	AvD int     `struc:"uint8,little"`
+	AwA int     `struc:"uint8,little"`
+	AxB int     `struc:"uint8,little"`
+	AyC int     `struc:"uint8,little"`
+	AzD int     `struc:"uint8,little"`
+	BaD int     `struc:"uint8,little"`
+	BbD int     `struc:"uint8,little"`
+	BcD int     `struc:"uint8,little"`
+	BdD int     `struc:"uint8,little"`
+	BeA int     `struc:"uint8,little"`
+	BfB int     `struc:"uint8,little"`
+	BgC int     `struc:"uint8,little"`
+	BhD int     `struc:"uint8,little"`
+	BiD int     `struc:"uint8,little"`
+	BjD int     `struc:"uint8,little"`
+	BkD int     `struc:"uint8,little"`
+	BlD int     `struc:"uint8,little"`
+	BmD int     `struc:"uint8,little"`
 }
 
 func TestEvalQuality(t *testing.T) {
@@ -115,7 +154,12 @@ func TestEvalQuality(t *testing.T) {
 	//test1
 
 	var buf bytes.Buffer
-	src := &F1SourceData{1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1}
+	src := &F1SourceData{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+		31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
+		50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70,
+		71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90,
+		91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104}
+
 	err := struc.Pack(&buf, src)
 	fmt.Printf("error code: %v \n", err)
 	fmt.Printf("struct : \n %+v \n", src)

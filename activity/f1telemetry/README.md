@@ -1,13 +1,19 @@
-# Compare
-This activity allows you to compare two values and return a true/false result. Data is passed as a string numeric and operation ( i.e. "=", "<=", ">",.... ).
+# f1telemetry
+This activity Decodes telemetry data from Codemasters F1-2017, and places it in to a "CSV" "record". 
+This is designed as a demonstration for integrating F1 2017 .. Flogo .... TIBCO Streambase and TIBCO Spotfire/Liveview
 
+The Flogo app needs to read the data in from UDP and feed the byte stream into this component for decoding ... it's then passed to Streambase via
+some form of messaging
+
+The UDP data is a packed little endian C struct, which is transformed to a Go struct by https://restruct.io/. This uses struct tags to decode the raw data
+correctly to the Go struct.
 
 ## Installation
 
 Navigate to the Flogo app directory [Essential !] and issue the following command
 
 ```bash
-flogo install github.com/ayh20/flogo-components/activity/compare
+flogo install github.com/ayh20/flogo-components/activity/f1telemetry
 ```
 
 ## Schema
@@ -15,28 +21,18 @@ Inputs and Outputs:
 
 ```json
 {
+ },
   "inputs":[
     {
-      "name": "input1",
+      "name": "buffer",
       "required": true,
-      "type": "string"
-    },
-    {
-      "name": "input2",
-      "required": true,
-      "type": "string"
-    },
-    {
-      "name": "comparemode",
-      "required": true,
-      "type": "string",
-      "allowed" : [">", "<", "=", "==", ">=", "<=", "!=" ]
+      "type": "any"
     }
   ],
   "outputs": [
     {
-      "name": "result",
-      "type": "boolean"
+      "name": "data",
+      "type": "string"
     }
   ]
 }
@@ -45,15 +41,13 @@ Inputs and Outputs:
 ## Settings
 | Setting     | Description       |
 |:------------|:------------------|
-| input1      | The first value   |
-| input2      | The second value  |
-| comparemode | Compare operation |
+| buffer      | The raw UDP data   |
 
 ## Outputs
 | Output      | Description                             |
 |:------------|:----------------------------------------|
-| result      | Bool result based on input comparison   |
+| data        | CSV formatted  race data   |
 
 ## Configuration Examples
 ### Simple
-Configure a task to compare two values:
+To be added....

@@ -3,9 +3,9 @@
   "author": "Andy Hampshire",
   "type": "flogo:activity",
   "ref": "github.com/ayh20/flogo-components/activity/f1telemetry",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "title": "F1 Telemetry decoder",
-  "description": "Value Compare Tool",
+  "description": "Decodes telemetry data from Codemasters F1-2017",
   "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/f1telemetry",
   "display": {
     "description": "F1 telemetry decoder",
