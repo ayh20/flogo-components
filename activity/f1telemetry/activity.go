@@ -1,10 +1,8 @@
 package f1telemetry
 
 import (
-	//"encoding/binary"
 	"fmt"
 	"reflect"
-	//"strconv"
 	"bytes"
 	"strings"
 
@@ -136,8 +134,8 @@ func init() {
 
 // f1telemetry is an Activity that takes in data from a byte stream and interprets it as data from F1 2017
 //
-// inputs : {input1, input2, datatype, comparemode}
-// outputs: result (bool)
+// inputs : {buffer} (byte array) RAW UDP data
+// outputs: {data} (string) CSV data
 type f1telemetry struct {
 	metadata *activity.Metadata
 }
@@ -156,31 +154,29 @@ func (a *f1telemetry) Metadata() *activity.Metadata {
 func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 
 	// Get the runtime values
-	fmt.Println("Starting")
+	log.Debug("Starting")
 
 	//var unpackedData F1Data
 	input, _ := context.GetInput(ivInput).([]byte)
 
-	fmt.Printf("input : \n %s \n", input)
+	log.Debugf("input : \n %s \n", input)
 
 	//var buf bytes.Buffer
 	buf := bytes.NewBuffer(input)
 	unpackedData := &F1Data{}
 
-	fmt.Println("Unpack")
+	log.Debug("Unpack")
 	//restruct.Unpack(input, binary.LittleEndian, &unpackedData)
 	err = struc.Unpack(buf, unpackedData)
 
-	fmt.Println("print")
-	fmt.Printf("struct : \n %+v \n", unpackedData)
-
-	fmt.Println("results")
+	//log.Debug("print")
+	//log.Debugf("struct : \n %+v \n", unpackedData)
 
 	// Write the CSV rows.
 	fields := unpackedData.ValueStrings()
 	fieldsstring := strings.Join(fields, ",")
 
-	fmt.Printf("data : %v \n", fieldsstring)
+	log.Debugf("CSV data : %v \n", fieldsstring)
 	context.SetOutput(ovOutput, fieldsstring)
 
 	return true, nil
