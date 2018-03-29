@@ -115,18 +115,32 @@ type F1Data struct {
 	TyresdamageRR        int     `struc:"uint8,little"`
 	TyresdamageFL        int     `struc:"uint8,little"`
 	TyresdamageFR        int     `struc:"uint8,little"`
-	Frontleftwingdamage  int     `struc:"uint8,little"` // front left wing damage (percentage)
-	Frontrightwingdamage int     `struc:"uint8,little"` // front right wing damage (percentage)
-	Rearwingdamage       int     `struc:"uint8,little"` // rear wing damage (percentage)
-	Enginedamage         int     `struc:"uint8,little"` // engine damage (percentage)
-	Gearboxdamage        int     `struc:"uint8,little"` // gear box damage (percentage)
-	Exhaustdamage        int     `struc:"uint8,little"` // exhaust damage (percentage)
-	Pitlimiterstatus     int     `struc:"uint8,little"` // pit limiter status – 0 = off, 1 = on
-	Pitspeedlimit        int     `struc:"uint8,little"` // pit speed limit in mph
-	Sessiontimeleft      int     `struc:"uint8,little"` // NEW: time left in session in seconds
-	Revlightspercent     int     `struc:"uint8,little"` // NEW: rev lights indicator (percentage)
-	Isspectating         int     `struc:"uint8,little"` // NEW: whether the player is spectating
-	Spectatorcarindex    int     `struc:"uint8,little"` // NEW: index of the car being spectated
+	Frontleftwingdamage  int     `struc:"uint8,little"`   // front left wing damage (percentage)
+	Frontrightwingdamage int     `struc:"uint8,little"`   // front right wing damage (percentage)
+	Rearwingdamage       int     `struc:"uint8,little"`   // rear wing damage (percentage)
+	Enginedamage         int     `struc:"uint8,little"`   // engine damage (percentage)
+	Gearboxdamage        int     `struc:"uint8,little"`   // gear box damage (percentage)
+	Exhaustdamage        int     `struc:"uint8,little"`   // exhaust damage (percentage)
+	Pitlimiterstatus     int     `struc:"uint8,little"`   // pit limiter status – 0 = off, 1 = on
+	Pitspeedlimit        int     `struc:"uint8,little"`   // pit speed limit in mph
+	Sessiontimeleft      int     `struc:"uint8,little"`   // NEW: time left in session in seconds
+	Revlightspercent     int     `struc:"uint8,little"`   // NEW: rev lights indicator (percentage)
+	Isspectating         int     `struc:"uint8,little"`   // NEW: whether the player is spectating
+	Spectatorcarindex    int     `struc:"uint8,little"`   // NEW: index of the car being spectated
+	Filler1              []byte  `struc:"[900]byte"`      // cars data array
+	Yaw                  float32 `struc:"float32,little"` // NEW (v1.8)
+	Pitch                float32 `struc:"float32,little"` // NEW (v1.8)
+	Roll                 float32 `struc:"float32,little"` // NEW (v1.8)
+	XLocalVelocity       float32 `struc:"float32,little"` // NEW (v1.8) Velocity in local space
+	YLocalVelocity       float32 `struc:"float32,little"` // NEW (v1.8) Velocity in local space
+	ZLocalVelocity       float32 `struc:"float32,little"` // NEW (v1.8) Velocity in local space
+	SuspAccelerationRL   float32 `struc:"float32,little"` // NEW (v1.8) RL, RR, FL, FR
+	SuspAccelerationRR   float32 `struc:"float32,little"`
+	SuspAccelerationFL   float32 `struc:"float32,little"`
+	SuspAccelerationFR   float32 `struc:"float32,little"`
+	AngAccX              float32 `struc:"float32,little"` // NEW (v1.8) angular acceleration x-component
+	AngAccY              float32 `struc:"float32,little"` // NEW (v1.8) angular acceleration y-component
+	AngAccZ              float32 `struc:"float32,little"` // NEW (v1.8) angular acceleration z-component
 }
 
 func init() {
@@ -186,7 +200,12 @@ func (f F1Data) valueStrings() []string {
 	v := reflect.ValueOf(f)
 	ss := make([]string, v.NumField())
 	for i := range ss {
-		ss[i] = fmt.Sprintf("%v", v.Field(i))
+		typeField := v.Type().Field(i)
+		if strings.HasPrefix(typeField.Name, "Filler") {
+			ss[i] = fmt.Sprintf("%v", "-1")
+		} else {
+			ss[i] = fmt.Sprintf("%v", v.Field(i))
+		}
 	}
 	return ss
 }
