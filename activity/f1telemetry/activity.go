@@ -204,7 +204,13 @@ func (f F1Data) valueStrings() []string {
 		if strings.HasPrefix(typeField.Name, "Filler") {
 			ss[i] = fmt.Sprintf("%v", "-1")
 		} else {
-			ss[i] = fmt.Sprintf("%v", v.Field(i))
+			switch v.Field(i).Kind() {
+			case reflect.Float32, reflect.Float64:
+				ss[i] = fmt.Sprintf("%g", v.Field(i).Float())
+			default:
+				ss[i] = fmt.Sprintf("%v", v.Field(i))
+			}
+
 		}
 	}
 	return ss
