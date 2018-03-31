@@ -115,18 +115,20 @@ type F1Data struct {
 	TyresdamageRR        int     `struc:"uint8,little"`
 	TyresdamageFL        int     `struc:"uint8,little"`
 	TyresdamageFR        int     `struc:"uint8,little"`
-	Frontleftwingdamage  int     `struc:"uint8,little"`   // front left wing damage (percentage)
-	Frontrightwingdamage int     `struc:"uint8,little"`   // front right wing damage (percentage)
-	Rearwingdamage       int     `struc:"uint8,little"`   // rear wing damage (percentage)
-	Enginedamage         int     `struc:"uint8,little"`   // engine damage (percentage)
-	Gearboxdamage        int     `struc:"uint8,little"`   // gear box damage (percentage)
-	Exhaustdamage        int     `struc:"uint8,little"`   // exhaust damage (percentage)
-	Pitlimiterstatus     int     `struc:"uint8,little"`   // pit limiter status – 0 = off, 1 = on
-	Pitspeedlimit        int     `struc:"uint8,little"`   // pit speed limit in mph
-	Sessiontimeleft      int     `struc:"uint8,little"`   // NEW: time left in session in seconds
-	Revlightspercent     int     `struc:"uint8,little"`   // NEW: rev lights indicator (percentage)
-	Isspectating         int     `struc:"uint8,little"`   // NEW: whether the player is spectating
-	Spectatorcarindex    int     `struc:"uint8,little"`   // NEW: index of the car being spectated
+	Frontleftwingdamage  int     `struc:"uint8,little"` // front left wing damage (percentage)
+	Frontrightwingdamage int     `struc:"uint8,little"` // front right wing damage (percentage)
+	Rearwingdamage       int     `struc:"uint8,little"` // rear wing damage (percentage)
+	Enginedamage         int     `struc:"uint8,little"` // engine damage (percentage)
+	Gearboxdamage        int     `struc:"uint8,little"` // gear box damage (percentage)
+	Exhaustdamage        int     `struc:"uint8,little"` // exhaust damage (percentage)
+	Pitlimiterstatus     int     `struc:"uint8,little"` // pit limiter status – 0 = off, 1 = on
+	Pitspeedlimit        int     `struc:"uint8,little"` // pit speed limit in mph
+	Sessiontimeleft      int     `struc:"uint8,little"` // NEW: time left in session in seconds
+	Revlightspercent     int     `struc:"uint8,little"` // NEW: rev lights indicator (percentage)
+	Isspectating         int     `struc:"uint8,little"` // NEW: whether the player is spectating
+	Spectatorcarindex    int     `struc:"uint8,little"` // NEW: index of the car being spectated
+	NumCars              int     `struc:"uint8,little"` // number of cars in data
+	PlayerCarIndex       int     `struc:"uint8,little"`
 	Filler1              []byte  `struc:"[900]byte"`      // cars data array
 	Yaw                  float32 `struc:"float32,little"` // NEW (v1.8)
 	Pitch                float32 `struc:"float32,little"` // NEW (v1.8)
