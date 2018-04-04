@@ -31,7 +31,11 @@ Inputs and Outputs:
   ],
   "outputs": [
     {
-      "name": "data",
+      "name": "cardata",
+      "type": "string"
+    },
+    {
+      "name": "cararray",
       "type": "string"
     }
   ]
@@ -46,7 +50,8 @@ Inputs and Outputs:
 ## Outputs
 | Output      | Description                             |
 |:------------|:----------------------------------------|
-| data        | CSV formatted  race data   |
+| cardata     | CSV formatted car data for current driver   |
+| cararray     | CSV formatted basic car data for ALL driver   |
 
 ## Configuration Examples
 ### Simple
