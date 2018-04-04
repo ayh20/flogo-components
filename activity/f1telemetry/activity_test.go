@@ -188,13 +188,13 @@ func TestEvalQuality(t *testing.T) {
 	// for _, v := range x {
 	// 	fmt.Printf("%v - %v \n", v, x[v])
 	// }
-	fmt.Printf("buffer : \n %s \n", x)
+	//fmt.Printf("buffer : \n %s \n", x)
 
 	tc.SetInput("buffer", x)
 
 	o := &F1SourceData{}
 	err = struc.Unpack(&buf, o)
-	fmt.Printf("struct : \n %+v \n", o)
+	//fmt.Printf("struct : \n %+v \n", o)
 
 	fmt.Println("#######   call routine ")
 	act.Eval(tc)
