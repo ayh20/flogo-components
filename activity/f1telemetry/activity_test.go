@@ -115,36 +115,36 @@ type F1SourceData struct {
 	CK  float32 `struc:"float32,little"`
 	CL  float32 `struc:"float32,little"`
 	CM  float32 `struc:"float32,little"`
-	AlD int     `struc:"uint8,little"`
-	AmD int     `struc:"uint8,little"`
-	AnD int     `struc:"uint8,little"`
-	AoA int     `struc:"uint8,little"`
-	ApB int     `struc:"uint8,little"`
-	AqC int     `struc:"uint8,little"`
-	ArD int     `struc:"uint8,little"`
-	AsD int     `struc:"uint8,little"`
-	AtD int     `struc:"uint8,little"`
-	AuD int     `struc:"uint8,little"`
-	AvD int     `struc:"uint8,little"`
-	AwA int     `struc:"uint8,little"`
-	AxB int     `struc:"uint8,little"`
-	AyC int     `struc:"uint8,little"`
-	AzD int     `struc:"uint8,little"`
-	BaD int     `struc:"uint8,little"`
-	BbD int     `struc:"uint8,little"`
-	BcD int     `struc:"uint8,little"`
-	BdD int     `struc:"uint8,little"`
-	BeA int     `struc:"uint8,little"`
-	BfB int     `struc:"uint8,little"`
-	BgC int     `struc:"uint8,little"`
-	BhD int     `struc:"uint8,little"`
-	BiD int     `struc:"uint8,little"`
-	BjD int     `struc:"uint8,little"`
-	BkD int     `struc:"uint8,little"`
-	BlD int     `struc:"uint8,little"`
-	BmD int     `struc:"uint8,little"`
-	BmE int     `struc:"uint8,little"`
-	BmF int     `struc:"uint8,little"`
+	AlD byte     `struc:"byte"`
+	AmD byte     `struc:"byte"`
+	AnD byte     `struc:"byte"`
+	AoA byte     `struc:"byte"`
+	ApB byte     `struc:"byte"`
+	AqC byte     `struc:"byte"`
+	ArD byte     `struc:"byte"`
+	AsD byte     `struc:"byte"`
+	AtD byte     `struc:"byte"`
+	AuD byte     `struc:"byte"`
+	AvD byte     `struc:"byte"`
+	AwA byte     `struc:"byte"`
+	AxB byte     `struc:"byte"`
+	AyC byte     `struc:"byte"`
+	AzD byte     `struc:"byte"`
+	BaD byte     `struc:"byte"`
+	BbD byte     `struc:"byte"`
+	BcD byte     `struc:"byte"`
+	BdD byte     `struc:"byte"`
+	BeA byte     `struc:"byte"`
+	BfB byte     `struc:"byte"`
+	BgC byte     `struc:"byte"`
+	BhD byte     `struc:"byte"`
+	BiD byte     `struc:"byte"`
+	BjD byte     `struc:"byte"`
+	BkD byte     `struc:"byte"`
+	BlD byte     `struc:"byte"`
+	BmD byte     `struc:"byte"`
+	BmE byte     `struc:"byte"`
+	BmF byte     `struc:"byte"`
 	Filler1              []byte  `struc:"[900]byte"`      // cars data array
 	Yaw                  float32 `struc:"float32,little"` // NEW (v1.8)
 	Pitch                float32 `struc:"float32,little"` // NEW (v1.8)

@@ -40,15 +40,15 @@ type F1Data struct {
 	Xd                   float32 `struc:"float32,little"` // World space forward direction F
 	Yd                   float32 `struc:"float32,little"` // World space forward direction F
 	Zd                   float32 `struc:"float32,little"` // World space forward direction F
-	SuspPosRL            float32 `struc:"float32,little"` // RL, RR, FL, FR  F array
+	SuspPosRL            float32 `struc:"float32,little"` // Suspension position RL, RR, FL, FR  F array
 	SuspPosRR            float32 `struc:"float32,little"`
 	SuspPosFL            float32 `struc:"float32,little"`
 	SuspPosFR            float32 `struc:"float32,little"`
-	SuspVelRL            float32 `struc:"float32,little"` // RL, RR, FL, FR  F array
+	SuspVelRL            float32 `struc:"float32,little"` // Suspension velocity RL, RR, FL, FR  F array
 	SuspVelRR            float32 `struc:"float32,little"`
 	SuspVelFL            float32 `struc:"float32,little"`
 	SuspVelFR            float32 `struc:"float32,little"`
-	WheelspeedRL         float32 `struc:"float32,little"`
+	WheelspeedRL         float32 `struc:"float32,little"` // Wheel Speed RL, RR, FL, FR  F array
 	WheelspeedRR         float32 `struc:"float32,little"`
 	WheelspeedFL         float32 `struc:"float32,little"`
 	WheelspeedFR         float32 `struc:"float32,little"`
@@ -99,36 +99,36 @@ type F1Data struct {
 	Angvelx              float32 `struc:"float32,little"` // angular velocity x-component
 	Angvely              float32 `struc:"float32,little"` // angular velocity y-component
 	Angvelz              float32 `struc:"float32,little"` // angular velocity z-component
-	TyrestemperatureRL   int     `struc:"uint8,little"`   // tyres temperature (centigrade)
-	TyrestemperatureRR   int     `struc:"uint8,little"`
-	TyrestemperatureFL   int     `struc:"uint8,little"`
-	TyrestemperatureFR   int     `struc:"uint8,little"`
-	TyreswearRL          int     `struc:"uint8,little"` // tyre wear percentage
-	TyreswearRR          int     `struc:"uint8,little"`
-	TyreswearFL          int     `struc:"uint8,little"`
-	TyreswearFR          int     `struc:"uint8,little"`
-	Tyrecompound         int     `struc:"uint8,little"` // compound of tyre – 0 = ultra soft, 1 = super soft, 2 = soft, 3 = medium, 4 = hard, 5 = inter, 6 = wet
-	Frontbrakebias       int     `struc:"uint8,little"` // front brake bias (percentage)
-	Fuelmix              int     `struc:"uint8,little"` // fuel mix - 0 = lean, 1 = standard, 2 = rich, 3 = max
-	CurrentLapInvalid    int     `struc:"uint8,little"` // current lap invalid - 0 = valid, 1 = invalid
-	TyresdamageRL        int     `struc:"uint8,little"` // tyre damage (percentage)
-	TyresdamageRR        int     `struc:"uint8,little"`
-	TyresdamageFL        int     `struc:"uint8,little"`
-	TyresdamageFR        int     `struc:"uint8,little"`
-	Frontleftwingdamage  int     `struc:"uint8,little"` // front left wing damage (percentage)
-	Frontrightwingdamage int     `struc:"uint8,little"` // front right wing damage (percentage)
-	Rearwingdamage       int     `struc:"uint8,little"` // rear wing damage (percentage)
-	Enginedamage         int     `struc:"uint8,little"` // engine damage (percentage)
-	Gearboxdamage        int     `struc:"uint8,little"` // gear box damage (percentage)
-	Exhaustdamage        int     `struc:"uint8,little"` // exhaust damage (percentage)
-	Pitlimiterstatus     int     `struc:"uint8,little"` // pit limiter status – 0 = off, 1 = on
-	Pitspeedlimit        int     `struc:"uint8,little"` // pit speed limit in mph
-	Sessiontimeleft      int     `struc:"uint8,little"` // NEW: time left in session in seconds
-	Revlightspercent     int     `struc:"uint8,little"` // NEW: rev lights indicator (percentage)
-	Isspectating         int     `struc:"uint8,little"` // NEW: whether the player is spectating
-	Spectatorcarindex    int     `struc:"uint8,little"` // NEW: index of the car being spectated
-	NumCars              int     `struc:"uint8,little"` // number of cars in data
-	PlayerCarIndex       int     `struc:"uint8,little"`
+	TyrestemperatureRL   byte     `struc:"byte"`   // tyres temperature (centigrade)
+	TyrestemperatureRR   byte     `struc:"byte"`
+	TyrestemperatureFL   byte     `struc:"byte"`
+	TyrestemperatureFR   byte     `struc:"byte"`
+	TyreswearRL          byte     `struc:"byte"` // tyre wear percentage
+	TyreswearRR          byte     `struc:"byte"`
+	TyreswearFL          byte     `struc:"byte"`
+	TyreswearFR          byte     `struc:"byte"`
+	Tyrecompound         byte     `struc:"byte"` // compound of tyre – 0 = ultra soft, 1 = super soft, 2 = soft, 3 = medium, 4 = hard, 5 = inter, 6 = wet
+	Frontbrakebias       byte     `struc:"byte"` // front brake bias (percentage)
+	Fuelmix              byte     `struc:"byte"` // fuel mix - 0 = lean, 1 = standard, 2 = rich, 3 = max
+	CurrentLapInvalid    byte     `struc:"byte"` // current lap invalid - 0 = valid, 1 = invalid
+	TyresdamageRL        byte     `struc:"byte"` // tyre damage (percentage)
+	TyresdamageRR        byte     `struc:"byte"`
+	TyresdamageFL        byte     `struc:"byte"`
+	TyresdamageFR        byte     `struc:"byte"`
+	Frontleftwingdamage  byte     `struc:"byte"` // front left wing damage (percentage)
+	Frontrightwingdamage byte     `struc:"byte"` // front right wing damage (percentage)
+	Rearwingdamage       byte     `struc:"byte"` // rear wing damage (percentage)
+	Enginedamage         byte     `struc:"byte"` // engine damage (percentage)
+	Gearboxdamage        byte     `struc:"byte"` // gear box damage (percentage)
+	Exhaustdamage        byte     `struc:"byte"` // exhaust damage (percentage)
+	Pitlimiterstatus     byte     `struc:"byte"` // pit limiter status – 0 = off, 1 = on
+	Pitspeedlimit        byte     `struc:"byte"` // pit speed limit in mph
+	Sessiontimeleft      byte     `struc:"byte"` // NEW: time left in session in seconds
+	Revlightspercent     byte     `struc:"byte"` // NEW: rev lights indicator (percentage)
+	Isspectating         byte     `struc:"byte"` // NEW: whether the player is spectating
+	Spectatorcarindex    byte     `struc:"byte"` // NEW: index of the car being spectated
+	NumCars              byte     `struc:"byte"` // number of cars in data
+	PlayerCarIndex       byte     `struc:"byte"`
 	Filler1              []byte  `struc:"[900]byte"`      // cars data array
 	Yaw                  float32 `struc:"float32,little"` // NEW (v1.8)
 	Pitch                float32 `struc:"float32,little"` // NEW (v1.8)
