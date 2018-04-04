@@ -194,12 +194,12 @@ func (a *f1telemetry) Metadata() *activity.Metadata {
 func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 
 	// Get the runtime values
-	log.Info("Starting")
+	log.Debug("Starting")
 
 	//var unpackedData F1Data
 	input, _ := context.GetInput(ivInput).([]byte)
 
-	log.Infof("input : \n %s \n", input)
+	log.Debugf("input : \n %s \n", input)
 
 	//var buf bytes.Buffer
 	buf := bytes.NewBuffer(input)
@@ -208,7 +208,7 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 	unpackedData := &F1Data{}
 	unpackedData2 := &[20]F1CarArray{}
 
-	log.Info("Unpack")
+	log.Debug("Unpack")
 	//restruct.Unpack(input, binary.LittleEndian, &unpackedData)
 
 	// Unpack the main data
@@ -226,24 +226,24 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 		return false, err
 	}
 
-	log.Info("print")
-	log.Infof("struct F1Data : \n %+v \n", unpackedData)
-	log.Infof("struct F1CarArray : \n %+v \n", unpackedData2)
+	log.Debug("print")
+	log.Debugf("struct F1Data : \n %+v \n", unpackedData)
+	log.Debugf("struct F1CarArray : \n %+v \n", unpackedData2)
 
 	// Write the CSV rows.
 	fields := unpackedData.valueStrings()
 	fieldsstring := strings.Join(fields, ",")
 
-	log.Infof("CSV data : %v \n", fieldsstring)
+	log.Debugf("CSV data : %v \n", fieldsstring)
 	context.SetOutput(ovOutput, fieldsstring)
 
-	fieldsstring = ""
+	fieldsstring = fmt.Sprintf("%g",unpackedData.Time)
 	// Write the CSV rows.
 	for i := range unpackedData2 {
 		fields = unpackedData2[i].valueStrings()
-		fieldsstring = fieldsstring + "|" + strings.Join(fields, ",")
+		fieldsstring = fieldsstring + "|" + fmt.Sprintf("%v",i) + "," + strings.Join(fields, ",")
 	}
-	log.Infof("CSV Car Array data : %v \n", fieldsstring)
+	log.Debugf("CSV Car Array data : %v \n", fieldsstring)
 	context.SetOutput(ovOutput2, fieldsstring)
 
 	return true, nil
