@@ -139,7 +139,7 @@ type F1SourceData struct {
 	BgC byte     `struc:"byte"`
 	BhD byte     `struc:"byte"`
 	BiD byte     `struc:"byte"`
-	BjD byte     `struc:"byte"`
+	BjD float32 `struc:"float32,little"` // Doh !
 	BkD byte     `struc:"byte"`
 	BlD byte     `struc:"byte"`
 	BmD byte     `struc:"byte"`
