@@ -237,11 +237,11 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 	log.Debugf("CSV data : %v \n", fieldsstring)
 	context.SetOutput(ovOutput, fieldsstring)
 
-	fieldsstring = fmt.Sprintf("%g",unpackedData.Time)
+	fieldsstring = fmt.Sprintf("%g", unpackedData.Time)
 	// Write the CSV rows.
 	for i := range unpackedData2 {
 		fields = unpackedData2[i].valueStrings()
-		fieldsstring = fieldsstring + "|" + fmt.Sprintf("%v",i) + "," + strings.Join(fields, ",")
+		fieldsstring = fieldsstring + "|" + fmt.Sprintf("%v", i) + "," + strings.Join(fields, ",")
 	}
 	log.Debugf("CSV Car Array data : %v \n", fieldsstring)
 	context.SetOutput(ovOutput2, fieldsstring)
@@ -258,7 +258,9 @@ func (f F1Data) valueStrings() []string {
 		} else {
 			switch v.Field(i).Kind() {
 			case reflect.Float32, reflect.Float64:
-				ss[i] = fmt.Sprintf("%g", v.Field(i).Float())
+				//var x float64
+				x := v.Field(i).Float()
+				ss[i] = fmt.Sprintf("%g", x)
 			default:
 				ss[i] = fmt.Sprintf("%v", v.Field(i))
 			}
