@@ -258,7 +258,6 @@ func (f F1Data) valueStrings() []string {
 		} else {
 			switch v.Field(i).Kind() {
 			case reflect.Float32, reflect.Float64:
-				//var x float64
 				x := v.Field(i).Float()
 				ss[i] = fmt.Sprintf("%g", x)
 			default:
@@ -276,7 +275,8 @@ func (f F1CarArray) valueStrings() []string {
 		//typeField := v.Type().Field(i)
 		switch v.Field(i).Kind() {
 		case reflect.Float32, reflect.Float64:
-			ss[i] = fmt.Sprintf("%g", v.Field(i).Float())
+			x := v.Field(i).Float()
+			ss[i] = fmt.Sprintf("%g", x)
 		default:
 			ss[i] = fmt.Sprintf("%v", v.Field(i))
 		}
