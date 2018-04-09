@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"reflect"
+	"strconv"
 	"strings"
 
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
@@ -170,6 +171,7 @@ type F1CarArray struct {
 
 func init() {
 	log.SetLogLevel(logger.InfoLevel)
+	//log.SetLogLevel(logger.DebugLevel)
 }
 
 // f1telemetry is an Activity that takes in data from a byte stream and interprets it as data from F1 2017
@@ -220,6 +222,7 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 
 	// Unpack the 20 item car data array
 	buf2 := bytes.NewBuffer(unpackedData.Filler1)
+	log.Debugf("car array raw: \n %+v", unpackedData.Filler1)
 	err = struc.Unpack(buf2, unpackedData2)
 	if err != nil {
 		log.Error("Unpack Fail: F1CarArray ", err.Error())
@@ -259,7 +262,7 @@ func (f F1Data) valueStrings() []string {
 			switch v.Field(i).Kind() {
 			case reflect.Float32, reflect.Float64:
 				x := v.Field(i).Float()
-				ss[i] = fmt.Sprintf("%g", x)
+				ss[i] = strconv.FormatFloat(x, 'f', -1, 32)
 			default:
 				ss[i] = fmt.Sprintf("%v", v.Field(i))
 			}
@@ -276,7 +279,7 @@ func (f F1CarArray) valueStrings() []string {
 		switch v.Field(i).Kind() {
 		case reflect.Float32, reflect.Float64:
 			x := v.Field(i).Float()
-			ss[i] = fmt.Sprintf("%g", x)
+			ss[i] = strconv.FormatFloat(x, 'f', -1, 32)
 		default:
 			ss[i] = fmt.Sprintf("%v", v.Field(i))
 		}
