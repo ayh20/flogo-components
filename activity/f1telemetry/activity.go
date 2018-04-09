@@ -201,7 +201,7 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 	input, _ := context.GetInput(ivInput).([]byte)
 	buf := bytes.NewBuffer(input)
 
-	log.Infof("input : \n %x \n", input)
+	log.Debugf("input : \n %x \n", input)
 
 	// Create structs to hold unpacked data
 	unpackedData := &F1Data{}
