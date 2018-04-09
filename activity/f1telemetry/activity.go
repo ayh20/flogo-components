@@ -158,15 +158,15 @@ type F1CarArray struct {
 	Sector1Time       float32 `struc:"float32,little"`
 	Sector2Time       float32 `struc:"float32,little"`
 	LapDistance       float32 `struc:"float32,little"`
-	DriverID          byte    `struc:"byte,little"`
-	TeamID            byte    `struc:"byte,little"`
-	CarPosition       byte    `struc:"byte,little"` // UPDATED: track positions of vehicle
-	CurrentLapNum     byte    `struc:"byte,little"`
-	TyreCompound      byte    `struc:"byte,little"` // compound of tyre – 0 = ultra soft, 1 = super soft, 2 = soft, 3 = medium, 4 = hard, 5 = inter, 6 = wet
-	InPits            byte    `struc:"byte,little"` // 0 = none, 1 = pitting, 2 = in pit area
-	Sector            byte    `struc:"byte,little"` // 0 = sector1, 1 = sector2, 2 = sector3
-	CurrentLapInvalid byte    `struc:"byte,little"` // current lap invalid - 0 = valid, 1 = invalid
-	Penalties         byte    `struc:"byte,little"` // NEW: accumulated time penalties in seconds to be added
+	DriverID          byte    `struc:"byte"`
+	TeamID            byte    `struc:"byte"`
+	CarPosition       byte    `struc:"byte"` // UPDATED: track positions of vehicle
+	CurrentLapNum     byte    `struc:"byte"`
+	TyreCompound      byte    `struc:"byte"` // compound of tyre – 0 = ultra soft, 1 = super soft, 2 = soft, 3 = medium, 4 = hard, 5 = inter, 6 = wet
+	InPits            byte    `struc:"byte"` // 0 = none, 1 = pitting, 2 = in pit area
+	Sector            byte    `struc:"byte"` // 0 = sector1, 1 = sector2, 2 = sector3
+	CurrentLapInvalid byte    `struc:"byte"` // current lap invalid - 0 = valid, 1 = invalid
+	Penalties         byte    `struc:"byte"` // NEW: accumulated time penalties in seconds to be added
 }
 
 func init() {
@@ -198,20 +198,16 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 	// Get the runtime values
 	log.Debug("Starting")
 
-	//var unpackedData F1Data
 	input, _ := context.GetInput(ivInput).([]byte)
-
-	log.Debugf("input : \n %s \n", input)
-
-	//var buf bytes.Buffer
 	buf := bytes.NewBuffer(input)
+
+	log.Infof("input : \n %x \n", input)
 
 	// Create structs to hold unpacked data
 	unpackedData := &F1Data{}
-	unpackedData2 := &[20]F1CarArray{}
+	unpackedData2 := &F1CarArray{}
 
 	log.Debug("Unpack")
-	//restruct.Unpack(input, binary.LittleEndian, &unpackedData)
 
 	// Unpack the main data
 	err = struc.Unpack(buf, unpackedData)
@@ -220,34 +216,38 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 		return false, err
 	}
 
-	// Unpack the 20 item car data array
-	buf2 := bytes.NewBuffer(unpackedData.Filler1)
-	log.Debugf("car array raw: \n %+v", unpackedData.Filler1)
-	err = struc.Unpack(buf2, unpackedData2)
-	if err != nil {
-		log.Error("Unpack Fail: F1CarArray ", err.Error())
-		return false, err
-	}
-
 	log.Debug("print")
 	log.Debugf("struct F1Data : \n %+v \n", unpackedData)
-	log.Debugf("struct F1CarArray : \n %+v \n", unpackedData2)
 
-	// Write the CSV rows.
+	// Write the CSV rows to the output
 	fields := unpackedData.valueStrings()
 	fieldsstring := strings.Join(fields, ",")
 
 	log.Debugf("CSV data : %v \n", fieldsstring)
 	context.SetOutput(ovOutput, fieldsstring)
 
-	fieldsstring = fmt.Sprintf("%g", unpackedData.Time)
-	// Write the CSV rows.
-	for i := range unpackedData2 {
-		fields = unpackedData2[i].valueStrings()
-		fieldsstring = fieldsstring + "|" + fmt.Sprintf("%v", i) + "," + strings.Join(fields, ",")
+	// Unpack the 20 item car data array
+	// First load the 900 bytes into a bytes buffer and initialise the output "CSV" header
+	// Note - Output array is:
+	// Timestamp + array of car CSV data seprated by a "|"
+
+	buf2 := bytes.NewBuffer(unpackedData.Filler1)
+	arraystring := fmt.Sprintf("%g", unpackedData.Time)
+
+	for i := 0; i <= 19; i++ {
+		err = struc.Unpack(buf2, unpackedData2)
+		if err != nil {
+			log.Error("Unpack Fail: F1CarArray ", err.Error())
+			return false, err
+		}
+		log.Debugf("Car Array unpacked: %v\n%+v\n", i, unpackedData2)
+		arrayfields := unpackedData2.valueStrings()
+		arraystring = arraystring + "|" + fmt.Sprintf("%v", i) + "," + strings.Join(arrayfields, ",")
 	}
-	log.Debugf("CSV Car Array data : %v \n", fieldsstring)
-	context.SetOutput(ovOutput2, fieldsstring)
+
+	// Write the CSV array rows to the output
+	log.Debugf("CSV Car Array data : %v \n", arraystring)
+	context.SetOutput(ovOutput2, arraystring)
 
 	return true, nil
 }
