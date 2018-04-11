@@ -232,7 +232,7 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 	// Timestamp + array of car CSV data seprated by a "|"
 
 	buf2 := bytes.NewBuffer(unpackedData.Filler1)
-	arraystring := fmt.Sprintf("%g", unpackedData.Time)
+	arraystring := ""
 
 	for i := 0; i <= 19; i++ {
 		err = struc.Unpack(buf2, unpackedData2)
@@ -242,7 +242,12 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 		}
 		log.Debugf("Car Array unpacked: %v\n%+v\n", i, unpackedData2)
 		arrayfields := unpackedData2.valueStrings()
-		arraystring = arraystring + "|" + fmt.Sprintf("%v", i) + "," + strings.Join(arrayfields, ",")
+		if arraystring == "" {
+			arraystring = fmt.Sprintf("%v", i) + "," + fmt.Sprintf("%g", unpackedData.Time) + "," + strings.Join(arrayfields, ",")
+		} else {
+			arraystring = arraystring + "|" + fmt.Sprintf("%v", i) + "," + fmt.Sprintf("%g", unpackedData.Time) + "," + strings.Join(arrayfields, ",")
+		}
+
 	}
 
 	// Write the CSV array rows to the output
