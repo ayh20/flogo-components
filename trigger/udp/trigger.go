@@ -32,12 +32,7 @@ type udpTrigger struct {
 	metadata *trigger.Metadata
 	runner   action.Runner
 	config   *trigger.Config
-	//handlers []*trigger.Handler
-}
-
-// Init implements trigger.Trigger.Init
-func (t *udpTrigger) Init(runner action.Runner) {
-	t.runner = runner
+	handlers []*trigger.Handler
 }
 
 // Metadata implements trigger.Trigger.Metadata
@@ -48,6 +43,13 @@ func (t *udpTrigger) Metadata() *trigger.Metadata {
 const (
 	maxDatagramSize = 8192
 )
+
+func (t *udpTrigger) Initialize(ctx trigger.InitContext) error {
+	log.Debug("Initialize")
+	t.handlers = ctx.GetHandlers()
+	return nil
+
+}
 
 // Start implements trigger.Trigger.Start
 func (t *udpTrigger) Start() error {
@@ -66,7 +68,7 @@ func (t *udpTrigger) Start() error {
 	if err != nil {
 		// Handle error
 		log.Errorf("Error resolving address %v", err)
-		return nil;
+		return nil
 	}
 
 	log.Debug("Resolved Addr O/P %v", addr)
@@ -104,13 +106,20 @@ func (t *udpTrigger) Start() error {
 
 			log.Debugf("Received %v from %v", payload, addr)
 
-			handlers := t.config.Handlers
+			//handlers := t.config.Handlers
+			trgData := make(map[string]interface{})
+			trgData["payload"] = payload
+			trgData["buffer"] = payloadB
 
 			log.Debug("Processing handlers")
-			for _, handler := range handlers {
-				t.RunAction(handler, payload, payloadB)
+			for _, handler := range t.handlers {
+				results, err := handler.Handle(context.Background(), trgData)
+				if err != nil {
+					log.Error("Error starting action: ", err.Error())
+				}
+				log.Debugf("Ran Handler: [%s]", handler)
+				log.Debugf("Results: [%v]", results)
 			}
-
 		}
 	}
 	return nil
@@ -120,44 +129,4 @@ func (t *udpTrigger) Start() error {
 func (t *udpTrigger) Stop() error {
 	// stop the trigger
 	return nil
-}
-
-func (t *udpTrigger) RunAction(handlerCfg *trigger.HandlerConfig, payload string, payloadB []byte) {
-
-	log.Debug("Starting Payload data action")
-
-	req := t.constructStartRequest(handlerCfg, payload, payloadB)
-	startAttrs, _ := t.metadata.OutputsToAttrs(req.Data, false)
-	action := action.Get(handlerCfg.ActionId)
-	context := trigger.NewContext(context.Background(), startAttrs)
-
-	log.Debugf("ActionID: '%s'", handlerCfg.ActionId)
-
-	// Run the triggered code
-	_, _, err := t.runner.Run(context, action, handlerCfg.ActionId, nil)
-	if err != nil {
-		log.Error("Error starting action: ", err.Error())
-	}
-}
-
-func (t *udpTrigger) constructStartRequest(handlerCfg *trigger.HandlerConfig, payload string, payloadB []byte) *StartRequest {
-
-	log.Debug("Received contstructStartRequest")
-
-	req := &StartRequest{}
-
-	// return bytes payload and string payload for the user to choose from
-	data := make(map[string]interface{})
-	data["payload"] = payload
-	data["buffer"] = payloadB
-	req.Data = data
-
-	return req
-}
-
-// StartRequest describes a request for starting a ProcessInstance
-type StartRequest struct {
-	ProcessURI string                 `json:"flowUri"`
-	Data       map[string]interface{} `json:"data"`
-	ReplyTo    string                 `json:"replyTo"`
 }
