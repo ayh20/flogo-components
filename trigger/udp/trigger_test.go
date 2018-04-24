@@ -8,9 +8,9 @@ import (
 	"github.com/TIBCOSoftware/flogo-lib/core/data"
 )
 
-var jsonMetadata = getJsonMetadata()
+var jsonMetadata = getJSONMetadata()
 
-func getJsonMetadata() string {
+func getJSONMetadata() string {
 	jsonMetadataBytes, err := ioutil.ReadFile("trigger.json")
 	if err != nil {
 		panic("No Json Metadata found for trigger.json path")

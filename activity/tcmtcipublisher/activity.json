@@ -1,0 +1,44 @@
+{
+  "name": "tcmtcipublisher",
+  "author": "Andy Hampshire",
+  "type": "flogo:activity",
+  "ref": "github.com/ayh20/flogo-components/activity/tcmtcipublisher",
+  "version": "0.0.2",
+  "title": "TCM TCI Publisher utility",
+  "description": "Value Compare Tool",
+  "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/tcmtcipublisher",
+  "display": {
+    "description": "TCM TCI Publisher Utility",
+    "category": "Utility",
+    "uid": "ayh20-tcmtcipublisher",
+    "visible": true
+ },
+  "inputs":[
+    {
+      "name": "message",
+      "required": true,
+      "type": "string"
+    },
+    {
+      "name": "key",
+      "required": true,
+      "type": "string"
+    },
+    {
+      "name": "url",
+      "required": true,
+      "type": "string"
+    },
+    {
+      "name": "channel",
+      "required": true,
+      "type": "string"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "type": "string"
+    }
+  ]
+}
