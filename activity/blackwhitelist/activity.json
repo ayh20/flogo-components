@@ -4,7 +4,7 @@
     "type": "flogo:activity",
     "ref": "github.com/ayh20/flogo-components/activity/blackwhitelist",
     "version": "0.0.1",
-    "title": "BlackWhite List IP Checker",
+    "title": "BlackWhite_List_IP_Checker",
     "description": "Checks IP against Black/White lists",
     "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/blackwhitelist",
     "display": {

@@ -44,10 +44,10 @@ func TestIt(t *testing.T) {
 
 	fmt.Println("#######   Testing ")
 	//test1
-	tc.SetInput("message", `{"_dest":"FlightData","hex":"48433a","flight":"KZR941","lat": 51.522354,"lon":-0.031771,"altitude":4225,"track":236,"speed":148,"messages":76 }`)
+	tc.SetInput("message", `{"hex":"48433b","flight":"KZR941","lat": "51.522354","lon":"-0.031771","altitude":"4225","track":"236","speed":"148","messages":"76" }`)
 	tc.SetInput("key", "773b42654dec94de14b659a9c1f01c69")
 	tc.SetInput("url", "wss://eu.messaging.cloud.tibco.com/tcm/01BKABHMAZKJDJA12PWHDR6WAP/channel")
-	tc.SetInput("channel", "myChannel")
+	tc.SetInput("channel", "FlightData")
 	act.Eval(tc)
 
 	res := tc.GetOutput("result").(string)
@@ -58,4 +58,18 @@ func TestIt(t *testing.T) {
 		t.Fail()
 	}
 
+	//test2
+	tc.SetInput("message", `{"hex":"16161c","flight":"ASSJ583","lat": 52.522354,"lon":-0.081771,"altitude":"4225","track":"236","speed":"148","messages":"76" }`)
+	tc.SetInput("key", "773b42654dec94de14b659a9c1f01c69")
+	tc.SetInput("url", "wss://eu.messaging.cloud.tibco.com/tcm/01BKABHMAZKJDJA12PWHDR6WAP/channel")
+	tc.SetInput("channel", "FlightData")
+	act.Eval(tc)
+
+	res = tc.GetOutput("result").(string)
+
+	fmt.Println("Result: ", res)
+
+	if tc.GetOutput("result") == nil {
+		t.Fail()
+	}
 }

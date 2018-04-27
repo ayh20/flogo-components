@@ -9,7 +9,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/jvanderl/tib-eftl"
+	"github.com/TIBCOSoftware/eftl"
 
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
@@ -61,7 +61,7 @@ func (a *TCMPublisher) Eval(context activity.Context) (done bool, err error) {
 	}
 
 	// connection options
-	activityLog.Info("Set Options")
+	activityLog.Debug("Set Options")
 	opts := &eftl.Options{
 		Password: inkey, ClientID: uuid,
 	}
@@ -70,7 +70,8 @@ func (a *TCMPublisher) Eval(context activity.Context) (done bool, err error) {
 	errChan := make(chan error, 1)
 
 	// connect to TIBCO Cloud Messaging
-	activityLog.Info("Connect")
+	activityLog.Debug("Connect")
+
 	conn, err := eftl.Connect(inurl, opts, errChan)
 	if err != nil {
 		activityLog.Errorf("connect failed: %v", err)
@@ -87,43 +88,28 @@ func (a *TCMPublisher) Eval(context activity.Context) (done bool, err error) {
 	}()
 
 	// publish a message to TIBCO Cloud Messaging
-	activityLog.Info("Publish Now")
+	activityLog.Debug("Publish Now")
 
+	// Convert input to byte slice and unmarshal json
 	b := []byte(inmessage)
-
 	var f interface{}
-	err3 := json.Unmarshal(b, &f)
-	if err3 != nil {
-		activityLog.Errorf("Unmarshal fail: %v", err3)
+	err = json.Unmarshal(b, &f)
+	if err != nil {
+		activityLog.Errorf("Unmarshal fail: %v", err)
 	}
 
+	// Add the TCI magic Dest value to the root of the data
 	m := f.(map[string]interface{})
+	m["_dest"] = inchannel
 
-	myMsg := eftl.Message{"_dest": inchannel}
+	activityLog.Debugf("eftlMsg : %v", m)
 
-	for k, v := range m {
-		switch vv := v.(type) {
-		case string:
-			myMsg[k] = vv
-		case float64, int:
-			myMsg[k] = vv
-		case []interface{}:
-			fmt.Println(k, "is an array:")
-			for i, u := range vv {
-				fmt.Println(i, u)
-			}
-		default:
-			myMsg[k] = vv
-		}
+	err = conn.Publish(m)
+	if err != nil {
+		activityLog.Errorf("Publish failed: %v", err)
 	}
 
-	err2 := conn.Publish(myMsg)
-
-	if err2 != nil {
-		activityLog.Errorf("publish failed: %v", err2)
-	}
-
-	activityLog.Info("Published")
+	activityLog.Debug("Published")
 
 	context.SetOutput(ovResult, "Send OK")
 
