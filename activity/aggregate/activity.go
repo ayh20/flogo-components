@@ -11,7 +11,7 @@ import (
 )
 
 // activityLogger is the default logger for the Aggregate Activity
-var activityLogger = logger.GetLogger("activity-tibco-aggregate")
+var activityLogger = logger.GetLogger("activity-ayh20-aggregate")
 
 const (
 	ivFunction   = "function"
