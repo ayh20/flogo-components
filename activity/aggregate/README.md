@@ -9,10 +9,12 @@ This activity allows you to aggregate data and calculate an average or sliding a
 
 ## Installation
 ### Flogo Web
-This activity comes out of the box with the Flogo Web UI
+```bash
+https://github.com/ayh20/flogo-components/activity/aggregate
+```
 ### Flogo CLI
 ```bash
-flogo install github.com/TIBCOSoftware/flogo-contrib/activity/aggregate
+flogo install github.com/ayh20/flogo-components/activity/aggregate
 ```
 
 ## Schema
@@ -35,6 +37,10 @@ Inputs and Outputs:
     {
       "name": "value",
       "type": "number"
+    },
+    {
+      "name": "key",
+      "type": "string"
     }
   ],
   "output": [
