@@ -1,11 +1,11 @@
 {
   "name": "ayh20-aggregator",
   "type": "flogo:activity",
-  "ref": "github.com/ayh20/flogo-contrib/activity/aggregate",
+  "ref": "github.com/ayh20/flogo-components/activity/aggregate",
   "version": "0.0.1",
   "title": "Aggregate with key",
   "description": "Key based Aggregator Activity",
-  "homepage": "https://github.com/ayh20/flogo-contrib/tree/master/activity/aggregate",
+  "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/aggregate",
   "input":[
     {
       "name": "function",
