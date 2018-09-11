@@ -16,4 +16,4 @@ Triggers
 
 1. A trigger that reads UDP data
 
-See the individual components for more information
+See the individual components for more information about their functionality
