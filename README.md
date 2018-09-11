@@ -1,6 +1,6 @@
 # flogo-components
 
-This project is a reposotory of Flogo Add in's
+This project is a reposotory of Flogo Add in's that I have developed during my learning of Go and Flogo http://flogo.io
 
 There are both Activities and Triggers in the respository:
 
