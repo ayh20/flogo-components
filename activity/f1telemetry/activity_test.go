@@ -254,7 +254,7 @@ func TestEvalQuality(t *testing.T) {
 
 	o := &F1SourceData{}
 	err = struc.Unpack(&buf, o)
-	//fmt.Printf("struct : \n %+v \n", o)
+	fmt.Printf("\n struct : \n %+v \n", o)
 
 	fmt.Println("#######   call routine ")
 	act.Eval(tc)
