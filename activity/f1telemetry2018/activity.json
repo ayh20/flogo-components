@@ -3,7 +3,7 @@
   "author": "Andy Hampshire",
   "type": "flogo:activity",
   "ref": "github.com/ayh20/flogo-components/activity/f1telemetry2018",
-  "version": "0.0.6",
+  "version": "0.0.1",
   "title": "F1 2018 Telemetry decoder",
   "description": "Decodes telemetry data from Codemasters F1-2018",
   "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/f1telemetry2018",
@@ -27,10 +27,6 @@
     },
     {
       "name": "data",
-      "type": "string"
-    },
-    {
-      "name": "array",
       "type": "string"
     }
   ]

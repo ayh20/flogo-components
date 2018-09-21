@@ -8,6 +8,8 @@ some form of messaging
 The UDP data is a packed little endian C struct, which is transformed to a Go struct by https://github.com/lunixbochs/struc. This uses struct tags to decode the raw data
 correctly to the Go struct.
 
+Information about the format of the raw data can be found here: https://forums.codemasters.com/discussion/136948/f1-2018-udp-specification
+
 ## Installation
 
 Navigate to the Flogo app directory [Essential !] and issue the following command
