@@ -1,6 +1,6 @@
 # f1telemetry
-This activity Decodes telemetry data from Codemasters F1-2017, and places it in to a "CSV" "record". 
-This is designed as a demonstration for integrating F1 2017 .. Flogo .... TIBCO Streambase and TIBCO Spotfire/Liveview
+This activity Decodes telemetry data from Codemasters F1-2018, and places it in to a "CSV" "record". 
+This is designed as a demonstration for integrating F1 2018 .. Flogo .... TIBCO Streambase and TIBCO Spotfire/Liveview
 
 The Flogo app needs to read the data in from UDP and feed the byte stream into this component for decoding ... it's then passed to Streambase via
 some form of messaging
@@ -33,11 +33,11 @@ Inputs and Outputs:
   ],
   "outputs": [
     {
-      "name": "cardata",
-      "type": "string"
+      "name": "msgtype",
+      "type": "integer"
     },
     {
-      "name": "cararray",
+      "name": "data",
       "type": "string"
     }
   ]
@@ -52,8 +52,8 @@ Inputs and Outputs:
 ## Outputs
 | Output      | Description                             |
 |:------------|:----------------------------------------|
-| cardata     | CSV formatted car data for current driver   |
-| cararray     | CSV formatted basic car data for ALL driver   |
+| data        | CSV formatted car data for current driver   |
+| msgtype     | Message type from the game for optional routing   |
 
 ## Configuration Examples
 ### Simple
