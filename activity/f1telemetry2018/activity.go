@@ -360,7 +360,7 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 	context.SetOutput(ovOutputData, "")
 	context.SetOutput(ovOutputType, int(unpHeader.PacketID))
 
-	outputHeader := fmt.Sprintf("%v,%v,%g", unpHeader.PacketID, unpHeader.SessionUID, unpHeader.SessionTime)
+	outputHeader := fmt.Sprintf("%v,%v,%g,%v", unpHeader.PacketID, unpHeader.SessionUID, unpHeader.SessionTime, unpHeader.PlayerCarIndex)
 
 	switch unpHeader.PacketID {
 	case 0: //Motion
