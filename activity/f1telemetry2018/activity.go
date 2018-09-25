@@ -197,11 +197,11 @@ type F1ParticipantData struct {
 
 // F1SetupData - Struct for the unpacking of the UDP data format
 type F1SetupData struct {
-	FrontWingu            uint8   `struc:"uint8,little"`   // Front wing aero
+	FrontWing             uint8   `struc:"uint8,little"`   // Front wing aero
 	RearWing              uint8   `struc:"uint8,little"`   // Rear wing aero
 	OnThrottle            uint8   `struc:"uint8,little"`   // Differential adjustment on throttle (percentage)
-	offThrottle           uint8   `struc:"uint8,little"`   // Differential adjustment off throttle (percentage)
-	frontCamber           float32 `struc:"float32,little"` // Front camber angle (suspension geometry)
+	OffThrottle           uint8   `struc:"uint8,little"`   // Differential adjustment off throttle (percentage)
+	FrontCamber           float32 `struc:"float32,little"` // Front camber angle (suspension geometry)
 	RearCamber            float32 `struc:"float32,little"` // Rear camber angle (suspension geometry)
 	FrontToe              float32 `struc:"float32,little"` // Front toe angle (suspension geometry)
 	RearToe               float32 `struc:"float32,little"` // Rear toe angle (suspension geometry)
@@ -238,7 +238,7 @@ type F1CarTelemetryData struct {
 	TyresSurfaceTemperatureRR uint16  `struc:"uint16,little"`  // Tyres surface temperature (celsius)
 	TyresSurfaceTemperatureFL uint16  `struc:"uint16,little"`  // Tyres surface temperature (celsius)
 	TyresSurfaceTemperatureFR uint16  `struc:"uint16,little"`  // Tyres surface temperature (celsius)
-	tyresInnerTemperatureRL   uint16  `struc:"uint16,little"`  // Tyres inner temperature (celsius)
+	TyresInnerTemperatureRL   uint16  `struc:"uint16,little"`  // Tyres inner temperature (celsius)
 	TyresInnerTemperatureRR   uint16  `struc:"uint16,little"`  // Tyres inner temperature (celsius)
 	TyresInnerTemperatureFL   uint16  `struc:"uint16,little"`  // Tyres inner temperature (celsius)
 	TyresInnerTemperatureFR   uint16  `struc:"uint16,little"`  // Tyres inner temperature (celsius)
@@ -263,7 +263,7 @@ type F1CarStatus struct {
 	PitLimiterStatus        uint8   `struc:"uint8,little"`   // Pit limiter status - 0 = off, 1 = on
 	FuelInTank              float32 `struc:"float32,little"` // Current fuel mass
 	FuelCapacity            float32 `struc:"float32,little"` // Fuel capacity
-	NaxRPM                  uint16  `struc:"uint16,little"`  // Cars max RPM, point of rev limiter
+	MaxRPM                  uint16  `struc:"uint16,little"`  // Cars max RPM, point of rev limiter
 	IdleRPM                 uint16  `struc:"uint16,little"`  // Cars idle RPM
 	MaxGears                uint8   `struc:"uint8,little"`   // Maximum number of gears
 	DrsAllowed              uint8   `struc:"uint8,little"`   // 0 = not allowed, 1 = allowed, -1 = unknown
@@ -462,10 +462,10 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 		for i := 0; i <= 19; i++ {
 			err = struc.Unpack(buf, unpCarSetupData)
 			if err != nil {
-				log.Error("Unpack Fail: F1LapData ", err.Error())
+				log.Error("Unpack Fail: F1CarSetupData ", err.Error())
 				return false, err
 			}
-			log.Debugf("LapData unpacked: %v\n%+v\n", i, unpCarSetupData)
+			log.Debugf("F1CarSetupData unpacked: %v\n%+v\n", i, unpCarSetupData)
 			arraystring = arraystring + fmt.Sprintf("|%v,", i) + strings.Join(unpCarSetupData.valueStrings(), ",")
 		}
 		context.SetOutput(ovOutputData, outputHeader+arraystring)
@@ -503,10 +503,10 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 		for i := 0; i <= 19; i++ {
 			err = struc.Unpack(buf, unpCarStatus)
 			if err != nil {
-				log.Error("Unpack Fail: F1CarCarStatus ", err.Error())
+				log.Error("Unpack Fail: F1CarStatus ", err.Error())
 				return false, err
 			}
-			log.Debugf("Car Array unpacked: %v\n%+v\n", i, unpCarStatus)
+			log.Debugf("CarStatus unpacked: %v\n%+v\n", i, unpCarStatus)
 			arraystring = arraystring + fmt.Sprintf("|%v,", i) + strings.Join(unpCarStatus.valueStrings(), ",")
 
 		}
