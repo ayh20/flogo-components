@@ -1,6 +1,7 @@
 package aggregate
 
 import (
+	"fmt"
 	"io/ioutil"
 	"testing"
 
@@ -58,6 +59,8 @@ func TestEval(t *testing.T) {
 		t.Error("Window should not report after first value")
 	}
 
+	fmt.Printf("test %v, %v", report, result)
+
 	tc2 := test.NewTestActivityContext(getActivityMetadata())
 
 	//setup attrs
@@ -79,6 +82,8 @@ func TestEval(t *testing.T) {
 		t.Error("Window should report after second value")
 	}
 
+	fmt.Printf("test %v, %v", report, result)
+
 	tc3 := test.NewTestActivityContext(getActivityMetadata())
 
 	//setup attrs
@@ -99,6 +104,9 @@ func TestEval(t *testing.T) {
 	if !report {
 		t.Error("Window should report after third value")
 	}
+
+	fmt.Printf("test %v, %v", report, result)
+
 }
 
 func TestResetEval(t *testing.T) {
@@ -123,6 +131,8 @@ func TestResetEval(t *testing.T) {
 		t.Error("Window should not report after first value")
 	}
 
+	fmt.Printf("test %v, %v", report, result)
+
 	tc2 := test.NewTestActivityContext(getActivityMetadata())
 
 	//setup attrs
@@ -143,6 +153,8 @@ func TestResetEval(t *testing.T) {
 		t.Error("Window should report after second value")
 	}
 
+	fmt.Printf("test %v, %v", report, result)
+
 	tc3 := test.NewTestActivityContext(getActivityMetadata())
 
 	//setup attrs
@@ -162,6 +174,9 @@ func TestResetEval(t *testing.T) {
 	if result != 0.0 {
 		t.Errorf("Result is %d instead of 0.0", result)
 	}
+
+	fmt.Printf("test %v, %v", report, result)
+
 }
 
 func TestVaryingData(t *testing.T) {
@@ -187,6 +202,8 @@ func TestVaryingData(t *testing.T) {
 		t.Error("Window should not report after first value for key 1")
 	}
 
+	fmt.Printf("test %v, %v", report, result)
+
 	tca := test.NewTestActivityContext(getActivityMetadata())
 
 	//setup attrs
@@ -206,6 +223,8 @@ func TestVaryingData(t *testing.T) {
 	if report {
 		t.Error("Window should not report after first value for key 2")
 	}
+
+	fmt.Printf("test %v, %v", report, result)
 
 	tc2 := test.NewTestActivityContext(getActivityMetadata())
 
@@ -228,6 +247,8 @@ func TestVaryingData(t *testing.T) {
 		t.Error("Window should report after second value for key 1")
 	}
 
+	fmt.Printf("test %v, %v", report, result)
+
 	tc3 := test.NewTestActivityContext(getActivityMetadata())
 
 	//setup attrs
@@ -249,6 +270,8 @@ func TestVaryingData(t *testing.T) {
 		t.Errorf("Result is %d instead of 0.0", result)
 	}
 
+	fmt.Printf("test %v, %v", report, result)
+
 	tca2 := test.NewTestActivityContext(getActivityMetadata())
 
 	//setup attrs
@@ -269,4 +292,7 @@ func TestVaryingData(t *testing.T) {
 	if !report {
 		t.Error("Window should report after second value for key 2")
 	}
+
+	fmt.Printf("test %v, %v", report, result)
+
 }

@@ -4,7 +4,9 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/TIBCOSoftware/flogo-contrib/activity/aggregate/aggregator"
+	//	"aggregator"
+
+	"github.com/TIBCOSoftware/flogo-contrib/activity/aggregate_old/aggregator"
 	"github.com/TIBCOSoftware/flogo-lib/core/activity"
 	"github.com/TIBCOSoftware/flogo-lib/core/data"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
@@ -27,10 +29,10 @@ func init() {
 	activityLogger.SetLogLevel(logger.InfoLevel)
 }
 
-// AggregateActivity is an Activity that is used to Aggregate a message to the console
+// AggregationActivity is an Activity that is used to Aggregate a message to the console
 // inputs : {function, windowSize, autoRest, value}
 // outputs: {result, report}
-type AggregateActivity struct {
+type AggregationActivity struct {
 	metadata *activity.Metadata
 	mutex    *sync.RWMutex
 
@@ -40,16 +42,16 @@ type AggregateActivity struct {
 
 // NewActivity creates a new AppActivity
 func NewActivity(metadata *activity.Metadata) activity.Activity {
-	return &AggregateActivity{metadata: metadata, aggregators: make(map[string]aggregator.Aggregator), mutex: &sync.RWMutex{}}
+	return &AggregationActivity{metadata: metadata, aggregators: make(map[string]aggregator.Aggregator), mutex: &sync.RWMutex{}}
 }
 
 // Metadata returns the activity's metadata
-func (a *AggregateActivity) Metadata() *activity.Metadata {
+func (a *AggregationActivity) Metadata() *activity.Metadata {
 	return a.metadata
 }
 
 // Eval implements api.Activity.Eval - Aggregates the Message
-func (a *AggregateActivity) Eval(context activity.Context) (done bool, err error) {
+func (a *AggregationActivity) Eval(context activity.Context) (done bool, err error) {
 
 	dataKey := context.GetInput(ivDataKey).(string)
 
