@@ -364,7 +364,7 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 
 	switch unpHeader.PacketID {
 	case 0: //Motion
-		fmt.Println("zero")
+		//fmt.Println("zero")
 
 		// Unpack the 20 item car motion array
 		// Note - Output array is:
@@ -394,7 +394,7 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 		context.SetOutput(ovOutputData, outputHeader+fieldsstring+arraystring)
 
 	case 1: //Session
-		fmt.Println("one")
+		//fmt.Println("one")
 		err = struc.Unpack(buf, unpSession)
 		if err != nil {
 			log.Error("Unpack Fail: F1Session ", err.Error())
@@ -406,7 +406,7 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 		context.SetOutput(ovOutputData, outputHeader+fieldsstring)
 
 	case 2: //Lap Data
-		fmt.Println("two")
+		//fmt.Println("two")
 		// Unpack the 20 item lap data array
 		// Note - Output array is:
 		// Timestamp + array of car CSV data seprated by a "|"
@@ -425,7 +425,7 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 		}
 		context.SetOutput(ovOutputData, outputHeader+arraystring)
 	case 3: //Event
-		fmt.Println("three")
+		//fmt.Println("three")
 		err = struc.Unpack(buf, unpEvent)
 		if err != nil {
 			log.Error("Unpack Fail: F1Event ", err.Error())
@@ -435,7 +435,7 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 		context.SetOutput(ovOutputData, outputHeader+"|"+unpEvent.EventString)
 
 	case 4: //Participants
-		fmt.Println("four")
+		//fmt.Println("four")
 		err = struc.Unpack(buf, unpParticipant)
 		if err != nil {
 			log.Error("Unpack Fail: F1Participant ", err.Error())
@@ -456,7 +456,7 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 		context.SetOutput(ovOutputData, outputHeader+fmt.Sprintf("|%v", unpParticipant.NumCars)+arraystring)
 
 	case 5: //Car Setups
-		fmt.Println("five")
+		//fmt.Println("five")
 		arraystring := ""
 
 		for i := 0; i <= 19; i++ {
@@ -471,7 +471,7 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 		context.SetOutput(ovOutputData, outputHeader+arraystring)
 
 	case 6: //Car Telemetery
-		fmt.Println("six")
+		//fmt.Println("six")
 		arraystring := ""
 
 		for i := 0; i <= 19; i++ {
@@ -496,7 +496,7 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 		context.SetOutput(ovOutputData, outputHeader+fieldsstring+arraystring)
 
 	case 7: //Car Status
-		fmt.Println("seven")
+		//fmt.Println("seven")
 
 		arraystring := ""
 
@@ -520,26 +520,6 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 	return true, nil
 }
 
-// func (f F1Data) valueStrings() []string {
-// 	v := reflect.ValueOf(f)
-// 	ss := make([]string, v.NumField())
-// 	for i := range ss {
-// 		typeField := v.Type().Field(i)
-// 		if strings.HasPrefix(typeField.Name, "Filler") {
-// 			ss[i] = fmt.Sprintf("%v", "-1")
-// 		} else {
-// 			switch v.Field(i).Kind() {
-// 			case reflect.Float32, reflect.Float64:
-// 				x := v.Field(i).Float()
-// 				ss[i] = strconv.FormatFloat(x, 'f', -1, 32)
-// 			default:
-// 				ss[i] = fmt.Sprintf("%v", v.Field(i))
-// 			}
-
-// 		}
-// 	}
-// 	return ss
-// }
 func (f F1CarMotion) valueStrings() []string {
 	v := reflect.ValueOf(f)
 	ss := make([]string, v.NumField())
