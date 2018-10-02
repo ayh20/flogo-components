@@ -34,7 +34,7 @@ type F1Header struct {
 	PlayerCarIndex  uint8   `struc:"uint8,little"`   // Index of player's car in the array
 }
 
-// F1CarMotion - Struct for the unpacking of the UDP Motion format
+// F1CarMotion (Type 0 x20) - Struct for the unpacking of the UDP Motion format
 type F1CarMotion struct {
 	X          float32 `struc:"float32,little"` // World space position X
 	Y          float32 `struc:"float32,little"` // World space position Y
@@ -56,7 +56,7 @@ type F1CarMotion struct {
 	Roll       float32 `struc:"float32,little"` // Roll angle in radians
 }
 
-// F1CarMotionExtra - Struct for the unpacking of the UDP data format
+// F1CarMotionExtra (Type 0 x1) - Struct for the unpacking of the UDP data format
 type F1CarMotionExtra struct {
 	SuspPosRL          float32 `struc:"float32,little"` // Suspension position RL, RR, FL, FR  F array
 	SuspPosRR          float32 `struc:"float32,little"`
@@ -90,7 +90,7 @@ type F1CarMotionExtra struct {
 	FrontWheelsAngle   float32 `struc:"float32,little"` // Current front wheels angle in radians
 }
 
-// F1Session - Struct for the unpacking of the UDP data format
+// F1Session (Type 1 x1) - Struct for the unpacking of the UDP data format
 type F1Session struct {
 	Weather             uint8   `struc:"uint8,little"`   // Weather - 0 = clear, 1 = light cloud, 2 = overcast  3 = light rain, 4 = heavy rain, 5 = storm
 	TrackTemperature    int8    `struc:"int8,little"`    // Track temp. in degrees celsius
@@ -154,7 +154,7 @@ type F1Session struct {
 	NetworkGame         uint8   `struc:"uint8,little"` // 0 = offline, 1 = online
 }
 
-// F1LapData - Struct for the unpacking of the UDP data format
+// F1LapData (Type 2 x20) - Struct for the unpacking of the UDP data format
 type F1LapData struct {
 	LastLapTime       float32 `struc:"float32,little"` // Last lap time in seconds
 	CurrentLapTime    float32 `struc:"float32,little"` // Current time around the lap in seconds
@@ -175,17 +175,17 @@ type F1LapData struct {
 	ResultStatus      uint8   `struc:"uint8,little"`   // Result status - 0 = invalid, 1 = inactive, 2 = active, 3 = finished, 4 = disqualified, 5 = not classified, 6 = retired
 }
 
-// F1Event - Struct for the unpacking of the UDP data format
+// F1Event (Type 3 x1) - Struct for the unpacking of the UDP data format
 type F1Event struct {
 	EventString string `struc:"[4]byte,little"` // Event string code
 }
 
-// F1Participant - Struct for the unpacking of the UDP data format
+// F1Participant (Type 4 x1) - Struct for the unpacking of the UDP data format
 type F1Participant struct {
 	NumCars uint8 `struc:"uint8,little"` // Number of cars in the data
 }
 
-// F1ParticipantData - Struct for the unpacking of the UDP data format
+// F1ParticipantData (Type 4 x20) - Struct for the unpacking of the UDP data format
 type F1ParticipantData struct {
 	AiControlled uint8  `struc:"uint8,little"`    // Whether the vehicle is AI (1) or Human (0) controlled
 	DriverID     uint8  `struc:"uint8,little"`    // Driver id
@@ -195,7 +195,7 @@ type F1ParticipantData struct {
 	Name         string `struc:"[48]byte,little"` // Name of participant in UTF-8 format – null terminated.  Will be truncated with … (U+2026) if too long
 }
 
-// F1SetupData - Struct for the unpacking of the UDP data format
+// F1SetupData (Type 5 x20)- Struct for the unpacking of the UDP data format
 type F1SetupData struct {
 	FrontWing             uint8   `struc:"uint8,little"`   // Front wing aero
 	RearWing              uint8   `struc:"uint8,little"`   // Rear wing aero
@@ -453,7 +453,7 @@ func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 			arraystring = arraystring + fmt.Sprintf("|%v,", i) + strings.Join(unpParticpantData.valueStrings(), ",")
 
 		}
-		context.SetOutput(ovOutputData, outputHeader+arraystring)
+		context.SetOutput(ovOutputData, outputHeader+fmt.Sprintf("|%v", unpParticipant.NumCars)+arraystring)
 
 	case 5: //Car Setups
 		fmt.Println("five")
