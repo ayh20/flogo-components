@@ -1,0 +1,58 @@
+{
+    "name": "mqtt",
+    "type": "flogo:activity",
+    "ref": "github.com/ayh20/flogo-components/activity/mqtt",
+    "version": "0.0.1",
+    "title": "Send MQTT Message with AWS IoT TLS Support",
+    "description": "Pubishes messages to a MQTT topic with AWS IoT support",
+    "author": "Andy Hampshire <ahampshi@tibco.com>",
+    "input":[
+     {
+        "name": "broker",
+        "type": "string"
+      },
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": "user",
+        "type": "string"
+      },
+      {
+        "name": "password",
+        "type": "string"
+      },
+      {
+        "name": "enabletls",
+        "type": "boolean"
+      },
+      {
+        "name": "certstore",
+        "type": "string"
+      },
+      {
+        "name": "thing",
+        "type": "string"
+      },
+      {
+        "name": "topic",
+        "type": "string"
+      },
+      {
+        "name": "qos",
+        "type": "integer",
+        "allowed" : ["0", "1", "2"]
+      },
+      {
+        "name": "message",
+        "type": "any"
+      }
+    ],
+    "output": [
+      {
+        "name": "result",
+        "type": "string"
+      }
+    ]
+  }
