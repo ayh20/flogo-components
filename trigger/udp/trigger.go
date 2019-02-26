@@ -71,7 +71,7 @@ func (t *udpTrigger) Start() error {
 		return nil
 	}
 
-	log.Debug("Resolved Addr O/P %v", addr)
+	log.Debug("Resolved Addr O/P %v", addr.String())
 
 	if wsGroup == "" {
 		/* Now listen at selected port */
