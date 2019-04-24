@@ -2,9 +2,9 @@
     "name": "mqtt",
     "type": "flogo:activity",
     "ref": "github.com/ayh20/flogo-components/activity/mqtt",
-    "version": "0.0.1",
-    "title": "Send MQTT Message with AWS IoT TLS Support",
-    "description": "Pubishes messages to a MQTT topic with AWS IoT support",
+    "version": "0.0.2",
+    "title": "Send MQTT Message with TLS Support  (AWS IoT, Eclipse Hono, Bosch IoT)",
+    "description": "Pubishes messages to a MQTT topic with TLS  support",
     "author": "Andy Hampshire <ahampshi@tibco.com>",
     "input":[
      {

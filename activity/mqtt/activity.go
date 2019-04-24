@@ -124,7 +124,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 
 	ivThing, ok := thingInput.(string)
 	if !ok || ivThing == "" {
-		//thing not set, use default
+		//thing not set, use default and this indicates that this is not AWS
 		ivThing = "device"
 	}
 
@@ -136,8 +136,13 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 
 	if tlsEnabled {
 		//set tls config
-		tlsConfig := NewTLSConfig(ivThing, ivCertStore)
-		opts.SetTLSConfig(tlsConfig)
+		if ivThing == "device" {
+			tlsConfig := NewTLSConfig(ivCertStore)
+			opts.SetTLSConfig(tlsConfig)
+		} else {
+			tlsConfig := AWSTLSConfig(ivThing, ivCertStore)
+			opts.SetTLSConfig(tlsConfig)
+		}
 	}
 
 	client := mqtt.NewClient(opts)
@@ -171,8 +176,26 @@ func makeMsg(msgData interface{}) string {
 	return returnData
 }
 
-// NewTLSConfig creates a TLS configuration for the specified 'thing'
-func NewTLSConfig(thingName string, thingDir string) *tls.Config {
+// NewTLSConfig creates a TLS configuration using passed cert
+func NewTLSConfig(certstore string) *tls.Config {
+
+	// Import root CA
+	certpool := x509.NewCertPool()
+	pemCerts, err := ioutil.ReadFile(certstore)
+	if err == nil {
+		certpool.AppendCertsFromPEM(pemCerts)
+	}
+
+	return &tls.Config{
+		RootCAs:            certpool,
+		ClientAuth:         tls.NoClientCert,
+		ClientCAs:          nil,
+		InsecureSkipVerify: true,
+	}
+}
+
+// AWSTLSConfig creates a TLS configuration for the specified 'thing'
+func AWSTLSConfig(thingName string, thingDir string) *tls.Config {
 
 	thingLoc := thingDir
 

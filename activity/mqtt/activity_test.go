@@ -66,14 +66,51 @@ func TestEval(t *testing.T) {
 
 }
 
-func TestEvalTLS(t *testing.T) {
+func TestEvalTLSBosch(t *testing.T) {
 
-	// defer func() {
-	// 	if r := recover(); r != nil {
-	// 		t.Failed()
-	// 		t.Errorf("panic during execution: %v", r)
-	// 	}
-	// }()
+	defer func() {
+		if r := recover(); r != nil {
+			t.Failed()
+			t.Errorf("panic during execution: %v", r)
+		}
+	}()
+
+	act := NewActivity(getActivityMetadata())
+	tc := test.NewTestActivityContext(getActivityMetadata())
+	//setup attrs
+
+	fmt.Println("Publishing a flogo test message to topic 'event' on broker 'mqtt.bosch-iot-hub.com:8883'")
+
+	tc.SetInput("broker", "ssl://mqtt.bosch-iot-hub.com:8883")
+	tc.SetInput("id", "basicPubSub")
+	tc.SetInput("topic", "event")
+	tc.SetInput("user", "little-sensor@tcef56e88b16548f9a4a49cd5b92150af")
+	tc.SetInput("password", "plaintextPassword")
+	tc.SetInput("qos", 1)
+	tc.SetInput("enabletls", true)
+	tc.SetInput("certstore", "C:/Users/ahampshi/Documents/BoschIoTStuff/iothub.crt")
+	tc.SetInput("message", "This is a test message from flogo")
+
+	act.Eval(tc)
+
+	//check result attr
+	result := tc.GetOutput("result")
+	fmt.Println("result: ", result)
+
+	if result == nil {
+		t.Fail()
+	}
+
+}
+
+func TestEvalTLSAWS(t *testing.T) {
+
+	defer func() {
+		if r := recover(); r != nil {
+			t.Failed()
+			t.Errorf("panic during execution: %v", r)
+		}
+	}()
 
 	act := NewActivity(getActivityMetadata())
 	tc := test.NewTestActivityContext(getActivityMetadata())
@@ -82,7 +119,7 @@ func TestEvalTLS(t *testing.T) {
 	fmt.Println("Publishing a flogo test message to topic 'topic_1' on broker 'a1ck3umk9w128s-ats.iot.eu-west-1.amazonaws.com:8883'")
 
 	tc.SetInput("broker", "ssl://a1ck3umk9w128s-ats.iot.eu-west-1.amazonaws.com:8883")
-	tc.SetInput("id", "basicPubSub")
+	tc.SetInput("id", "testclient")
 	tc.SetInput("topic", "topic_1")
 	tc.SetInput("qos", 0)
 	tc.SetInput("enabletls", true)

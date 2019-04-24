@@ -1,9 +1,9 @@
-# Publish MQTT Message with TLS support for AWS IoT
+# Publish MQTT Message with TLS support (AWS IoT/Eclipse Hono/Bosch IoT Suite)
 This activity provides your flogo application the ability to publish a message on an MQTT topic.
 
 This activity is based on the MQTT activity produced by Jan van der Lugt https://github.com/jvanderl/flogo-components/tree/master/incubator/activity/mqtt and the TLS MQTT trigger from Anshul Sharmas https://github.com/anshulsharmas/flogo-contrib/tree/master/trigger/mqtt 
 
-Take care when using AWS IoT to get the correct certs/keys and Policy configuration. Topic, Client Name and keys must all match the  policy definition.
+Take care when using AWS IoT to get the correct certs/keys and Policy configuration. Topic, Client Name and keys must all match the policy definition.
 
 ## Installation
 
@@ -76,15 +76,18 @@ Inputs and Outputs:
 }
 ```
 ## Settings
+
+See activity-test.go for sample SSL/TLS parameters ...
+
 | Setting   | Description    |
 |:----------|:---------------|
-| broker    | the MQTT Broker/AWS IoT URI (tcp://[hostname]:[port]) or ssl://[awshostname]:8883 |
-| id        | The MQTT Client ID (Must be a valid name in the AWS Policy files)|         
-| user      | The UserID used when connecting to the MQTT IoT broker |
-| password  | The Password used when connecting to the MQTT broker |
-| certstore | The AWS TLS keys location |
-| thing     | The AWS thing name used for locating the correct TLS certs/keys |
-| topic     | Topic on which the message is published (Valid AWS policy |
+| broker    | the MQTT Broker/AWS IoT URI (tcp://[hostname]:[port]) or ssl://[hostname]:8883 |
+| id        | The MQTT Client ID (Must be a valid name in the AWS Policy files) |         
+| user      | The UserID used when connecting to the MQTT IoT broker (Not AWS)|
+| password  | The Password used when connecting to the MQTT broker (Not AWS) |
+| certstore | For AWS TLS keys location directory, otherwise this is the server's TLS cert file |
+| thing     | Blank unless connecting to AWS, then the thing name used for locating the correct TLS certs/keys in the certstore dir |
+| topic     | Topic on which the message is published (Valid AWS policy entry required) |
 | qos       | MQTT Quality of Service |
 | message   | The message payload |
 
