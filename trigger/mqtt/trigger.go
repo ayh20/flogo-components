@@ -63,13 +63,24 @@ func (t *MqttTrigger) Start() error {
 	opts.SetClientID(t.config.GetSetting("id"))
 	opts.SetUsername(t.config.GetSetting("user"))
 	opts.SetPassword(t.config.GetSetting("password"))
+
+	if t.config.Settings["keepalive"] != "" {
+		k, err := data.CoerceToInteger(t.config.Settings["keepalive"])
+		if err != nil {
+			log.Error("Error converting \"keepalive\" to an integer ", err.Error())
+			return err
+		}
+
+		opts.SetKeepAlive(time.Duration(k) * time.Second)
+	}
+
 	b, err := data.CoerceToBoolean(t.config.Settings["cleansess"])
 	if err != nil {
 		log.Error("Error converting \"cleansess\" to a boolean ", err.Error())
 		return err
 	}
 	opts.SetCleanSession(b)
-	if storeType := t.config.Settings["store"]; storeType != ":memory:" {
+	if storeType := t.config.Settings["store"]; storeType != ":memory:" && storeType != "" {
 		opts.SetStore(mqtt.NewFileStore(t.config.GetSetting("store")))
 	}
 	// Get settings for TLS (store location, thing name)

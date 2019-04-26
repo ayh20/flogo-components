@@ -57,6 +57,10 @@ Settings, Outputs and Endpoint:
         "type": "integer"
       },
       {
+        "name": "keepalive",
+        "type": "integer"
+      },
+      {
         "name": "cleansess",
         "type": "boolean"
       }
