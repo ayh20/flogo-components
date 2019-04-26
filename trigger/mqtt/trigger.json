@@ -1,0 +1,75 @@
+{
+    "name": "tibco-mqtt-aws",
+    "type": "flogo:trigger",
+    "ref": "github.com/ayh20/flogo-components/trigger/mqtt",
+    "version": "0.0.1",
+    "title": "Receive MQTT Message with TLS Support  (AWS IoT, Eclipse Hono, Bosch IoT)",
+    "author": "Andy Hampshire <ahampshi@tibco.com>",
+    "description": "MQTT Trigger with TLS suppport",
+    "settings":[
+      {
+        "name": "broker",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "id",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "user",
+        "type": "string"
+      },
+      {
+        "name": "password",
+        "type": "string"
+      },
+      {
+        "name": "enabletls",
+        "type": "boolean",
+        "required": true
+      },
+      {
+        "name": "certstore",
+        "type": "string"
+      },
+      {
+        "name": "thing",
+        "type": "string"
+      },
+      {
+        "name": "store",
+        "type": "string"
+      },
+      {
+        "name": "qos",
+        "type": "integer",
+        "allowed" : ["0", "1", "2"]
+      },
+      {
+        "name": "cleansess",
+        "type": "boolean"
+      }
+    ],
+    "output": [
+        {
+          "name": "message",
+          "type": "any"
+        }
+      ],
+      "reply": [
+        {
+          "name": "data",
+          "type": "object"
+        }
+      ],
+    "handler": {
+      "settings": [
+        {
+          "name": "topic",
+          "type": "string"
+        }
+      ]
+    }
+  }
