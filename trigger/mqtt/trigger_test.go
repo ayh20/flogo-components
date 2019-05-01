@@ -51,6 +51,7 @@ const testConfig2 string = `{
 	  "password": "plaintextPassword",
 	  "store": "",
 	  "qos": "1",
+	  "keepalive": "30",
 	  "cleansess": "false",
 	  "enabletls": "true",
 	  "certstore": "C:/Users/ahampshi/Documents/BoschIoTStuff/iothub.crt"

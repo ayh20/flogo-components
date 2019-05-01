@@ -80,9 +80,11 @@ func (t *MqttTrigger) Start() error {
 		return err
 	}
 	opts.SetCleanSession(b)
+
 	if storeType := t.config.Settings["store"]; storeType != ":memory:" && storeType != "" {
 		opts.SetStore(mqtt.NewFileStore(t.config.GetSetting("store")))
 	}
+	
 	// Get settings for TLS (store location, thing name)
 	tlsEnabled, err := data.CoerceToBoolean(t.config.Settings["enabletls"])
 	if err != nil {
