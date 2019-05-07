@@ -74,6 +74,13 @@ func (t *MqttTrigger) Start() error {
 		opts.SetKeepAlive(time.Duration(k) * time.Second)
 	}
 
+	ac, err := data.CoerceToBoolean(t.config.Settings["autoreconnect"])
+	if err != nil {
+		log.Error("Error converting \"autoreconnect\" to a boolean ", err.Error())
+		return err
+	}
+	opts.SetAutoReconnect(ac)
+
 	b, err := data.CoerceToBoolean(t.config.Settings["cleansess"])
 	if err != nil {
 		log.Error("Error converting \"cleansess\" to a boolean ", err.Error())
@@ -84,7 +91,7 @@ func (t *MqttTrigger) Start() error {
 	if storeType := t.config.Settings["store"]; storeType != ":memory:" && storeType != "" {
 		opts.SetStore(mqtt.NewFileStore(t.config.GetSetting("store")))
 	}
-	
+
 	// Get settings for TLS (store location, thing name)
 	tlsEnabled, err := data.CoerceToBoolean(t.config.Settings["enabletls"])
 	if err != nil {

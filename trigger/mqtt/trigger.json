@@ -52,8 +52,14 @@
         "type": "integer"
       },
       {
+        "name": "autoreconnect",
+        "type": "boolean",
+        "required": true
+      },
+      {
         "name": "cleansess",
-        "type": "boolean"
+        "type": "boolean",
+        "required": true
       }
     ],
     "output": [
