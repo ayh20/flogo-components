@@ -128,6 +128,8 @@ func (t *MqttTrigger) Start() error {
 		}
 	}
 
+	log.Debugf("Opts for mqtt client: %+v", opts)
+
 	client := mqtt.NewClient(opts)
 	t.client = client
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
