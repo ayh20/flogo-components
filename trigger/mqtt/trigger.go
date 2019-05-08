@@ -58,6 +58,7 @@ func (t *MqttTrigger) Initialize(ctx trigger.InitContext) error {
 // Start implements trigger.Trigger.Start
 func (t *MqttTrigger) Start() error {
 
+	log.Debugf("MQTT Trigger: %v", "Starting")
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(t.config.GetSetting("broker"))
 	opts.SetClientID(t.config.GetSetting("id"))
@@ -99,12 +100,16 @@ func (t *MqttTrigger) Start() error {
 		return err
 	}
 
+	log.Debugf("MQTT Trigger: %v", "Values set, do TLS")
+
 	ivCertStore := t.config.GetSetting("certstore")
 
 	ivThing := t.config.GetSetting("thing")
 
 	opts.SetDefaultPublishHandler(func(client mqtt.Client, msg mqtt.Message) {
 		topic := msg.Topic()
+
+		log.Debugf("MQTT Trigger: %v", "In pub handler")
 		//TODO we should handle other types, since mqtt message format are data-agnostic
 		payload := string(msg.Payload())
 		log.Debug("Received msg:", payload)
@@ -130,6 +135,7 @@ func (t *MqttTrigger) Start() error {
 
 	log.Debugf("Opts for mqtt client: %+v", opts)
 
+	log.Debugf("MQTT Trigger: %v", "Create handler")
 	client := mqtt.NewClient(opts)
 	t.client = client
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
@@ -145,7 +151,7 @@ func (t *MqttTrigger) Start() error {
 	t.topicToHandler = make(map[string]*trigger.Handler)
 
 	for _, handler := range t.handlers {
-
+		log.Debugf("MQTT Trigger: %v", "Start handlers")
 		topic := handler.GetStringSetting("topic")
 
 		if token := t.client.Subscribe(topic, byte(i), nil); token.Wait() && token.Error() != nil {
