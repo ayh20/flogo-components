@@ -20,6 +20,9 @@ import (
 // log is the default package logger
 var log = logger.GetLogger("trigger-ayh20-mqtt-tls")
 
+// default handlername
+var defaultHandler string
+
 // MqttTrigger is simple MQTT trigger
 type MqttTrigger struct {
 	metadata       *trigger.Metadata
@@ -117,7 +120,10 @@ func (t *MqttTrigger) Start() error {
 		if found {
 			t.RunHandler(handler, payload)
 		} else {
-			log.Errorf("handler for topic '%s' not found", topic)
+			// add a hack here .... if the topic doesn't exist use the first/default one ---- this should be a patten matcher
+			handler = t.topicToHandler[defaultHandler]
+			t.RunHandler(handler, payload)
+			//log.Errorf("handler for topic '%s' not found", topic)
 		}
 	})
 
@@ -150,6 +156,7 @@ func (t *MqttTrigger) Start() error {
 
 	t.topicToHandler = make(map[string]*trigger.Handler)
 
+	d := 1
 	for _, handler := range t.handlers {
 		log.Debugf("MQTT Trigger: %v", "Start handlers")
 		topic := handler.GetStringSetting("topic")
@@ -160,6 +167,11 @@ func (t *MqttTrigger) Start() error {
 		}
 		log.Debugf("Subscribed to topic: %s, will trigger handler: %s", topic, handler)
 		t.topicToHandler[topic] = handler
+		// set the first handler as the default
+		if d == 1 {
+			defaultHandler = topic
+			d = 0
+		}
 
 	}
 
