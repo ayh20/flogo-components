@@ -116,14 +116,13 @@ func (t *MqttTrigger) Start() error {
 		//TODO we should handle other types, since mqtt message format are data-agnostic
 		payload := string(msg.Payload())
 		log.Debug("Received msg:", payload)
-		handler, found := t.topicToHandler[topic]
+
+		// add a hack here .... if the topic doesn't exist use the first/default one ---- this should be a patten matcher
+		handler, found := t.topicToHandler[defaultHandler]
 		if found {
 			t.RunHandler(handler, payload)
 		} else {
-			// add a hack here .... if the topic doesn't exist use the first/default one ---- this should be a patten matcher
-			handler = t.topicToHandler[defaultHandler]
-			t.RunHandler(handler, payload)
-			//log.Errorf("handler for topic '%s' not found", topic)
+			log.Errorf("handler for topic '%s' not found", defaultHandler)
 		}
 	})
 
