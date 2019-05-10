@@ -110,7 +110,7 @@ func (t *MqttTrigger) Start() error {
 	ivThing := t.config.GetSetting("thing")
 
 	opts.SetDefaultPublishHandler(func(client mqtt.Client, msg mqtt.Message) {
-		topic := msg.Topic()
+		//topic := msg.Topic()
 
 		log.Debugf("MQTT Trigger: %v", "In pub handler")
 		//TODO we should handle other types, since mqtt message format are data-agnostic
