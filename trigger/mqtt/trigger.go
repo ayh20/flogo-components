@@ -2,6 +2,7 @@ package mqtt
 
 import (
 	"context"
+	"math/rand"
 
 	"crypto/tls"
 	"crypto/x509"
@@ -64,7 +65,7 @@ func (t *MqttTrigger) Start() error {
 	log.Debugf("MQTT Trigger: %v", "Starting")
 	opts := mqtt.NewClientOptions()
 	opts.AddBroker(t.config.GetSetting("broker"))
-	opts.SetClientID(t.config.GetSetting("id"))
+	opts.SetClientID(t.config.GetSetting("id") + strconv.Itoa(rand.Intn(999)))
 	opts.SetUsername(t.config.GetSetting("user"))
 	opts.SetPassword(t.config.GetSetting("password"))
 
