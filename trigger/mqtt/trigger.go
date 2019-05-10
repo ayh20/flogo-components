@@ -196,6 +196,7 @@ func (t *MqttTrigger) Stop() error {
 func (t *MqttTrigger) RunHandler(handler *trigger.Handler, payload string) {
 
 	trgData := make(map[string]interface{})
+	log.Debug("Handler payload:", payload)
 	trgData["message"] = payload
 
 	results, err := handler.Handle(context.Background(), trgData)
