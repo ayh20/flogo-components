@@ -19,7 +19,7 @@ func (fnMatch) Name() string {
 }
 
 func (fnMatch) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeInt64}, false
+	return []data.Type{data.TypeString, data.TypeString}, false
 }
 
 func (fnMatch) Eval(params ...interface{}) (interface{}, error) {

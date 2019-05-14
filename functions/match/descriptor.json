@@ -8,7 +8,7 @@
   "functions": [
     {
       "name": "match",
-      "description": "Match",
+      "description": "Match input against regular expression",
       "varArgs": true,
       "args": [
         {
