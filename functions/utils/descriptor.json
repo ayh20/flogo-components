@@ -1,14 +1,14 @@
 {
-  "name": "match",
+  "name": "utils",
   "type": "flogo:function",
   "version": "0.0.1",
   "title": "Match string to Pattern",
   "description": "returns current time",
-  "homepage": "https://github.com/ayh20/flogo-components/functions/match",
+  "homepage": "https://github.com/ayh20/flogo-components/functions/utils",
   "functions": [
     {
       "name": "match",
-      "description": "Match input against regular expression",
+      "description": "Match input against regular expression \n  utils.match(\"p([a-z]+)ch\", \"peach\")",
       "varArgs": true,
       "args": [
         {

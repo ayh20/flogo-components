@@ -1,4 +1,4 @@
-package match
+package utils
 
 import (
 	"regexp"
