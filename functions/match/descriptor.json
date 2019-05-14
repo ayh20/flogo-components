@@ -1,0 +1,25 @@
+{
+  "name": "match",
+  "type": "flogo:function",
+  "version": "0.0.1",
+  "title": "Match string to Pattern",
+  "description": "returns current time",
+  "homepage": "https://github.com/ayh20/flogo-components/functions/match",
+  "functions": [
+    {
+      "name": "match",
+      "description": "Match",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "expression",
+          "type": "string"
+        },
+        {
+          "name": "input",
+          "type": "string"
+        }
+      ]
+    }
+  ]
+}

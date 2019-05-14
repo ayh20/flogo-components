@@ -4,3 +4,4 @@ activity/jwt/debug.test
 activity/datemath/debug.test
 activity/blackwhitelist/debug.test
 .vscode/launch.json
+.vscode/settings.json
