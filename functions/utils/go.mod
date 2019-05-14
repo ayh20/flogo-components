@@ -1,4 +1,4 @@
-module github.com/ayh20/flogo-components/functions/util
+module github.com/ayh20/flogo-components/functions/utils
 
 go 1.12
 
