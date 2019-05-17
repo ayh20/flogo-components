@@ -23,7 +23,6 @@ func (fnMatch) Sig() (paramTypes []data.Type, isVariadic bool) {
 }
 
 func (fnMatch) Eval(params ...interface{}) (interface{}, error) {
-
 	match, _ := regexp.MatchString(params[0].(string), params[1].(string))
 	return match, nil
 }
