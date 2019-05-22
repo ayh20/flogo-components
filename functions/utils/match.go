@@ -15,7 +15,7 @@ type fnMatch struct {
 }
 
 func (fnMatch) Name() string {
-	return "match"
+	return "matchregex"
 }
 
 func (fnMatch) Sig() (paramTypes []data.Type, isVariadic bool) {

@@ -7,8 +7,8 @@
   "homepage": "https://github.com/ayh20/flogo-components/functions/utils",
   "functions": [
     {
-      "name": "match",
-      "description": "Match input against regular expression   utils.match(\"p([a-z]+)ch\", \"peach\")",
+      "name": "matchregex",
+      "description": "Match input against regular expression   utils.matchregex(\"p([a-z]+)ch\", \"peach\")",
       "varArgs": true,
       "args": [
         {
@@ -22,8 +22,8 @@
       ]
     },
     {
-      "name": "replace",
-      "description": "Replace data in a string based on a regular expression match   utils.replace(\"p([a-z]+)ches\", \" I hate peaches !\", \"apples\")",
+      "name": "replaceregex",
+      "description": "Replace data in a string based on a regular expression match   utils.replaceregex(\"p([a-z]+)ches\", \" I hate peaches !\", \"apples\")",
       "varArgs": true,
       "args": [
         {
