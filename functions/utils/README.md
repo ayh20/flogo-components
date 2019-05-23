@@ -16,8 +16,8 @@ https://github.com/ayh20/flogo-components/functions/utils
 
 ## Functions
 
-| Name         | Decription                             | Sample      |
-|:-------------|:---------------------------------------|:------------|
+| Name         | Decription             | Sample                                                |
+|:-------------|:-----------------------|:------------------------------------------------------|
 | matchregex   | Match input against regular expression | utils.matchregex(\"p([a-z]+)ch\", \"peach\")" |
 | replaceregex | Replace data in a string based on a regular expression match  | utils.replaceregex(\"p([a-z]+)ches\", \" I hate peaches !\", \"apples\")" |
 | contains     | Contains reports whether substr is within s. |  utils.contains(\"seafood\", \"foo\")" |
