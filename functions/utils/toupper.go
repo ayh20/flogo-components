@@ -15,7 +15,7 @@ type fnToUpper struct {
 }
 
 func (fnToUpper) Name() string {
-	return "toupperr"
+	return "toupper"
 }
 
 func (fnToUpper) Sig() (paramTypes []data.Type, isVariadic bool) {
