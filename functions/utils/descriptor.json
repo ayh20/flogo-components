@@ -298,6 +298,14 @@
           "type": "string"
         }
       ]
+    },
+    {
+      "name": "uuid",
+      "description": "Returns a random UUID according to RFC 4122. utils.uuid()",
+      "varArgs": true,
+      "args": [
+        { }
+      ]
     }
   ]
 }

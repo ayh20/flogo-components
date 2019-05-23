@@ -37,3 +37,4 @@ https://github.com/ayh20/flogo-components/functions/utils
 | trimright    | TrimRight returns a slice of the string s with all leading Unicode code points contained in cutset removed. | utils.trimright(\"¡¡¡Hello, Gophers!!!\", \"!¡\")" |
 | trimprefix   | TrimPrefix returns s without the provided leading prefix string. If s doesn't start with prefix, s is returned unchanged. | utils.trimprefix(\"¡¡¡Hello, Gophers!!!\", \"¡¡¡Hello\")" |
 | trimsuffix   | TrimSuffix returns s without the provided trailing suffix string. If s doesn't end with suffix, s is returned unchanged. | utils.trimsuffix(\"¡¡¡Hello, Gophers!!!\", \"Gophers!!!\")" |
+| uuid         | UUID generates a random UUID according to RFC 4122. | utils.uuid() |
