@@ -21,6 +21,8 @@ https://github.com/ayh20/flogo-components/functions/utils
 | contains     | Contains reports whether substr is within s. |  utils.contains(\"seafood\", \"foo\")" |
 | containsany  | ContainsAny reports whether any Unicode code points in chars are within s. |  utils.containsany(\"failure\", \"u & i\")" |
 | count        | Count counts the number of non-overlapping instances of substr in s. If substr is an empty string, Count returns 1 + the number of Unicode code points in s. | utils.count(\"cheese\", \"e\")" |
+| decodestring | Decodestring returns the string represented by the base 64 encoded input string. | utils.decodestring(\"SGVsbG8gV29ybGQ=\") |
+| encodestring | Encodestring returns a base 64 encoded copy of the input string. | utils.encodestring("Hello World") |
 | index        | Index returns the index of the first instance of substr in s, or -1 if substr is not present in s. | utils.index(\"cheese\", \"e\")" |
 | indexany     | IndexAny returns the index of the first instance of any Unicode code point from chars in s, or -1 if no Unicode code point from chars is present in s. | utils.indexany(\"chicken\", \"aeiouy\")" |
 | lastindex    | LastIndex returns the index of the last instance of substr in s, or -1 if substr is not present in s. | utils.lastindex(\"go gopher\", \"go\")" |
