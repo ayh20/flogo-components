@@ -23,7 +23,7 @@ func (fnDecodeString) Sig() (paramTypes []data.Type, isVariadic bool) {
 	return []data.Type{data.TypeString}, false
 }
 
-// Eval - UUID generates a random UUID according to RFC 4122
+// Eval - Decode base64 string
 func (fnDecodeString) Eval(params ...interface{}) (interface{}, error) {
 	data, err := base64.StdEncoding.DecodeString(params[0].(string))
 	if err != nil {
