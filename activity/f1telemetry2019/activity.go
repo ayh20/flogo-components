@@ -549,6 +549,11 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		return false, fmt.Errorf("F1 Data: Undefined packet ID %v", unpHeader.PacketID)
 	}
 
+	err = ctx.SetOutputObject(output)
+    if err != nil {
+        return false, err
+    }
+
 	return true, nil
 }
 
