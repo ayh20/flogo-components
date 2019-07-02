@@ -307,6 +307,7 @@ type F1CarStatus struct {
 	PitLimiterStatus        uint8   `struc:"uint8,little"`   // Pit limiter status - 0 = off, 1 = on
 	FuelInTank              float32 `struc:"float32,little"` // Current fuel mass
 	FuelCapacity            float32 `struc:"float32,little"` // Fuel capacity
+	FuelRemainingLaps       float32 `struc:"float32,little"` // Fuel remaining in terms of laps (value on MFD)
 	MaxRPM                  uint16  `struc:"uint16,little"`  // Cars max RPM, point of rev limiter
 	IdleRPM                 uint16  `struc:"uint16,little"`  // Cars idle RPM
 	MaxGears                uint8   `struc:"uint8,little"`   // Maximum number of gears
