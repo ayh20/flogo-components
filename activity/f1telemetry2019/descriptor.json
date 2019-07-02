@@ -1,0 +1,27 @@
+{
+  "name": "f1telemetry2018",
+  "author": "Andy Hampshire",
+  "type": "flogo:activity",
+  "ref": "github.com/ayh20/flogo-components/activity/f1telemetry2019",
+  "version": "0.0.1",
+  "title": "F1 2019 Telemetry decoder",
+  "description": "Decodes telemetry data from Codemasters F1-2019",
+  "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/f1telemetry2019",
+  "input": [
+    {
+      "name": "buffer",
+      "required": true,
+      "type": "any"
+    }
+  ],
+  "output": [
+    {
+      "name": "msgtype",
+      "type": "integer"
+    },
+    {
+      "name": "data",
+      "type": "string"
+    }
+  ]
+}
