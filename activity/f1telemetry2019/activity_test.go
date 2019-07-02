@@ -1,4 +1,4 @@
-package f1telemetry2018
+package f1telemetry2019
 
 import (
 	"bytes"
