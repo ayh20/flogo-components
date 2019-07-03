@@ -2,8 +2,6 @@ package f1telemetry2019
 
 import (
 	"github.com/project-flogo/core/activity"
-	//"github.com/project-flogo/core/data/metadata"
-	//"github.com/project-flogo/core/support/log"
 
 	"bytes"
 	"fmt"
@@ -12,7 +10,6 @@ import (
 	"strings"
 
 	"github.com/lunixbochs/struc"
-	//"gopkg.in/restruct.v1"
 )
 
 func init() {
@@ -41,15 +38,15 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 
 // F1Header - Struct for the unpacking of the UDP Header
 type F1Header struct {
-	PacketFormat    uint16  `struc:"uint16,little"`  // 2019
-	GameMajorVersion uint8  `struc:"uint8,little"`   // Game major version - "X.00"
-    GameMinorVersion uint8  `struc:"uint8,little"`   // Game minor version - "1.XX"
-	PacketVersion   uint8   `struc:"uint8,little"`   // Version of this packet type, all start from 1
-	PacketID        uint8   `struc:"uint8,little"`   // Identifier for the packet type, see below
-	SessionUID      uint64  `struc:"uint64,little"`  // Unique identifier for the session
-	SessionTime     float32 `struc:"float32,little"` // Session timestamp
-	FrameIdentifier uint    `struc:"uint,little"`    // Identifier for the frame the data was retrieved on
-	PlayerCarIndex  uint8   `struc:"uint8,little"`   // Index of player's car in the array
+	PacketFormat     uint16  `struc:"uint16,little"`  // 2019
+	GameMajorVersion uint8   `struc:"uint8,little"`   // Game major version - "X.00"
+	GameMinorVersion uint8   `struc:"uint8,little"`   // Game minor version - "1.XX"
+	PacketVersion    uint8   `struc:"uint8,little"`   // Version of this packet type, all start from 1
+	PacketID         uint8   `struc:"uint8,little"`   // Identifier for the packet type, see below
+	SessionUID       uint64  `struc:"uint64,little"`  // Unique identifier for the session
+	SessionTime      float32 `struc:"float32,little"` // Session timestamp
+	FrameIdentifier  uint    `struc:"uint,little"`    // Identifier for the frame the data was retrieved on
+	PlayerCarIndex   uint8   `struc:"uint8,little"`   // Index of player's car in the array
 }
 
 // F1CarMotion (Type 0 x20) - Struct for the unpacking of the UDP Motion format
@@ -200,23 +197,13 @@ type F1Event struct {
 
 // F1EventDetailsFastestLap (Type 3 x1) - Struct for the unpacking of the UDP data format
 type F1EventDetailsFastestLap struct {
-	VehicleIndex uint8  `struc:"uint8,little"` // Vehicle index of car achieving fastest lap
-	LapTime    float32 `struc:"float32,little"` // Lap time is in seconds
+	VehicleIndex uint8   `struc:"uint8,little"`   // Vehicle index of car achieving fastest lap
+	LapTime      float32 `struc:"float32,little"` // Lap time is in seconds
 }
 
-// F1EventDetailsRetirement (Type 3 x1) - Struct for the unpacking of the UDP data format
-type F1EventDetailsRetirement struct {
-	VehicleIndex uint8  `struc:"uint8,little"` // Vehicle index of car retiring
-}
-
-// F1EventDetailsTeamMateInPits (Type 3 x1) - Struct for the unpacking of the UDP data format
-type F1EventDetailsTeamMateInPits struct {
-	VehicleIndex uint8  `struc:"uint8,little"` // Vehicle index of team mate
-}
-
-// F1EventDetailsRaceWinner (Type 3 x1) - Struct for the unpacking of the UDP data format
-type F1EventDetailsRaceWinner struct {
-	VehicleIndex uint8  `struc:"uint8,little"` // Vehicle index of the race winner
+// F1EventDetailsExtraIndex (Type 3 x1) - Struct for the unpacking of the UDP data format
+type F1EventDetailsExtraIndex struct {
+	VehicleIndex uint8 `struc:"uint8,little"` // Vehicle index of related car
 }
 
 // F1Participant (Type 4 x1) - Struct for the unpacking of the UDP data format
@@ -226,13 +213,13 @@ type F1Participant struct {
 
 // F1ParticipantData (Type 4 x20) - Struct for the unpacking of the UDP data format
 type F1ParticipantData struct {
-	AiControlled uint8  `struc:"uint8,little"`    // Whether the vehicle is AI (1) or Human (0) controlled
-	DriverID     uint8  `struc:"uint8,little"`    // Driver id
-	TeamID       uint8  `struc:"uint8,little"`    // Team id
-	RaceNumber   uint8  `struc:"uint8,little"`    // Race number of the car
-	Nationality  uint8  `struc:"uint8,little"`    // Nationality of the drive
-	Name         string `struc:"[48]byte,little"` // Name of participant in UTF-8 format – null terminated.  Will be truncated with … (U+2026) if too long
-	YourTelemetry  uint8  `struc:"uint8,little"`    // The player's UDP setting, 0 = restricted, 1 = public
+	AiControlled  uint8  `struc:"uint8,little"`    // Whether the vehicle is AI (1) or Human (0) controlled
+	DriverID      uint8  `struc:"uint8,little"`    // Driver id
+	TeamID        uint8  `struc:"uint8,little"`    // Team id
+	RaceNumber    uint8  `struc:"uint8,little"`    // Race number of the car
+	Nationality   uint8  `struc:"uint8,little"`    // Nationality of the drive
+	Name          string `struc:"[48]byte,little"` // Name of participant in UTF-8 format – null terminated.  Will be truncated with … (U+2026) if too long
+	YourTelemetry uint8  `struc:"uint8,little"`    // The player's UDP setting, 0 = restricted, 1 = public
 }
 
 // F1SetupData (Type 5 x20)- Struct for the unpacking of the UDP data format
@@ -262,11 +249,11 @@ type F1SetupData struct {
 // F1CarTelemetryData (Type 6 x20) - Struct for the unpacking of the UDP data format
 type F1CarTelemetryData struct {
 	Speed                     uint16  `struc:"uint16,little"`  // Speed of car in kilometres per hour
-	Throttle                  uint8   `struc:"uint8,little"`   // Amount of throttle applied (0 to 100)
-	Steer                     int8    `struc:"int8,little"`    // Steering (-100 (full lock left) to 100 (full lock right))
-	Brake                     uint8   `struc:"uint8,little"`   // Amount of brake applied (0 to 100)
+	Throttle                  float32 `struc:"float32,little"` // Amount of throttle applied (0 to 100)
+	Steer                     float32 `struc:"float32,little"` // Steering (-100 (full lock left) to 100 (full lock right))
+	Brake                     float32 `struc:"float32,little"` // Amount of brake applied (0 to 100)
 	Clutch                    uint8   `struc:"uint8,little"`   // Amount of clutch applied (0 to 100)
-	Gear                      uint8   `struc:"uint8,little"`   // Gear selected (1-8, N=0, R=-1)
+	Gear                      int8    `struc:"int8,little"`    // Gear selected (1-8, N=0, R=-1)
 	EngineRPM                 uint16  `struc:"uint16,little"`  // Engine RPM
 	Drs                       uint8   `struc:"uint8,little"`   // 0 = off, 1 = on
 	RevLightsPercent          uint8   `struc:"uint8,little"`   // Rev lights indicator (percentage)
@@ -317,7 +304,7 @@ type F1CarStatus struct {
 	TyresWearFL             uint8   `struc:"uint8,little"`   // Tyre wear percentage
 	TyresWearFR             uint8   `struc:"uint8,little"`   // Tyre wear percentage
 	ActualTyreCompound      uint8   `struc:"uint8,little"`   // F1 Modern - 16 = C5, 17 = C4, 18 = C3, 19 = C2, 20 = C1, 7 = inter, 8 = wet, F1 Classic - 9 = dry, 10 = wet, F2 – 11 = super soft, 12 = soft, 13 = medium, 14 = hard, 15 = wet
-	VisualTyreCompound      uint8   `struc:"uint8,little"`   // F1 Visual - 16 = soft, 17 = medium, 18 = hard, 7 = inter, 8 = wet - Classic and F2 as above 
+	VisualTyreCompound      uint8   `struc:"uint8,little"`   // F1 Visual - 16 = soft, 17 = medium, 18 = hard, 7 = inter, 8 = wet - Classic and F2 as above
 	TyresDamageRL           uint8   `struc:"uint8,little"`   // Tyre damage (percentage)
 	TyresDamageRR           uint8   `struc:"uint8,little"`   // Tyre damage (percentage)
 	TyresDamageFL           uint8   `struc:"uint8,little"`   // Tyre damage (percentage)
@@ -355,7 +342,6 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	// Create structs to hold unpacked data
 	unpHeader := &F1Header{}
-
 
 	ctx.Logger().Debug("Unpack Header")
 
@@ -450,6 +436,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	case 3: //Event
 		unpEvent := &F1Event{}
+		extradata := ""
 
 		err = struc.Unpack(buf, unpEvent)
 		if err != nil {
@@ -457,11 +444,28 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			return false, err
 		}
 
-		if unpEvent.EventString == "" {
+		switch unpEvent.EventString {
+		case "FTLP":
+			unpEventFL := &F1EventDetailsFastestLap{}
+			err = struc.Unpack(buf, unpEventFL)
+			if err != nil {
+				ctx.Logger().Debugf("Unpack Fail: F1LapData ", err.Error())
+				return false, err
+			}
+			extradata = "," + fmt.Sprintf("%v", unpEventFL.VehicleIndex) + "," + strconv.FormatFloat(float64(unpEventFL.LapTime), 'f', -1, 32)
 
+		case "RTMT", "TMPT", "RCWN":
+			//
+			unpEventExtra := &F1EventDetailsExtraIndex{}
+			err = struc.Unpack(buf, unpEventExtra)
+			if err != nil {
+				ctx.Logger().Debugf("Unpack Fail: F1LapData ", err.Error())
+				return false, err
+			}
+			extradata = "," + fmt.Sprintf("%v", unpEventExtra.VehicleIndex)
 		}
 
-		output.Data = outputHeader + "|" + unpEvent.EventString
+		output.Data = outputHeader + "|" + unpEvent.EventString + extradata
 
 	case 4: //Participants
 		unpParticipant := &F1Participant{}
@@ -551,9 +555,9 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	}
 
 	err = ctx.SetOutputObject(output)
-    if err != nil {
-        return false, err
-    }
+	if err != nil {
+		return false, err
+	}
 
 	return true, nil
 }
