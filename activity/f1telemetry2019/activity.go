@@ -12,15 +12,15 @@ import (
 	"github.com/lunixbochs/struc"
 )
 
+// Activity is a F1 Telemetery decoder activity
+type Activity struct {
+}
+
 func init() {
 	_ = activity.Register(&Activity{}, New)
 }
 
 var activityMd = activity.ToMetadata(&Input{}, &Output{})
-
-// Activity is a F1 Telemetery decoder activity
-type Activity struct {
-}
 
 // Metadata returns the activity's metadata
 func (a *Activity) Metadata() *activity.Metadata {
@@ -353,10 +353,9 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	}
 
 	// dump header
-	ctx.Logger().Debug("print")
 	ctx.Logger().Debugf("struct F1Header : \n %+v \n", unpHeader)
 
-	// Test for valid 2018 data..
+	// Test for valid 2019 data..
 	if unpHeader.PacketFormat != 2019 {
 		ctx.Logger().Debugf("F1 Data: Unsupported packet format %v", unpHeader.PacketFormat)
 		return false, fmt.Errorf("F1 Data: Unsupported packet format %v", unpHeader.PacketFormat)
@@ -371,8 +370,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	switch unpHeader.PacketID {
 	case 0: //Motion
 		// Unpack the 20 item car motion array
-		// Note - Output array is:
-		// Timestamp + array of car CSV data seprated by a "|"
+		// Note - Output array is:  Timestamp + array of car CSV data seprated by a "|"
 
 		unpMotion := &F1CarMotion{}
 		unpMotionExtra := &F1CarMotionExtra{}
@@ -386,8 +384,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				return false, err
 			}
 			ctx.Logger().Debugf("Car Array unpacked: %v\n%+v\n", i, unpMotion)
-			arrayfields := unpMotion.valueStrings()
-			arraystring = arraystring + fmt.Sprintf("|%v,", i) + strings.Join(arrayfields, ",")
+
+			arraystring = arraystring + fmt.Sprintf("|%v,", i) + getStrings(unpMotion)
 
 		}
 
@@ -397,8 +395,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			return false, err
 		}
 		// Send all fields
-		fieldsstring := "|" + strings.Join(unpMotionExtra.valueStrings(), ",")
-		output.Data = outputHeader + fieldsstring + arraystring
+		output.Data = outputHeader + "|" + getStrings(unpMotionExtra) + arraystring
 
 	case 1: //Session
 		unpSession := &F1Session{}
@@ -408,15 +405,13 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			ctx.Logger().Debugf("Unpack Fail: F1Session ", err.Error())
 			return false, err
 		}
-		fields := unpSession.valueStrings()
-		fieldsstring := "|" + strings.Join(fields, ",")
+
 		// Send all fields
-		output.Data = outputHeader + fieldsstring
+		output.Data = outputHeader + "|" + getStrings(unpSession)
 
 	case 2: //Lap Data
 		// Unpack the 20 item lap data array
-		// Note - Output array is:
-		// Timestamp + array of car CSV data seprated by a "|"
+		// Note - Output array is:  Timestamp + array of car CSV data seprated by a "|"
 
 		unpLapdata := &F1LapData{}
 
@@ -429,8 +424,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				return false, err
 			}
 			ctx.Logger().Debugf("LapData unpacked: %v\n%+v\n", i, unpLapdata)
-			arraystring = arraystring + fmt.Sprintf("|%v,", i) + strings.Join(unpLapdata.valueStrings(), ",")
-
+			arraystring = arraystring + fmt.Sprintf("|%v,", i) + getStrings(unpLapdata)
 		}
 		output.Data = outputHeader + arraystring
 
@@ -452,7 +446,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				ctx.Logger().Debugf("Unpack Fail: F1LapData ", err.Error())
 				return false, err
 			}
-			extradata = "," + fmt.Sprintf("%v", unpEventFL.VehicleIndex) + "," + strconv.FormatFloat(float64(unpEventFL.LapTime), 'f', -1, 32)
+			extradata = "," + getStrings(unpEventFL)
 
 		case "RTMT", "TMPT", "RCWN":
 			//
@@ -462,7 +456,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				ctx.Logger().Debugf("Unpack Fail: F1LapData ", err.Error())
 				return false, err
 			}
-			extradata = "," + fmt.Sprintf("%v", unpEventExtra.VehicleIndex)
+			extradata = "," + getStrings(unpEventExtra)
 		}
 
 		output.Data = outputHeader + "|" + unpEvent.EventString + extradata
@@ -485,7 +479,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				return false, err
 			}
 			ctx.Logger().Debugf("F1Participant unpacked: %v\n%+v\n", i, unpParticpantData)
-			arraystring = arraystring + fmt.Sprintf("|%v,", i) + strings.Join(unpParticpantData.valueStrings(), ",")
+			arraystring = arraystring + fmt.Sprintf("|%v,", i) + getStrings(unpParticpantData)
 
 		}
 		output.Data = outputHeader + fmt.Sprintf("|%v", unpParticipant.NumActiveCars) + arraystring
@@ -502,7 +496,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				return false, err
 			}
 			ctx.Logger().Debugf("F1CarSetupData unpacked: %v\n%+v\n", i, unpCarSetupData)
-			arraystring = arraystring + fmt.Sprintf("|%v,", i) + strings.Join(unpCarSetupData.valueStrings(), ",")
+			arraystring = arraystring + fmt.Sprintf("|%v,", i) + getStrings(unpCarSetupData)
 		}
 		output.Data = outputHeader + arraystring
 
@@ -519,8 +513,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				return false, err
 			}
 			ctx.Logger().Debugf("Car Array unpacked: %v\n%+v\n", i, unpCarTelemetry)
-			arrayfields := unpCarTelemetry.valueStrings()
-			arraystring = arraystring + fmt.Sprintf("|%v,", i) + strings.Join(arrayfields, ",")
+			arraystring = arraystring + fmt.Sprintf("|%v,", i) + getStrings(unpCarTelemetry)
 
 		}
 
@@ -530,8 +523,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			return false, err
 		}
 		// Send all fields
-		fieldsstring := "|" + strings.Join(unpCarTelemetryExtra.valueStrings(), ",")
-		output.Data = outputHeader + fieldsstring + arraystring
+		output.Data = outputHeader + "|" + getStrings(unpCarTelemetryExtra) + arraystring
 
 	case 7: //Car Status
 		unpCarStatus := &F1CarStatus{}
@@ -544,7 +536,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				return false, err
 			}
 			ctx.Logger().Debugf("CarStatus unpacked: %v\n%+v\n", i, unpCarStatus)
-			arraystring = arraystring + fmt.Sprintf("|%v,", i) + strings.Join(unpCarStatus.valueStrings(), ",")
+			arraystring = arraystring + fmt.Sprintf("|%v,", i) + getStrings(unpCarStatus)
 
 		}
 		output.Data = outputHeader + arraystring
@@ -562,163 +554,24 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	return true, nil
 }
 
-func (f F1CarMotion) valueStrings() []string {
-	v := reflect.ValueOf(f)
-	ss := make([]string, v.NumField())
-	for i := range ss {
-		//typeField := v.Type().Field(i)
-		switch v.Field(i).Kind() {
-		case reflect.Float32, reflect.Float64:
-			x := v.Field(i).Float()
-			ss[i] = strconv.FormatFloat(x, 'f', -1, 32)
-		default:
-			ss[i] = fmt.Sprintf("%v", v.Field(i))
-		}
+func getStrings(iface interface{}) string {
 
-	}
-	return ss
-}
-func (f F1CarMotionExtra) valueStrings() []string {
-	v := reflect.ValueOf(f)
-	ss := make([]string, v.NumField())
-	for i := range ss {
-		//typeField := v.Type().Field(i)
-		switch v.Field(i).Kind() {
-		case reflect.Float32, reflect.Float64:
-			x := v.Field(i).Float()
-			ss[i] = strconv.FormatFloat(x, 'f', -1, 32)
-		default:
-			ss[i] = fmt.Sprintf("%v", v.Field(i))
-		}
+	//  The function is passed a pointer to a struct. We use Indirect to get the actual value of the passed struct
+	v := reflect.Indirect(reflect.ValueOf(iface))
 
-	}
-	return ss
-}
-func (f F1LapData) valueStrings() []string {
-	v := reflect.ValueOf(f)
+	// Create a slice that is the correct size for the struct
 	ss := make([]string, v.NumField())
-	for i := range ss {
-		//typeField := v.Type().Field(i)
-		switch v.Field(i).Kind() {
-		case reflect.Float32, reflect.Float64:
-			x := v.Field(i).Float()
-			ss[i] = strconv.FormatFloat(x, 'f', -1, 32)
-		default:
-			ss[i] = fmt.Sprintf("%v", v.Field(i))
-		}
 
-	}
-	return ss
-}
-func (f F1Session) valueStrings() []string {
-	v := reflect.ValueOf(f)
-	ss := make([]string, v.NumField())
+	// run through each field and based on it's type format the value as a string
 	for i := range ss {
-		//typeField := v.Type().Field(i)
 		switch v.Field(i).Kind() {
 		case reflect.Float32, reflect.Float64:
-			x := v.Field(i).Float()
-			ss[i] = strconv.FormatFloat(x, 'f', -1, 32)
-		default:
-			ss[i] = fmt.Sprintf("%v", v.Field(i))
-		}
-
-	}
-	return ss
-}
-func (f F1Event) valueStrings() []string {
-	v := reflect.ValueOf(f)
-	ss := make([]string, v.NumField())
-	for i := range ss {
-		//typeField := v.Type().Field(i)
-		switch v.Field(i).Kind() {
-		case reflect.Float32, reflect.Float64:
-			x := v.Field(i).Float()
-			ss[i] = strconv.FormatFloat(x, 'f', -1, 32)
-		default:
-			ss[i] = fmt.Sprintf("%v", v.Field(i))
-		}
-
-	}
-	return ss
-}
-func (f F1ParticipantData) valueStrings() []string {
-	v := reflect.ValueOf(f)
-	ss := make([]string, v.NumField())
-	for i := range ss {
-		//typeField := v.Type().Field(i)
-		switch v.Field(i).Kind() {
-		case reflect.Float32, reflect.Float64:
-			x := v.Field(i).Float()
-			ss[i] = strconv.FormatFloat(x, 'f', -1, 32)
+			ss[i] = strconv.FormatFloat(v.Field(i).Float(), 'f', -1, 32)
 		default:
 			ss[i] = strings.Trim(fmt.Sprintf("%v", v.Field(i)), "\x00")
 		}
-
 	}
-	return ss
-}
-func (f F1SetupData) valueStrings() []string {
-	v := reflect.ValueOf(f)
-	ss := make([]string, v.NumField())
-	for i := range ss {
-		//typeField := v.Type().Field(i)
-		switch v.Field(i).Kind() {
-		case reflect.Float32, reflect.Float64:
-			x := v.Field(i).Float()
-			ss[i] = strconv.FormatFloat(x, 'f', -1, 32)
-		default:
-			ss[i] = fmt.Sprintf("%v", v.Field(i))
-		}
 
-	}
-	return ss
-}
-func (f F1CarTelemetryData) valueStrings() []string {
-	v := reflect.ValueOf(f)
-	ss := make([]string, v.NumField())
-	for i := range ss {
-		//typeField := v.Type().Field(i)
-		switch v.Field(i).Kind() {
-		case reflect.Float32, reflect.Float64:
-			x := v.Field(i).Float()
-			ss[i] = strconv.FormatFloat(x, 'f', -1, 32)
-		default:
-			ss[i] = fmt.Sprintf("%v", v.Field(i))
-		}
-
-	}
-	return ss
-}
-func (f F1CarTelemetryDataExtra) valueStrings() []string {
-	v := reflect.ValueOf(f)
-	ss := make([]string, v.NumField())
-	for i := range ss {
-		//typeField := v.Type().Field(i)
-		switch v.Field(i).Kind() {
-		case reflect.Float32, reflect.Float64:
-			x := v.Field(i).Float()
-			ss[i] = strconv.FormatFloat(x, 'f', -1, 32)
-		default:
-			ss[i] = fmt.Sprintf("%v", v.Field(i))
-		}
-
-	}
-	return ss
-}
-func (f F1CarStatus) valueStrings() []string {
-	v := reflect.ValueOf(f)
-	ss := make([]string, v.NumField())
-	for i := range ss {
-		//typeField := v.Type().Field(i)
-		switch v.Field(i).Kind() {
-		case reflect.Float32, reflect.Float64:
-			x := v.Field(i).Float()
-			ss[i] = strconv.FormatFloat(x, 'f', -1, 32)
-		default:
-			ss[i] = fmt.Sprintf("%v", v.Field(i))
-		}
-
-	}
-	return ss
+	// Return the data as a CSV style string
+	return strings.Join(ss, ",")
 }

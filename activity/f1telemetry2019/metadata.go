@@ -27,7 +27,7 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 	return nil
 }
 
-// Output data structure
+//Output data structure
 type Output struct {
 	MsgType int    `md:"msgtype"` // The data format type of this UDP packet
 	Data    string `md:"data"`    // The formatted CSV like data
