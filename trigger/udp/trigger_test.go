@@ -1,19 +1,22 @@
 package udp
 
 import (
-	"context"
+	"encoding/json"
 	"io/ioutil"
+	"testing"
 
-	"github.com/TIBCOSoftware/flogo-lib/core/action"
-	"github.com/TIBCOSoftware/flogo-lib/core/data"
+	"github.com/project-flogo/core/action"
+	"github.com/project-flogo/core/support/test"
+	"github.com/project-flogo/core/trigger"
+	"github.com/stretchr/testify/assert"
 )
 
 var jsonMetadata = getJSONMetadata()
 
 func getJSONMetadata() string {
-	jsonMetadataBytes, err := ioutil.ReadFile("trigger.json")
+	jsonMetadataBytes, err := ioutil.ReadFile("descriptor.json")
 	if err != nil {
-		panic("No Json Metadata found for trigger.json path")
+		panic("No Json Metadata found for descriptor.json path")
 	}
 	return string(jsonMetadataBytes)
 }
@@ -22,12 +25,14 @@ func getJSONMetadata() string {
 const testConfig1 string = `{
   "name": "udp",
   "settings": {
-		"port": 22600,
-		"multicast_group": "224.192.32.19"
+		"port": "22600",
+		"multicastGroup": "224.192.32.19"
   },
   "handlers": [
     {
-      "actionId": "nextaction",
+      "action": {
+		  "id" : "dummy"
+	  },
       "settings": {
         "handler_setting": "xxx"
       }
@@ -39,20 +44,48 @@ const testConfig1 string = `{
 const testConfig2 string = `{
   "name": "udp",
   "settings": {
-		"port": 20777,
-		"multicast_group": ""
+		"port": "20777",
+		"multicastGroup": ""
   },
   "handlers": [
     {
-      "actionId": "NextAction",
-      "settings": {
-        "handler_setting": "xxx"
-      }
-    }
+		"action": {
+			"id" : "dummy"
+		},
+		"settings": {
+		  "handler_setting": "xxx"
+		}
+	  }
   ]
 }`
 
+func TestTrigger_Initialize(t *testing.T) {
+	f := &Factory{}
+
+	t.Log("Running test udp trigger")
+
+	config := &trigger.Config{}
+	err := json.Unmarshal([]byte(testConfig1), config)
+	assert.Nil(t, err)
+
+	actions := map[string]action.Action{"dummy": test.NewDummyAction(func() {
+		//do nothing
+
+	})}
+
+	trg, err := test.InitTrigger(f, config, actions)
+	assert.Nil(t, err)
+	assert.NotNil(t, trg)
+
+	err = trg.Start()
+	assert.Nil(t, err)
+	err = trg.Stop()
+	assert.Nil(t, err)
+
+}
+
 //192.168.1.19
+/*
 type TestRunner struct {
 }
 
@@ -73,6 +106,7 @@ func (tr *TestRunner) Execute(ctx context.Context, act action.Action, inputs map
 	log.Infof("Ran Action (Execute): %v", act)
 	return nil, nil
 }
+*/
 
 /*
 //TODO: Fix Test

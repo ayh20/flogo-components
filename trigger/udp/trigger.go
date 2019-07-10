@@ -2,131 +2,145 @@ package udp
 
 import (
 	"context"
+	"errors"
 	"net"
 
-	"github.com/TIBCOSoftware/flogo-lib/core/action"
-	"github.com/TIBCOSoftware/flogo-lib/core/trigger"
-	"github.com/TIBCOSoftware/flogo-lib/logger"
+	"github.com/project-flogo/core/data/metadata"
+	"github.com/project-flogo/core/support/log"
+	"github.com/project-flogo/core/trigger"
 )
 
-// log is the default package logger
-var log = logger.GetLogger("trigger-udp")
+var triggerMd = trigger.NewMetadata(&Settings{}, &HandlerSettings{}, &Output{})
 
-// udpTriggerFactory My Trigger factory
-type udpTriggerFactory struct {
-	metadata *trigger.Metadata
+func init() {
+	_ = trigger.Register(&Trigger{}, &Factory{})
 }
 
-//NewFactory create a new Trigger factory
-func NewFactory(md *trigger.Metadata) trigger.Factory {
-	return &udpTriggerFactory{metadata: md}
+type Factory struct {
 }
 
-//New Creates a new trigger instance for a given id
-func (t *udpTriggerFactory) New(config *trigger.Config) trigger.Trigger {
-	return &udpTrigger{metadata: t.metadata, config: config}
+// Metadata implements trigger.Factory.Metadata
+func (*Factory) Metadata() *trigger.Metadata {
+	return triggerMd
 }
 
-// udpTrigger is a stub for your Trigger implementation
-type udpTrigger struct {
-	metadata *trigger.Metadata
-	runner   action.Runner
-	config   *trigger.Config
-	handlers []*trigger.Handler
+// New implements trigger.Factory.New
+func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
+	s := &Settings{}
+	err := metadata.MapToStruct(config.Settings, s, true)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Trigger{settings: s}, nil
 }
 
-// Metadata implements trigger.Trigger.Metadata
-func (t *udpTrigger) Metadata() *trigger.Metadata {
-	return t.metadata
+// Trigger is a stub for your Trigger implementation
+type Trigger struct {
+	settings       *Settings
+	handlers       []trigger.Handler
+	logger         log.Logger
+	connection     *net.UDPConn
+	address        *net.UDPAddr
+	port           string
+	multicastGroup string
 }
 
 const (
 	maxDatagramSize = 8192
 )
 
-func (t *udpTrigger) Initialize(ctx trigger.InitContext) error {
-	log.Debug("Initialize")
+// Initialize initializes the trigger
+func (t *Trigger) Initialize(ctx trigger.InitContext) error {
+
+	port := t.settings.Port
+	multicastGroup := t.settings.MulticastGroup
 	t.handlers = ctx.GetHandlers()
-	return nil
+	t.logger = ctx.Logger()
 
-}
+	if port == "" {
+		return errors.New("Valid port must be set")
+	}
 
-// Start implements trigger.Trigger.Start
-func (t *udpTrigger) Start() error {
-	// start the trigger
-	log.Debug("Start")
-	// Get parms
-	wsPort := t.config.GetSetting("port")
-	wsGroup := t.config.GetSetting("multicast_group")
-	var l *net.UDPConn
+	t.logger.Infof("Set UDP port to %v", port)
 
-	//  for multicastgroup
-	log.Debug("Resolve")
-
-	addr, err := net.ResolveUDPAddr("udp", wsGroup+":"+wsPort)
+	var err error
+	t.address, err = net.ResolveUDPAddr("udp", multicastGroup+":"+port)
 
 	if err != nil {
 		// Handle error
-		log.Errorf("Error resolving address %v", err)
+		t.logger.Errorf("Error resolving address %v", err)
 		return nil
 	}
+	t.port = port
+	t.multicastGroup = multicastGroup
 
-	log.Infof("Binding to %v : %v", addr.Network(), addr.Port)
+	t.logger.Infof("Binding to %v : %v", t.address.Network(), t.address.Port)
 
-	if wsGroup == "" {
-		/* Now listen at selected port */
-		log.Debug("ListenUDP")
-		l, err = net.ListenUDP("udp", addr)
+	return err
+}
+
+// Start starts the trigger
+func (t *Trigger) Start() error {
+	t.logger.Info("Starting to listen for incoming udp messages")
+
+	var err error
+	if t.multicastGroup == "" {
+		t.connection, err = net.ListenUDP("udp", t.address)
 	} else {
-		log.Debug("ListenMulticastUDP")
-		l, err = net.ListenMulticastUDP("udp", nil, addr)
+		t.connection, err = net.ListenMulticastUDP("udp", nil, t.address)
 	}
+
+	//t.connection = connection
 	if err != nil {
-		log.Errorf("UDP Listen failed: %v", err)
-	} else {
+		return err
+	}
 
-		// common
-		log.Debug("SetRead")
-		l.SetReadBuffer(maxDatagramSize)
+	t.connection.SetReadBuffer(maxDatagramSize)
 
-		for {
-			buf := make([]byte, maxDatagramSize)
+	for {
+		buf := make([]byte, maxDatagramSize)
 
-			log.Debug("BeforeREAD")
-			n, addr, err := l.ReadFromUDP(buf)
+		output := &Output{}
 
-			// Read ok ?
+		n, addr, err := t.connection.ReadFromUDP(buf)
+
+		// Read ok ?
+		if err != nil {
+			t.logger.Errorf("ReadFromUDP failed: %v", err)
+		}
+
+		t.logger.Debug("after ReadFromUDP")
+		payload := string(buf[0:n])
+		payloadB := buf[0:n]
+
+		t.logger.Debugf("Received %v from %v", payload, addr)
+
+		//handlers := t.config.Handlers
+		trgData := make(map[string]interface{})
+		output.Payload = payload
+		output.Buffer = payloadB
+
+		t.logger.Debug("Processing handlers")
+		for _, handler := range t.handlers {
+			results, err := handler.Handle(context.Background(), trgData)
 			if err != nil {
-				log.Errorf("ReadFromUDP failed: %v", err)
+				t.logger.Error("Error starting action: ", err.Error())
 			}
-
-			log.Debug("afterRead ")
-			payload := string(buf[0:n])
-			payloadB := buf[0:n]
-
-			log.Debugf("Received %v from %v", payload, addr)
-
-			//handlers := t.config.Handlers
-			trgData := make(map[string]interface{})
-			trgData["payload"] = payload
-			trgData["buffer"] = payloadB
-
-			log.Debug("Processing handlers")
-			for _, handler := range t.handlers {
-				results, err := handler.Handle(context.Background(), trgData)
-				if err != nil {
-					log.Error("Error starting action: ", err.Error())
-				}
-				log.Debugf("Ran Handler: [%s]", handler)
-				log.Debugf("Results: [%v]", results)
-			}
+			t.logger.Debugf("Ran Handler: [%s]", handler)
+			t.logger.Debugf("Results: [%v]", results)
 		}
 	}
-	return nil
 }
 
 // Stop implements trigger.Trigger.Start
-func (t *udpTrigger) Stop() error {
+func (t *Trigger) Stop() error {
 	// stop the trigger
+	if t.connection != nil {
+		t.connection.Close()
+	}
+
+	t.logger.Info("Stopped UDP trigger")
+
 	return nil
 }
