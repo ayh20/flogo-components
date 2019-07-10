@@ -40,7 +40,7 @@ const testConfig1 string = `{
   ]
 }`
 
-// Listen for F1-2017 data
+// Listen for F1-2018 data
 const testConfig2 string = `{
   "name": "udp",
   "settings": {

@@ -5,7 +5,7 @@ import (
 )
 
 type Settings struct {
-	Port           string `md:"port"`           // The port to listen on
+	Port           string `md:"port"`           // The UDP port to listen on
 	MulticastGroup string `md:"multicastGroup"` // The multicast group for multicast messages
 }
 

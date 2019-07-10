@@ -91,7 +91,6 @@ func (t *Trigger) Start() error {
 		t.connection, err = net.ListenMulticastUDP("udp", nil, t.address)
 	}
 
-	//t.connection = connection
 	if err != nil {
 		return err
 	}

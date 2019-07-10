@@ -19,10 +19,10 @@ Outputs and Endpoint:
 "settings":[
     {
       "name": "port",
-      "type": "integer"
+      "type": "string"
     },
     {
-      "name": "multicast_group",
+      "name": "multicastGroup",
       "type": "string"
     }
   ],
@@ -45,7 +45,7 @@ Outputs and Endpoint:
 | Setting   | Description    |
 |:----------|:---------------|
 | port      | port to listen on |
-| multicast_group    | listen group for Mukticast messages |
+| multicastGroup    | listen group for Mukticast messages |
 
 ## Ouputs
 | Output   | Description    |
@@ -68,12 +68,14 @@ Configure the Trigger to capture all data on a given port
 {
   "name": "udp",
   "settings": {
-		"port": 20777,
-		"multicast_group": ""
+		"port": "20777",
+		"multicastGroup": ""
   },
   "handlers": [
     {
-      "actionId": "local://testFlow2",
+      "action": {
+		  "id" : "local://testFlow2"
+	  },
       "settings": {
         "handler_setting": "xxx"
       }
@@ -86,12 +88,14 @@ Configure the Trigger to capture data for a multicast group/port
 {
   "name": "udp",
   "settings": {
-		"port": 22600,
-		"multicast_group": "224.192.32.19"
+		"port": "22600",
+		"multicastGroup": "224.192.32.19"
   },
   "handlers": [
     {
-      "actionId": "local://testFlow2",
+      "action": {
+		  "id" : "local://testFlow2"
+	  },
       "settings": {
         "handler_setting": "xxx"
       }
