@@ -1,6 +1,6 @@
-{
+{ 
   "name": "udp",
-  "version": "0.0.5",
+  "version": "0.9.0",
   "type": "flogo:trigger",
   "ref": "github.com/ayh20/flogo-components/trigger/udp",
   "title": "Receive UDP Message",
@@ -10,11 +10,13 @@
   "settings":[
     {
       "name": "port",
-      "type": "integer"
+      "type": "string",
+      "description": "Port to listen on"
     },
     {
-      "name": "multicast_group",
-      "type": "string"
+      "name": "multicastGroup",
+      "type": "string",
+      "description": "IP multicast group address"
     }
   ],
   "outputs": [
@@ -29,10 +31,7 @@
   ],
   "handler": {
     "settings": [
-      {
-        "name": "handler_setting",
-        "type": "string"
-      }
+      
     ]
   }
  }
