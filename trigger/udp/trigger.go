@@ -115,8 +115,10 @@ func (t *Trigger) Start() error {
 
 		t.logger.Debugf("Received %v from %v", payload, addr)
 
-		//handlers := t.config.Handlers
 		trgData := make(map[string]interface{})
+		trgData["payload"] = payload
+		trgData["buffer"] = payloadB
+
 		output.Payload = payload
 		output.Buffer = payloadB
 
