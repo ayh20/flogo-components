@@ -16,6 +16,7 @@ type Input struct {
 	Topic string `md:"topic"`
 	QOS int `md:"qos"`
 	Message string `md:"message"`
+	JSONPayload bool `md:"jsonpayload"`
 }
 
 //ToMap Input mapper
@@ -31,6 +32,7 @@ func (i *Input) ToMap() map[string]interface{} {
 		"topic": i.Topic,
 		"qos": i.QOS,
 		"message": i.Message,
+		"jsonpayload": i.JSONPayload,
 	}
 }
 
@@ -50,7 +52,7 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 	if err != nil {
 		return err
 	}
-	i.Password, err = coerce.ToString(values["psssword"])
+	i.Password, err = coerce.ToString(values["password"])
 	if err != nil {
 		return err
 	}
@@ -75,6 +77,10 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 		return err
 	}
 	i.Message, err = coerce.ToString(values["message"])
+	if err != nil {
+		return err
+	}
+	i.JSONPayload, err = coerce.ToBool(values["jsonpayload"])
 	if err != nil {
 		return err
 	}

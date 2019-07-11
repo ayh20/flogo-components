@@ -53,6 +53,12 @@
       {
         "name": "message",
         "type": "any"
+      },
+      {
+        "name": "jsonpayload",
+        "type": "boolean",
+        "required": true,
+        "allowed" : ["true", "false"]
       }
     ],
     "output": [

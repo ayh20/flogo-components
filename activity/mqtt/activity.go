@@ -77,8 +77,13 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		return false, fmt.Errorf("Topic not set")
 	}
 
-	ivpayload := makeMsg(ctx, in.Message)
-	ctx.Logger().Debugf("Created Message: %v", ivpayload)
+	var ivpayload = ""
+	if in.JSONPayload {
+		ivpayload = makeMsg(ctx, in.Message)
+		ctx.Logger().Debugf("Created Message: %v", ivpayload)
+	} else {
+		ivpayload = in.Message
+	}
 
 	if in.ID == "" {
 		ctx.Logger().Debug("CLIENTID_NOT_SET")
