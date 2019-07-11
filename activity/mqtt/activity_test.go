@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/TIBCOSoftware/flogo-contrib/action/flow/test"
-	"github.com/TIBCOSoftware/flogo-lib/core/activity"
+	"github.com/project-flogo/core/activity"
 )
 
 var activityMetadata *activity.Metadata

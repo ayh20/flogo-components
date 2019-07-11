@@ -7,171 +7,137 @@ import (
 	"fmt"
 	"io/ioutil"
 
-	"github.com/TIBCOSoftware/flogo-lib/core/activity"
-	"github.com/TIBCOSoftware/flogo-lib/logger"
-	"github.com/eclipse/paho.mqtt.golang"
+	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"github.com/project-flogo/core/activity"
 )
 
-// log is the default package logger
-var log = logger.GetLogger("activity-ayh20-mqtt-tls")
-
-const (
-	broker    = "broker"
-	topic     = "topic"
-	qos       = "qos"
-	payload   = "message"
-	id        = "id"
-	user      = "user"
-	password  = "password"
-	enabletls = "enabletls"
-	certstore = "certstore"
-	thing     = "thing"
-)
-
-// MyActivity is a stub for your Activity implementation
-type MyActivity struct {
-	metadata *activity.Metadata
+// Activity is a MQTT with TLS activity
+type Activity struct {
 }
 
-// NewActivity creates a new AppActivity
-func NewActivity(metadata *activity.Metadata) activity.Activity {
-	return &MyActivity{metadata: metadata}
+func init() {
+	_ = activity.Register(&Activity{}, New)
 }
 
-// Metadata implements activity.Activity.Metadata
-func (a *MyActivity) Metadata() *activity.Metadata {
-	return a.metadata
+var activityMd = activity.ToMetadata(&Input{}, &Output{})
+
+// Metadata returns the activity's metadata
+func (a *Activity) Metadata() *activity.Metadata {
+	return activityMd
 }
+
+// New create a new  activity
+func New(ctx activity.InitContext) (activity.Activity, error) {
+
+	ctx.Logger().Info("In MQTT activity")
+
+	act := &Activity{}
+	return act, nil
+}
+
+// const (
+// 	broker    = "broker"
+// 	topic     = "topic"
+// 	qos       = "qos"
+// 	payload   = "message"
+// 	id        = "id"
+// 	user      = "user"
+// 	password  = "password"
+// 	enabletls = "enabletls"
+// 	certstore = "certstore"
+// 	thing     = "thing"
+// )
 
 // Eval implements activity.Activity.Eval
-func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
+//func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
+func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
-	// do eval
+	// Get the runtime values
+	ctx.Logger().Debug("Starting")
 
-	brokerInput := context.GetInput(broker)
-
-	ivbroker, ok := brokerInput.(string)
-	if !ok {
-		context.SetOutput("result", "BROKER_NOT_SET")
-		return true, fmt.Errorf("broker not set")
+	in := &Input{}
+	err = ctx.GetInputObject(in)
+	if err != nil {
+		return false, err
 	}
 
-	topicInput := context.GetInput(topic)
+	output := &Output{}
 
-	ivtopic, ok := topicInput.(string)
-	if !ok {
-		context.SetOutput("result", "TOPIC_NOT_SET")
-		return true, fmt.Errorf("topic not set")
+	if in.Broker == "" {
+		ctx.Logger().Debug("BROKER_NOT_SET")
+		output.Result = "BROKER_NOT_SET"
+		ctx.SetOutputObject(output)
+		return false, fmt.Errorf("Broker not set")
 	}
 
-	payloadInput := context.GetInput(payload)
-	if payloadInput == nil {
-		context.SetOutput("result", "PAYLOAD_NOT_SET")
-		return true, fmt.Errorf("payload not set")
+	if in.Topic == "" {
+		ctx.Logger().Debug("TOPIC_NOT_SET")
+		output.Result = "TOPIC_NOT_SET"
+		ctx.SetOutputObject(output)
+		return false, fmt.Errorf("Topic not set")
 	}
 
-	ivpayload := makeMsg(payloadInput)
-	log.Debugf("Created Message: %v", ivpayload)
+	ivpayload := makeMsg(ctx, in.Message)
+	ctx.Logger().Debugf("Created Message: %v", ivpayload)
 
-	ivqos, ok := context.GetInput(qos).(int)
-	if !ok {
-		context.SetOutput("result", "QOS_NOT_SET")
-		return true, fmt.Errorf("qos not set")
+	if in.ID == "" {
+		ctx.Logger().Debug("CLIENTID_NOT_SET")
+		output.Result = "CLIENTID_NOT_SET"
+		ctx.SetOutputObject(output)
+		return false, fmt.Errorf("Client ID not set")
 	}
 
-	idInput := context.GetInput(id)
-
-	ivID, ok := idInput.(string)
-	if !ok {
-		context.SetOutput("result", "CLIENTID_NOT_SET")
-		return true, fmt.Errorf("client id not set")
-	}
-
-	userInput := context.GetInput(user)
-
-	ivUser, ok := userInput.(string)
-	if !ok {
-		//User not set, use default
-		ivUser = ""
-	}
-
-	passwordInput := context.GetInput(password)
-
-	ivPassword, ok := passwordInput.(string)
-	if !ok {
-		//Password not set, use default
-		ivPassword = ""
-	}
-
-	// Get settings for TLS (store location, thing name)
-	tlsInput := context.GetInput(enabletls)
-
-	tlsEnabled, ok := tlsInput.(bool)
-	if !ok {
-		context.SetOutput("result", "ENABLETLS_NOT_SET")
-		return true, fmt.Errorf("ENABLE TLS not set")
-	}
-
-	certstoreInput := context.GetInput(certstore)
-
-	ivCertStore, ok := certstoreInput.(string)
-	if !ok {
-		//Store not set, use default
-		ivCertStore = ""
-	}
-
-	thingInput := context.GetInput(thing)
-
-	ivThing, ok := thingInput.(string)
-	if !ok || ivThing == "" {
+	if in.Thing == "" {
 		//thing not set, use default and this indicates that this is not AWS
-		ivThing = "device"
+		in.Thing = "device"
 	}
 
 	opts := mqtt.NewClientOptions()
-	opts.AddBroker(ivbroker)
-	opts.SetClientID(ivID)
-	opts.SetUsername(ivUser)
-	opts.SetPassword(ivPassword)
+	opts.AddBroker(in.Broker)
+	opts.SetClientID(in.ID)
+	opts.SetUsername(in.User)
+	opts.SetPassword(in.Password)
 
-	if tlsEnabled {
+	if in.EnableTLS {
 		//set tls config
-		if ivThing == "device" {
-			tlsConfig := NewTLSConfig(ivCertStore)
+		if in.Thing == "device" {
+			tlsConfig := NewTLSConfig(in.CertStore)
 			opts.SetTLSConfig(tlsConfig)
 		} else {
-			tlsConfig := AWSTLSConfig(ivThing, ivCertStore)
+			tlsConfig := AWSTLSConfig(in.Thing, in.CertStore)
 			opts.SetTLSConfig(tlsConfig)
 		}
 	}
 
 	client := mqtt.NewClient(opts)
 
-	log.Debugf("MQTT Publisher connecting to broker %v using client ID %v", ivbroker, ivID)
+	ctx.Logger().Debugf("MQTT Publisher connecting to broker %v using client ID %v", in.Broker, in.ID)
 
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
 		fmt.Printf("%v\n", token.Error())
 		panic(token.Error())
 	}
 
-	log.Debugf("MQTT Publisher connected, sending message on topic %v", ivtopic)
-	token := client.Publish(ivtopic, byte(ivqos), false, ivpayload)
+	ctx.Logger().Debugf("MQTT Publisher connected, sending message on topic %v", in.Topic)
+	token := client.Publish(in.Topic, byte(in.QOS), false, ivpayload)
 	token.Wait()
 
 	client.Disconnect(250)
-	log.Debugf("MQTT Publisher disconnected")
-	context.SetOutput("result", "OK")
+	ctx.Logger().Debugf("MQTT Publisher disconnected")
+
+	output.Result = "OK"
+	ctx.SetOutputObject(output)
 
 	return true, nil
 }
 
-func makeMsg(msgData interface{}) string {
+func makeMsg(ctx activity.Context, msgData interface{}) string {
 
 	returnData := ""
 	b, _ := json.Marshal(msgData)
 	returnData = string(b)
 
-	log.Debugf("MakeMsg returning data: %v", returnData)
+	ctx.Logger().Debugf("MakeMsg returning data: %v", returnData)
 
 	return returnData
 }

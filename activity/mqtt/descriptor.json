@@ -2,17 +2,19 @@
     "name": "mqtt",
     "type": "flogo:activity",
     "ref": "github.com/ayh20/flogo-components/activity/mqtt",
-    "version": "0.0.2",
+    "version": "0.9.1",
     "title": "Send MQTT Message with TLS Support  (AWS IoT, Eclipse Hono, Bosch IoT)",
     "description": "Pubishes messages to a MQTT topic with TLS  support",
     "author": "Andy Hampshire <ahampshi@tibco.com>",
     "input":[
      {
         "name": "broker",
+        "required": true,
         "type": "string"
       },
       {
         "name": "id",
+        "required": true,
         "type": "string"
       },
       {
@@ -25,7 +27,9 @@
       },
       {
         "name": "enabletls",
-        "type": "boolean"
+        "type": "boolean",
+        "required": true,
+        "allowed" : ["true", "false"]
       },
       {
         "name": "certstore",
@@ -37,11 +41,13 @@
       },
       {
         "name": "topic",
+        "required": true,
         "type": "string"
       },
       {
         "name": "qos",
         "type": "integer",
+        "required": true,
         "allowed" : ["0", "1", "2"]
       },
       {
