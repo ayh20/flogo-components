@@ -84,6 +84,35 @@ func Test_One(t *testing.T) {
 	log.RootLogger().Info("****TEST : Executing Find One ends****")
 	assert.Nil(t, err)
 }
+func Test_Two(t *testing.T) {
+	log.RootLogger().Info("****TEST : Executing Two start****")
+	m := make(map[string]interface{})
+	err1 := json.Unmarshal([]byte(settingsjson), &m)
+
+	log.RootLogger().Infof("Input Settings are : %v", m["settings"])
+	assert.Nil(t, err1)
+
+	mf := mapper.NewFactory(resolve.GetBasicResolver())
+
+	support.RegisterAlias("connection", "connection", "github.com/ayh20/flogo-components/activity/mqtt/connection")
+
+	//fmt.Println("=======Settings========", m["settings"])
+	iCtx := test.NewActivityInitContext(m["settings"], mf)
+	act, err := New(iCtx)
+	assert.Nil(t, err)
+
+	tc := test.NewActivityContext(act.Metadata())
+	tc.SetInput("message", "My test message2")
+
+	_, err = act.Eval(tc)
+
+	// Getting outputs
+	testOutput := tc.GetOutput("result")
+	jsonOutput, _ := json.Marshal(testOutput)
+	log.RootLogger().Infof("jsonOutput is : %s", string(jsonOutput))
+	log.RootLogger().Info("****TEST : Executing Find two ends****")
+	assert.Nil(t, err)
+}
 
 // func TestCreate(t *testing.T) {
 // 	act := NewActivity(getActivityMetadata())

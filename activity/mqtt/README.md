@@ -10,11 +10,14 @@ Note This is the first version of the connector for the purposes of testing the 
 ## Installation
 
 ```bash
-flogo install github.com/ayh20/flogo-components/activity/mqtt
+flogo install github.com/ayh20/flogo-components/activity/mqtt/connection
+
+flogo install github.com/ayh20/flogo-components/activity/mqtt/publish
 ```
 Link for flogo web:
 ```
-https://github.com/ayh20/flogo-components/activity/mqtt
+https://github.com/ayh20/flogo-components/activity/mqtt/connection
+https://github.com/ayh20/flogo-components/activity/mqtt/publish
 ```
 
 ## Schema

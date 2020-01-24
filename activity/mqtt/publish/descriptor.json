@@ -1,8 +1,8 @@
 {
-    "name": "mqtt",
+    "name": "mqtt-publish",
     "type": "flogo:activity",
-    "ref": "github.com/ayh20/flogo-components/activity/mqtt",
-    "version": "0.9.5",
+    "ref": "github.com/ayh20/flogo-components/activity/mqtt/publish",
+    "version": "0.1.1",
     "title": "Send MQTT Message with TLS Support  (AWS IoT, Eclipse Hono, Bosch IoT)",
     "description": "Pubishes messages to a MQTT topic with TLS  support",
     "author": "Andy Hampshire <ahampshi@tibco.com>",

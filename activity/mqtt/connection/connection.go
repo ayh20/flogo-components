@@ -50,14 +50,18 @@ func (*mqttFactory) Type() string {
 func (*mqttFactory) NewManager(settings map[string]interface{}) (connection.Manager, error) {
 	sharedConn := &mqttSharedConfigManager{}
 	var err error
+	logmqtt.Debug("Get shared config")
 	sharedConn.config, err = getmqttClientConfig(settings)
+
 	if err != nil {
 		return nil, err
 	}
 	if sharedConn.mqttclient != nil {
+		logmqtt.Debug("Reuse Shared")
 		return sharedConn, nil
 	}
 
+	logmqtt.Debug("Create new config")
 	opts := mqtt.NewClientOptions()
 
 	opts.AddBroker(sharedConn.config.Broker)
