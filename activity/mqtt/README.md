@@ -5,6 +5,8 @@ This activity is based on the MQTT activity produced by Jan van der Lugt https:/
 
 Take care when using AWS IoT to get the correct certs/keys and Policy configuration. Topic, Client Name and keys must all match the policy definition.
 
+Note This is the first version of the connector for the purposes of testing the new connection object structure... doc to be updated soon to refect changes
+
 ## Installation
 
 ```bash

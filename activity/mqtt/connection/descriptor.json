@@ -1,0 +1,51 @@
+{
+    "name": "mqtt-connection",
+    "type": "flogo:connector",
+    "ref": "github.com/ayh20/flogo-components/activity/mqtt/connection",
+    "version": "0.1.1",
+    "title": "Connection for MQTT Message with TLS Support  (AWS IoT, Eclipse Hono, Bosch IoT)",
+    "description": "Connection details for MQTT server with TLS  support",
+    "author": "Andy Hampshire <ahampshi@tibco.com>",
+    "settings":[
+      {
+        "name": "name",
+        "type": "string",
+        "required": true
+      },
+      {
+        "name": "description",
+        "type": "string"
+      },
+      {
+        "name": "broker",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "name": "id",
+        "required": true,
+        "type": "string"
+      },
+      {
+        "name": "user",
+        "type": "string"
+      },
+      {
+        "name": "password",
+        "type": "string"
+      },
+      {
+        "name": "enabletls",
+        "type": "boolean",
+        "required": true
+      },
+      {
+        "name": "certstore",
+        "type": "string"
+      },
+      {
+        "name": "thing",
+        "type": "string"
+      }
+    ]
+  }
