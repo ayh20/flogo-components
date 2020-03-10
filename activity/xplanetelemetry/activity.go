@@ -1,6 +1,8 @@
 package xplanetelemetry
 
 import (
+	"strings"
+
 	"github.com/project-flogo/core/activity"
 
 	"bytes"
@@ -68,30 +70,62 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	headerdata = make([]byte, 4)
 	internaluse = make([]byte, 1)
 	indexdata = make([]byte, 4)
-	var resultdata string
+	var resultdata, debugdata, debugdata2 string
 
 	//peel off header
 	b.Read(headerdata)
 	b.Read(internaluse)
-	b.Read(indexdata)
 
-	ctx.Logger().Debugf("header : %+v flag : %+v index : %+v\n", headerdata, internaluse, indexdata)
+	ctx.Logger().Debugf("header : %+v flag : %+v\n", headerdata, internaluse)
 
 	for {
-		_, err := b.Read(floatdata)
 
+		//read index 4 bytes
+		_, err := b.Read(indexdata)
+
+		// Test for EOF
 		if err == io.EOF {
-			resultdata = resultdata
+			resultdata = strings.TrimRight(resultdata, ",|")
 			break
 		}
 
-		float := math.Float32frombits(binary.LittleEndian.Uint32(floatdata))
-		resultdata = resultdata + fmt.Sprintf("%+v,", float)
-		//fmt.Printf("\n float= %+v", float)
+		// Debug code to dump sentences
+		index := indexdata[0:1]
+		indexvalue := fmt.Sprintf("%+v", index)
+		indexvalue = indexvalue[1 : len(indexvalue)-1]
+		debugdata = fmt.Sprintf("debugdata : %+v,", index)
+		debugdata2 = fmt.Sprintf("debugdata2 : %+v,", index)
+
+		resultdata = resultdata + indexvalue + ","
+
+		// read all 8 values
+		for i := 0; i < 8; i++ {
+			// read the next 4 bytes
+			b.Read(floatdata)
+
+			// convert to float
+			float := math.Float32frombits(binary.LittleEndian.Uint32(floatdata))
+
+			if float != -999 {
+				resultdata = resultdata + fmt.Sprintf("%+v,", float)
+				debugdata = debugdata + fmt.Sprintf("%X,", floatdata)
+				debugdata2 = debugdata2 + fmt.Sprintf("%+v,", floatdata)
+			}
+			//fmt.Printf("\n float= %+v", float)
+
+		}
+
+		resultdata = strings.TrimRight(resultdata, ",") + "|"
+
+		// dumpout debug
+		ctx.Logger().Debugf("%+v", strings.TrimRight(debugdata, ","))
+		ctx.Logger().Debugf("%+v", strings.TrimRight(debugdata2, ","))
+
 	}
 
 	output.Data = resultdata
 	output.MsgType = 1
+
 	err = ctx.SetOutputObject(output)
 	if err != nil {
 		return false, err
