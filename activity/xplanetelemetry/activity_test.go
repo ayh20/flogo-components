@@ -53,17 +53,6 @@ func TestEvalQuality(t *testing.T) {
 	}
 
 	tc.SetInput("buffer", arr)
-	//err := struc.Pack(&buf, arr)
-
-	//o := &F1Header{}
-
-	//err = struc.Unpack(&buf, o)
-	//if err != nil {
-	//	fmt.Printf("error code: %v \n", err)
-	//	return
-	//}
-
-	//fmt.Printf("F1 Header : \n %+v \n", o)
 
 	fmt.Println("#######   Call Activity")
 	act.Eval(tc)
