@@ -1,0 +1,27 @@
+{
+  "name": "xplanetelemetry",
+  "author": "Andy Hampshire",
+  "type": "flogo:activity",
+  "ref": "github.com/ayh20/flogo-components/activity/xplanetelemetry",
+  "version": "0.0.1",
+  "title": "X-Plane 11 Telemetry decoder",
+  "description": "Decodes telemetry data from X-Plane 11",
+  "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/xplanetelemetry",
+  "input": [
+    {
+      "name": "buffer",
+      "required": true,
+      "type": "any"
+    }
+  ],
+  "output": [
+    {
+      "name": "msgtype",
+      "type": "integer"
+    },
+    {
+      "name": "data",
+      "type": "string"
+    }
+  ]
+}
