@@ -50,9 +50,39 @@ Inputs and Outputs:
 ## Outputs
 | Output      | Description                                 |
 |:------------|:--------------------------------------------|
-| data        | CSV formatted car data for current driver   |
 | msgtype     | Message type - Currently unused set to 1    |
+| data        | CSV formatted plane telemetry data          |
+
 
 ## Configuration Examples
 ### Simple
-To be added....
+```json
+{
+            "id": "xplanetelemetry_2",
+            "name": "X Plane Telemetry decoder",
+            "description": "Decodes telemetry data from XPlane 11",
+            "activity": {
+              "ref": "#xplanetelemetry",
+              "input": {
+                "buffer": "=$flow.payload"
+              }
+            }
+          },
+          {
+            "id": "mqtt_3",
+            "name": "Send MQTT Message with TLS Support  (AWS IoT, Eclipse Hono, Bosch IoT)",
+            "description": "Pubishes messages to a MQTT topic with TLS  support",
+            "activity": {
+              "ref": "#publish",
+              "input": {
+                "message": "=$activity[xplanetelemetry_2].data"
+              },
+              "settings": {
+                "connection": "conn://myconn",
+                "topic": "xplane/telemetery",
+                "qos": 0,
+                "jsonpayload": false
+              }
+            }
+          }
+```

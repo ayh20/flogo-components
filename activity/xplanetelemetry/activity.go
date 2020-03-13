@@ -56,10 +56,6 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	// Get byte stream from input
 	b := bytes.NewBuffer(in.Buffer)
 
-	// testing
-	//var b bytes.Buffer // A Buffer needs no initialization.
-	//b.Write([]byte{0x35, 0xce, 0x86, 0x41, 0x33, 0x33, 0x9f, 0x41, 0x00, 0xc0, 0x79, 0xc4, 0x7e, 0x13, 0x73, 0x3d, 0x89, 0xd1, 0x43, 0x3d, 0xd6, 0x4b, 0x75, 0x3d, 0x00, 0x00, 0x80, 0x3f})
-
 	// Create byte array to hold data
 	var headerdata []byte
 	var internaluse []byte
@@ -70,7 +66,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	headerdata = make([]byte, 4)
 	internaluse = make([]byte, 1)
 	indexdata = make([]byte, 4)
-	var resultdata, debugdata, debugdata2 string
+	var resultdata string
+	//var debugdata, debugdata2 string
 
 	//peel off header
 	b.Read(headerdata)
@@ -93,8 +90,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		index := indexdata[0:1]
 		indexvalue := fmt.Sprintf("%+v", index)
 		indexvalue = indexvalue[1 : len(indexvalue)-1]
-		debugdata = fmt.Sprintf("debugdata : %+v,", index)
-		debugdata2 = fmt.Sprintf("debugdata2 : %+v,", index)
+		//debugdata = fmt.Sprintf("debugdata : %+v,", index)
+		//debugdata2 = fmt.Sprintf("debugdata2 : %+v,", index)
 
 		resultdata = resultdata + indexvalue + ","
 
@@ -108,8 +105,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 			if float != -999 {
 				resultdata = resultdata + fmt.Sprintf("%+v,", float)
-				debugdata = debugdata + fmt.Sprintf("%X,", floatdata)
-				debugdata2 = debugdata2 + fmt.Sprintf("%+v,", floatdata)
+				//debugdata = debugdata + fmt.Sprintf("%X,", floatdata)
+				//debugdata2 = debugdata2 + fmt.Sprintf("%+v,", floatdata)
 			}
 			//fmt.Printf("\n float= %+v", float)
 
@@ -118,13 +115,14 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		resultdata = strings.TrimRight(resultdata, ",") + "|"
 
 		// dumpout debug
-		ctx.Logger().Debugf("%+v", strings.TrimRight(debugdata, ","))
-		ctx.Logger().Debugf("%+v", strings.TrimRight(debugdata2, ","))
+		//ctx.Logger().Debugf("%+v", strings.TrimRight(debugdata, ","))
+		//ctx.Logger().Debugf("%+v", strings.TrimRight(debugdata2, ","))
 
 	}
 
 	output.Data = resultdata
 	output.MsgType = 1
+	ctx.Logger().Debugf("Result: %+v", resultdata)
 
 	err = ctx.SetOutputObject(output)
 	if err != nil {
