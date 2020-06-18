@@ -18,6 +18,19 @@
       "return": {
         "type": "string"
     }
+    },
+    {
+      "name": "pathencode",
+      "description": "Make the passed path string url safe  rtbutils.pathencode(\"path with?reserved+characters\")",
+      "args": [
+        {
+          "name": "input",
+          "type": "string"
+        }
+      ], 
+      "return": {
+        "type": "string"
+    }
     }
   ]
 }
