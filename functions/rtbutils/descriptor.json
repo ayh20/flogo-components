@@ -9,7 +9,6 @@
     {
       "name": "urlencode",
       "description": "Make the passed string url safe  rtbutils.urlencode(\"Hello World\")",
-      "varArgs": true,
       "args": [
         {
           "name": "input",
