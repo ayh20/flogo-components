@@ -1,0 +1,21 @@
+{
+  "name": "rtbutils",
+  "type": "flogo:function",
+  "version": "0.0.1",
+  "title": "functions to help RTB creation",
+  "description": "misc utils",
+  "homepage": "https://github.com/ayh20/flogo-components/functions/rtbutils",
+  "functions": [
+    {
+      "name": "URLencode",
+      "description": "Make the passed string url safe  rtbutils.URLencode(\"Hello World\")",
+      "varArgs": true,
+      "args": [
+        {
+          "name": "input",
+          "type": "string"
+        }
+      ]
+    }
+  ]
+}

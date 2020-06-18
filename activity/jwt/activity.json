@@ -39,7 +39,7 @@
           "type":"dropdown",
           "selection":"single"
       },
-      "allowed" : ["Verify", "Sign"]
+      "allowed" : ["Verify", "Sign", "Decode"]
     },
     {
       "name": "algorithm",

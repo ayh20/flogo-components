@@ -65,30 +65,52 @@ func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 
 	// Determine code path based on mode
 	switch mode {
-	case "Decrypt":
-		//  Do we need a decrypt and what does it logicaly mean anyway !
+	case "Decode":
+		context.SetOutput(ovClaims, "")
+		context.SetOutput(ovToken, "")
 
-		/* 		key := []byte(secret)
-		   		tok, err := jwt.ParseEncrypted(token)
-		   		if err != nil {
-		   			activityLog.Info("Parse Error")
-		   			activityLog.Info(err.Error)
-		   			context.SetOutput("valid", false)
-		   			return false, err
-		   		}
+		// Parse takes the token string and a function for looking up the key. The latter is especially
+		// useful if you use multiple keys for your application.  The standard is to use 'kid' in the
+		// head of the token to identify which key to use, but the parsed token (head and claims) is provided
+		// to the callback, providing flexibility.
 
-		   		out := jwt.Claims{}
+		token, err := jwt.Parse(tokenstring, func(token *jwt.Token) (interface{}, error) {
+			// sharedEncryptionKey contains a plain secret or a public key
+			// we used the passed Algo name to determine the handling of the secret
+			// returning the formatted ES/RS key or secret string
+			return sharedEncryptionKey, nil
+		})
 
-		   		if err := tok.Claims(key, &out); err != nil {
-		   			activityLog.Info("claims error")
-		   			activityLog.Info(err.Error)
-		   			context.SetOutput("valid", false)
-		   			return false, err
-		   		}
-		   		//out2 := jwt.NestedJSONWebToken.
-		   		activityLog.Info(fmt.Sprintf("iss: %s, sub: %s, ID: %s \n", out.Issuer, out.Subject, out.ID))
-		   		context.SetOutput("valid", true) */
-		return true, nil
+		activityLog.Info("Created Token")
+
+		if err != nil {
+			context.SetOutput(ovClaims, fmt.Errorf("Token Error: %v", err))
+			activityLog.Info("Parse Failed - Token Error: ", err)
+			return true, nil
+		}
+
+		activityLog.Info("Check for Valid Token")
+		// if the token is invalid then return a false
+		if token.Valid {
+			activityLog.Info(token.Claims, token.Header)
+		} else {
+			context.SetOutput(ovClaims, fmt.Errorf("Token Invalid: %v", err))
+			activityLog.Info("Token invalid: ", err)
+			return true, nil
+		}
+
+		activityLog.Info("Decode Claims")
+		// Take the decoded claims
+		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+			claimsJSON, _ := json.Marshal(claims)
+			context.SetOutput(ovClaims, string(claimsJSON))
+			activityLog.Info("Valid Token, claims are: ", string(claimsJSON))
+			context.SetOutput(ovValid, true)
+			return true, nil
+		} else {
+			activityLog.Info("Claims invalid: ", err)
+			return true, nil
+		}
 
 	case "Verify":
 
@@ -108,6 +130,11 @@ func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 			// sharedEncryptionKey contains a plain secret or a public key
 			// we used the passed Algo name to determine the handling of the secret
 			// returning the formatted ES/RS key or secret string
+			if err != nil {
+				context.SetOutput(ovClaims, fmt.Errorf("Parse Error: %v", err))
+				activityLog.Info("Parse Failed - Parse Error: ", err)
+				return true, nil
+			}
 			if isEs(algo) {
 				return jwt.ParseECPublicKeyFromPEM(sharedEncryptionKey)
 			} else if isRs(algo) {

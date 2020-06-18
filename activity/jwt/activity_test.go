@@ -84,6 +84,21 @@ func TestDecrypt(t *testing.T) {
 		fmt.Println("******** Result: ", tc.GetOutput("valid"), tc.GetOutput("claims"))
 	}
 
+	//test2b
+	fmt.Println("===> Test2B")
+	tc.SetInput("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6Imk2bEdrM0ZaenhSY1ViMkMzbkVRN3N5SEpsWSIsImtpZCI6Imk2bEdrM0ZaenhSY1ViMkMzbkVRN3N5SEpsWSJ9.eyJhdWQiOiJlZjFkYTlkNC1mZjc3LTRjM2UtYTAwNS04NDBjM2Y4MzA3NDUiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC9mYTE1ZDY5Mi1lOWM3LTQ0NjAtYTc0My0yOWYyOTUyMjIyOS8iLCJpYXQiOjE1MzcyMzMxMDYsIm5iZiI6MTUzNzIzMzEwNiwiZXhwIjoxNTM3MjM3MDA2LCJhY3IiOiIxIiwiYWlvIjoiQVhRQWkvOElBQUFBRm0rRS9RVEcrZ0ZuVnhMaldkdzhLKzYxQUdyU091TU1GNmViYU1qN1hPM0libUQzZkdtck95RCtOdlp5R24yVmFUL2tES1h3NE1JaHJnR1ZxNkJuOHdMWG9UMUxrSVorRnpRVmtKUFBMUU9WNEtjWHFTbENWUERTL0RpQ0RnRTIyMlRJbU12V05hRU1hVU9Uc0lHdlRRPT0iLCJhbXIiOlsid2lhIl0sImFwcGlkIjoiNzVkYmU3N2YtMTBhMy00ZTU5LTg1ZmQtOGMxMjc1NDRmMTdjIiwiYXBwaWRhY3IiOiIwIiwiZW1haWwiOiJBYmVMaUBtaWNyb3NvZnQuY29tIiwiZmFtaWx5X25hbWUiOiJMaW5jb2xuIiwiZ2l2ZW5fbmFtZSI6IkFiZSAoTVNGVCkiLCJpZHAiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC83MmY5ODhiZi04NmYxLTQxYWYtOTFhYi0yZDdjZDAxMjIyNDcvIiwiaXBhZGRyIjoiMjIyLjIyMi4yMjIuMjIiLCJuYW1lIjoiYWJlbGkiLCJvaWQiOiIwMjIyM2I2Yi1hYTFkLTQyZDQtOWVjMC0xYjJiYjkxOTQ0MzgiLCJyaCI6IkkiLCJzY3AiOiJ1c2VyX2ltcGVyc29uYXRpb24iLCJzdWIiOiJsM19yb0lTUVUyMjJiVUxTOXlpMmswWHBxcE9pTXo1SDNaQUNvMUdlWEEiLCJ0aWQiOiJmYTE1ZDY5Mi1lOWM3LTQ0NjAtYTc0My0yOWYyOTU2ZmQ0MjkiLCJ1bmlxdWVfbmFtZSI6ImFiZWxpQG1pY3Jvc29mdC5jb20iLCJ1dGkiOiJGVnNHeFlYSTMwLVR1aWt1dVVvRkFBIiwidmVyIjoiMS4wIn0.D3H6pMUtQnoJAGq6AHd")
+	tc.SetInput("secret", "secret")
+	tc.SetInput("mode", "Verify")
+	tc.SetInput("algorithm", "RS256")
+	act.Eval(tc)
+
+	if tc.GetOutput("valid") == nil {
+		fmt.Println("******** Test Failed  ********")
+		t.Fail()
+	} else {
+		fmt.Println("******** Result: ", tc.GetOutput("valid"), tc.GetOutput("claims"))
+	}
+
 	//test3
 	fmt.Println("===> Test3")
 	tc.SetInput("header", `{"typ":"JWT","alg":"HS256"}`)
@@ -173,6 +188,9 @@ CKuHRG+AP579dncdUnOMvfXOtkdM4vk0+hWASBQzM9xzVcztCa+koAugjVaLS9A+
 	lasttoken = tc.GetOutput("token").(string)
 	tc.SetInput("token", lasttoken)
 	//tc.SetInput("secret", "secret")
+	tc.SetInput("header", "")
+	tc.SetInput("algorithm", "RS256")
+	tc.SetInput("payload", "")
 	tc.SetInput("mode", "Verify")
 	tc.SetInput("algorithm", "RS256")
 	tc.SetInput("secret", `-----BEGIN PUBLIC KEY-----
@@ -184,6 +202,23 @@ XrHhR+1DcKJzQBSTAGnpYVaqpsARap+nwRipr3nUTuxyGohBTSmjJ2usSeQXHI3b
 ODIRe1AuTyHceAbewn8b462yEWKARdpd9AjQW5SIVPfdsz5B6GlYQ5LdYKtznTuy
 7wIDAQAB
 -----END PUBLIC KEY-----`)
+	act.Eval(tc)
+
+	if tc.GetOutput("valid") == nil {
+		fmt.Println("******** Test Failed  ********")
+		t.Fail()
+	} else {
+		fmt.Println("******** Result: ", tc.GetOutput("valid"), tc.GetOutput("claims"))
+	}
+
+	//Test 8 - validate token
+	fmt.Println("===> Test8")
+	lasttoken = tc.GetOutput("token").(string)
+	tc.SetInput("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSIsImtpZCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSJ9.eyJhdWQiOiJodHRwOi8vZmxvZ28udGVzdDEiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC80N2VjMGM4Yy0yMDdkLTQ3NzQtOGNjOS02ZDNmOGRhMzE3OGUvIiwiaWF0IjoxNTg1MTQ5MTE1LCJuYmYiOjE1ODUxNDkxMTUsImV4cCI6MTU4NTE1MzAxNSwiYWlvIjoiNDJkZ1lIZ1NGaXlwdTFVL3lyZDZYV2YvdFZvNUFBPT0iLCJhcHBpZCI6IjNhNjRjNGQ1LTQ1M2ItNGU1Ni05ZGIyLTJmNGFiMzk2OWQ5ZSIsImFwcGlkYWNyIjoiMSIsImlkcCI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0LzQ3ZWMwYzhjLTIwN2QtNDc3NC04Y2M5LTZkM2Y4ZGEzMTc4ZS8iLCJvaWQiOiIzNGNkNGQ4Ni1kMmM0LTRkMjQtOWU2My0yY2ZjMmJkMDU4OWYiLCJzdWIiOiIzNGNkNGQ4Ni1kMmM0LTRkMjQtOWU2My0yY2ZjMmJkMDU4OWYiLCJ0aWQiOiI0N2VjMGM4Yy0yMDdkLTQ3NzQtOGNjOS02ZDNmOGRhMzE3OGUiLCJ1dGkiOiJZSExUekVzbW5VYUlyc1c1R1htTEFBIiwidmVyIjoiMS4wIn0.ZAPvx8urJ1vWbUh86lNfzM4I9G2AVIVF522ev2m_ZkLyxo_m6SrXtAHAyxI3U72xt1Q0Z8MyjUSSXnLG5SuyWPzftSUzAY0wRCHLl-Yl9HZPsp258qaW0I5j0UM70oqeEhFnK5Y_gc9HC8IoZnDs71kuIM5vlceKuSYRWhb-XCBUlteUlJ9rO1GxyrCoruxppU-zdqo-c4e8qbQW0zqOA6iavdYyoflWOhaAKRTlOPbb-MpBL_Zt5WvKNi13JCD09ps3mdokCM1dyEo72rUefoSlDZbA4JIaveVz2e2Iq0PL6FcdEaxNkXvr_mIEl0Rj7DElCSdYYa3m0z64cSJVIQ")
+	//tc.SetInput("secret", "secret")
+	tc.SetInput("mode", "Decode")
+	tc.SetInput("algorithm", "")
+	tc.SetInput("secret", "")
 	act.Eval(tc)
 
 	if tc.GetOutput("valid") == nil {
