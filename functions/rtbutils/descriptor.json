@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "title": "functions to help RTB creation",
   "description": "misc utils",
-  "homepage": "https://github.com/ayh20/flogo-components/functions/rtbutils",
+  "homepage": "https://github.com/ayh20/flogo-components/tree/master/functions/rtbutils",
   "functions": [
     {
       "name": "URLencode",
