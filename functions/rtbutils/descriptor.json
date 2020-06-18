@@ -7,8 +7,8 @@
   "homepage": "https://github.com/ayh20/flogo-components/tree/master/functions/rtbutils",
   "functions": [
     {
-      "name": "URLencode",
-      "description": "Make the passed string url safe  rtbutils.URLencode(\"Hello World\")",
+      "name": "urlencode",
+      "description": "Make the passed string url safe  rtbutils.urlencode(\"Hello World\")",
       "varArgs": true,
       "args": [
         {

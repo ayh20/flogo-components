@@ -1,8 +1,8 @@
-# Utils Functions
+# Utils Functions for RTB project
 This package adds a set of functions that can be used in Flogo versions >= 0.9.0.
 
 Installing them in the Web UI means that they will show up as functions that can be used in the mapper
-
+These will get added to the core project at some point
 
 ## Installation
 
