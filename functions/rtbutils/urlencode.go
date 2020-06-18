@@ -15,7 +15,7 @@ type fnURLencode struct {
 }
 
 func (fnURLencode) Name() string {
-	return "URLencode"
+	return "urlencode"
 }
 
 func (fnURLencode) Sig() (paramTypes []data.Type, isVariadic bool) {
