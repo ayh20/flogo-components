@@ -15,7 +15,7 @@ type fnpathencode struct {
 }
 
 func (fnpathencode) Name() string {
-	return "URLencode"
+	return "pathencode"
 }
 
 func (fnpathencode) Sig() (paramTypes []data.Type, isVariadic bool) {
