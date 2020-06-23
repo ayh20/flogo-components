@@ -18,5 +18,5 @@ https://github.com/ayh20/flogo-components/functions/rtbutils
 
 | Name         | Decription             | Sample                                                |
 |:-------------|:-----------------------|:------------------------------------------------------|
-| URLencode      | Make the passed string url safe |   rtbutils.URLencode(\"Hello World\") |
+| urlencode      | Make the passed string url safe |   rtbutils.urlencode(\"Hello World\") |
 | pathencode      | Make the path string url safe |   rtbutils.pathencode(\"path with?reserved+characters\") |
