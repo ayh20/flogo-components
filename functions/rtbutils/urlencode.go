@@ -8,20 +8,20 @@ import (
 )
 
 func init() {
-	function.Register(&fnURLencode{})
+	function.Register(&fnurlencode{})
 }
 
-type fnURLencode struct {
+type fnurlencode struct {
 }
 
-func (fnURLencode) Name() string {
+func (fnurlencode) Name() string {
 	return "urlencode"
 }
 
-func (fnURLencode) Sig() (paramTypes []data.Type, isVariadic bool) {
+func (fnurlencode) Sig() (paramTypes []data.Type, isVariadic bool) {
 	return []data.Type{data.TypeString}, false
 }
 
-func (fnURLencode) Eval(params ...interface{}) (interface{}, error) {
+func (fnurlencode) Eval(params ...interface{}) (interface{}, error) {
 	return url.QueryEscape(params[0].(string)), nil
 }
