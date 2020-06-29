@@ -1,7 +1,7 @@
 {
   "name": "rtbutils",
   "type": "flogo:function",
-  "version": "0.0.8", 
+  "version": "0.0.9", 
   "title": "functions to help RTB creation",
   "description": "misc utils",
   "homepage": "https://github.com/ayh20/flogo-components/tree/master/functions/rtbutils",
@@ -26,6 +26,30 @@
         {
           "name": "input",
           "type": "string"
+        }
+      ], 
+      "return": {
+        "type": "string"
+    }
+    },
+    {
+      "name": "jsontostring",
+      "description": "Takes a passed json array and flattens it to a concatinated string",
+      "args": [
+        {
+          "name": "inputarray",
+          "type": "string",
+          "description" : "The input array"
+        },
+        {
+          "name": "itemname",
+          "type": "string",
+          "description" : "Name of item in array to concatenate"
+        },
+        {
+          "name": "separator",
+          "type": "string",
+          "description" : "Chars to use to separate items"
         }
       ], 
       "return": {

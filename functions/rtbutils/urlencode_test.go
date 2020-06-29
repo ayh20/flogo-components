@@ -8,7 +8,7 @@ import (
 )
 
 func TestFnConcat_Eval(t *testing.T) {
-	f := &fnURLencode{}
+	f := &fnurlencode{}
 	v, err := function.Eval(f, "Hello World")
 
 	assert.Nil(t, err)
@@ -17,5 +17,5 @@ func TestFnConcat_Eval(t *testing.T) {
 	v, err = function.Eval(f, "this \\ \" data")
 
 	assert.Nil(t, err)
-	assert.Equal(t, "+this+%5C+%22+data", v)
+	assert.Equal(t, "this+%5C+%22+data", v)
 }
