@@ -5,9 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	//sched "scheduler"
-
-	"github.com/carlescere/scheduler"
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
 	"github.com/project-flogo/core/trigger"
@@ -43,7 +40,7 @@ func (*Factory) New(config *trigger.Config) (trigger.Trigger, error) {
 
 // Trigger - Type def
 type Trigger struct {
-	timers   []*scheduler.Job
+	timers   []*Job
 	handlers []trigger.Handler
 	logger   log.Logger
 }
@@ -133,7 +130,7 @@ func (t *Trigger) scheduleOnce(handler trigger.Handler, settings *HandlerSetting
 		t.logger.Debugf("Scheduling action to run once in %d seconds", seconds)
 	}
 
-	var timerJob *scheduler.Job
+	var timerJob *Job
 
 	fn := func() {
 		t.logger.Info("Executing \"Once\" timer trigger")
@@ -152,7 +149,7 @@ func (t *Trigger) scheduleOnce(handler trigger.Handler, settings *HandlerSetting
 		t.logger.Info("Start delay not specified, executing action immediately")
 		fn()
 	} else {
-		timerJob := scheduler.Every(seconds).Seconds()
+		timerJob := Every(seconds).Seconds()
 		timerJob, err := timerJob.NotImmediately().Run(fn)
 		if err != nil {
 			t.logger.Error("Error scheduling execute \"once\" timer: ", err.Error())
@@ -197,7 +194,7 @@ func (t *Trigger) scheduleRepeating(handler trigger.Handler, settings *HandlerSe
 	}
 
 	if startSeconds == 0 {
-		timerJob, err := scheduler.Every(repeatInterval).Seconds().Run(fn)
+		timerJob, err := Every(repeatInterval).Seconds().Run(fn)
 		if err != nil {
 			t.logger.Error("Error scheduling repeating timer: ", err.Error())
 		}
@@ -205,7 +202,7 @@ func (t *Trigger) scheduleRepeating(handler trigger.Handler, settings *HandlerSe
 		t.timers = append(t.timers, timerJob)
 	} else {
 
-		timerJob := scheduler.Every(startSeconds).Seconds()
+		timerJob := Every(startSeconds).Seconds()
 
 		fn2 := func() {
 			t.logger.Info("Executing first run of repeating timer")
@@ -219,7 +216,7 @@ func (t *Trigger) scheduleRepeating(handler trigger.Handler, settings *HandlerSe
 				timerJob.Quit <- true
 			}
 
-			timerJob, err := scheduler.Every(repeatInterval).Seconds().NotImmediately().Run(fn)
+			timerJob, err := Every(repeatInterval).Seconds().NotImmediately().Run(fn)
 			if err != nil {
 				t.logger.Error("Error scheduling repeating timer: ", err.Error())
 			}
@@ -239,19 +236,20 @@ func (t *Trigger) scheduleRepeating(handler trigger.Handler, settings *HandlerSe
 }
 func (t *Trigger) scheduleOnceOnDay(handler trigger.Handler, settings *HandlerSettings) error {
 	t.logger.Info("Scheduling a Once on a named Day/time timer")
-	ti := time.Now()
-	t.logger.Infof("Will be run @ %s %s now %s", settings.StartTime, settings.StartDay, ti.UTC())
+	//ti := time.Now()
+	//t.logger.Infof("Will be run @ %s %s now %s", settings.StartTime, settings.StartDay, ti.UTC())
+
 	// StartInterval is ignored in this branch
 	if settings.StartInterval != "" {
 		return fmt.Errorf("StartDay and StartInterval not compatible")
 	}
 
-	var timerJob *scheduler.Job
+	var timerJob *Job
 	var err error
 
 	fn := func() {
-		ti := time.Now()
-		t.logger.Infof("Executing \"Once on Given day and time\" timer trigger @ %s", ti.UTC())
+
+		t.logger.Debug("Executing \"Once on Given day and time\" timer trigger")
 
 		_, err := handler.Handle(context.Background(), nil)
 		if err != nil {
@@ -266,25 +264,28 @@ func (t *Trigger) scheduleOnceOnDay(handler trigger.Handler, settings *HandlerSe
 
 	switch settings.StartDay {
 	case "Sunday":
-		timerJob, err = scheduler.Every().Sunday().At(settings.StartTime).Run(fn)
+		timerJob, err = Every().Sunday().At(settings.StartTime).Run(fn)
 	case "Monday":
-		timerJob, err = scheduler.Every().Monday().At(settings.StartTime).Run(fn)
+		timerJob, err = Every().Monday().At(settings.StartTime).Run(fn)
 	case "Tuesday":
-		timerJob, err = scheduler.Every().Tuesday().At(settings.StartTime).Run(fn)
+		timerJob, err = Every().Tuesday().At(settings.StartTime).Run(fn)
 	case "Wednesday":
-		timerJob, err = scheduler.Every().Wednesday().At(settings.StartTime).Run(fn)
+		timerJob, err = Every().Wednesday().At(settings.StartTime).Run(fn)
 	case "Thursday":
-		timerJob, err = scheduler.Every().Thursday().At(settings.StartTime).Run(fn)
+		timerJob, err = Every().Thursday().At(settings.StartTime).Run(fn)
 	case "Friday":
-		timerJob, err = scheduler.Every().Friday().At(settings.StartTime).Run(fn)
+		timerJob, err = Every().Friday().At(settings.StartTime).Run(fn)
 	case "Saturday":
-		timerJob, err = scheduler.Every().Saturday().At(settings.StartTime).Run(fn)
+		timerJob, err = Every().Saturday().At(settings.StartTime).Run(fn)
+	case "Everyday":
+		timerJob, err = Every().Day().At(settings.StartTime).Run(fn)
 	}
 
 	if err != nil {
 		t.logger.Error("Error scheduling execute \"Once on Given day and time\" timer: ", err.Error())
 	}
-	xxx(timerJob)
+
+	t.NextRun(timerJob)
 
 	t.timers = append(t.timers, timerJob)
 
@@ -298,34 +299,39 @@ func (t *Trigger) scheduleRepeatingonDay(handler trigger.Handler, settings *Hand
 		return fmt.Errorf("StartDay and StartInterval not compatible")
 	}
 
-	var timerJob *scheduler.Job
+	var timerJob *Job
 	var err error
 
 	fn := func() {
-		t.logger.Info("Executing \"Repeating on Given day and time\" schedule trigger")
+		t.logger.Debug("Executing \"Repeating on Given day and time\" schedule trigger")
 
 		_, err := handler.Handle(context.Background(), nil)
 		if err != nil {
 			t.logger.Error("Error running handler: ", err.Error())
 		}
+		t.NextRun(timerJob)
 	}
 
 	switch settings.StartDay {
 	case "Sunday":
-		timerJob, err = scheduler.Every().Sunday().At(settings.StartTime).Run(fn)
+		timerJob, err = Every().Sunday().At(settings.StartTime).Run(fn)
 	case "Monday":
-		timerJob, err = scheduler.Every().Monday().At(settings.StartTime).Run(fn)
+		timerJob, err = Every().Monday().At(settings.StartTime).Run(fn)
 	case "Tuesday":
-		timerJob, err = scheduler.Every().Tuesday().At(settings.StartTime).Run(fn)
+		timerJob, err = Every().Tuesday().At(settings.StartTime).Run(fn)
 	case "Wednesday":
-		timerJob, err = scheduler.Every().Wednesday().At(settings.StartTime).Run(fn)
+		timerJob, err = Every().Wednesday().At(settings.StartTime).Run(fn)
 	case "Thursday":
-		timerJob, err = scheduler.Every().Thursday().At(settings.StartTime).Run(fn)
+		timerJob, err = Every().Thursday().At(settings.StartTime).Run(fn)
 	case "Friday":
-		timerJob, err = scheduler.Every().Friday().At(settings.StartTime).Run(fn)
+		timerJob, err = Every().Friday().At(settings.StartTime).Run(fn)
 	case "Saturday":
-		timerJob, err = scheduler.Every().Saturday().At(settings.StartTime).Run(fn)
+		timerJob, err = Every().Saturday().At(settings.StartTime).Run(fn)
+	case "Everyday":
+		timerJob, err = Every().Day().At(settings.StartTime).Run(fn)
 	}
+
+	t.NextRun(timerJob)
 
 	if err != nil {
 		t.logger.Error("Error scheduling execute \"once\" timer: ", err.Error())
@@ -336,9 +342,15 @@ func (t *Trigger) scheduleRepeatingonDay(handler trigger.Handler, settings *Hand
 	return nil
 }
 
-func xxx(job *scheduler.Job) {
-	fmt.Printf("in xxx  %v\r\n", time.Now())
+// NextRun - When will task actually run !
+func (t *Trigger) NextRun(job *Job) {
+
 	actual, err := job.schedule.nextRun()
+	if err != nil {
+		t.logger.Error("Error determining nextRun: ", err.Error())
+	}
 	runTime := time.Now().Add(actual)
-	fmt.Printf("in xxx: Will run @ %v\r\n", runTime)
+	//fmt.Printf("in xxx: Will run @ %v\r\n", runTime)
+	t.logger.Infof("Task next scheduled for: %v", runTime)
+
 }

@@ -15,13 +15,13 @@
         {
           "name": "repeatInterval",
           "type": "string",
-          "description": "The repeat interval (ex. 1m, 1h, etc.), doesn't repeat if not specified. When specified with repeat day/time it's only valid value is 1w (all other values ignored and 1w is assumed)"
+          "description": "The repeat interval (ex. 1d, 1w, etc.), doesn't repeat if not specified. When specified with repeat day/time it's only valid values are 1d or 1w (all other values ignored and 1w is assumed)"
         },
         {
           "name": "startDay",
           "type": "string",
           "description": "The day the process should run (ex. Monday, Tuesday, etc.)",
-          "allowed" : ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+          "allowed" : ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Everyday"]
         },
         {
           "name": "startTime",

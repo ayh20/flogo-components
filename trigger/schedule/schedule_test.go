@@ -1,4 +1,4 @@
-package timer
+package schedule
 
 import (
 	"encoding/json"
@@ -17,8 +17,9 @@ const testConfig string = `{
 	"handlers": [
 	  {
 		"settings":{
-			"startDay": "Tuesday",
-			"startTime": "13:50"
+			"startDay": "Everyday",
+			"startTime": "13:58",
+			"repeatInterval" : "1d"
 		},
 		"action":{
 			"id":"dummy"
