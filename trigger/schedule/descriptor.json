@@ -1,0 +1,33 @@
+{
+    "name": "flogo-schedule",
+    "type": "flogo:trigger",
+    "version": "0.1.0",
+    "title": "Scheduler",
+    "description": "Simple Scheduler trigger",
+    "homepage": "https://github.com/ayh20/flogo-components/trigger/schedule",
+    "handler": {
+      "settings": [
+        {
+          "name": "startDelay",
+          "type": "string",
+          "description": "The start delay (ex. 1m, 1h, etc.), immediate if not specified"
+        },
+        {
+          "name": "repeatInterval",
+          "type": "string",
+          "description": "The repeat interval (ex. 1m, 1h, etc.), doesn't repeat if not specified. When specified with repeat day/time it's only valid value is 1w (all other values ignored and 1w is assumed)"
+        },
+        {
+          "name": "startDay",
+          "type": "string",
+          "description": "The day the process should run (ex. Monday, Tuesday, etc.)",
+          "allowed" : ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+        },
+        {
+          "name": "startTime",
+          "type": "string",
+          "description": "The Time the process should run (ex. 08:30, 12:00, 21:00)"
+        }
+      ]
+    }
+  }
