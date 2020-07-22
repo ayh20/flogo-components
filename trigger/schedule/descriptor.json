@@ -4,6 +4,8 @@
     "version": "0.1.0",
     "title": "Scheduler",
     "description": "Simple Scheduler trigger",
+    "author": "Andy Hampshire <ahampshire@tibco.com>",
+    "ref": "github.com/ayh20/flogo-components/trigger/schedule",
     "homepage": "https://github.com/ayh20/flogo-components/trigger/schedule",
     "handler": {
       "settings": [

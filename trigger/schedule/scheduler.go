@@ -1,4 +1,4 @@
-// Package scheduler is a cron replacement based on:
+// Package schedule is a cron replacement based on:
 //  http://adam.herokuapp.com/past/2010/4/13/rethinking_cron/
 // and
 //  https://github.com/dbader/schedule

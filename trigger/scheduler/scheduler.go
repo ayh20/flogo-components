@@ -87,7 +87,13 @@ func (w weekly) nextRun() (time.Duration, error) {
 	year, month, day := now.Date()
 	numDays := w.day - now.Weekday()
 	if numDays == 0 {
-		numDays = 7
+		// now check time... if it's later today, OK ... otherwise add 7
+		schedtime := time.Date(now.Year(), now.Month(), now.Day(), w.d.hour, w.d.min, w.d.sec, 0, time.Local)
+		if schedtime.After(now) {
+			numDays = 0
+		} else {
+			numDays = 7
+		}
 	} else if numDays < 0 {
 		numDays += 7
 	}
