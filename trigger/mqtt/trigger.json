@@ -3,7 +3,7 @@
     "type": "flogo:trigger",
     "ref": "github.com/ayh20/flogo-components/trigger/mqtt",
     "version": "0.0.5",
-    "title": "Receive MQTT Message (TLS Support) ",
+    "title": "Receive MQTT Message with TLS Support",
     "author": "Andy Hampshire <ahampshire@tibco.com>",
     "description": "MQTT Trigger with TLS suppport (AWS IoT, Eclipse Hono, Bosch IoT)",
     "settings":[
