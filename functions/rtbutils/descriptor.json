@@ -72,7 +72,7 @@
         }
       ], 
       "return": {
-        "type": "date"
+        "type": "datetime"
     }
     }
   ]
