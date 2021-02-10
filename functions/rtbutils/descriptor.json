@@ -55,6 +55,25 @@
       "return": {
         "type": "string"
     }
+    },
+    {
+      "name": "stringtodate",
+      "description": "Takes a string date and parses it using the passed Golang format string string",
+      "args": [
+        {
+          "name": "datestring",
+          "type": "string",
+          "description" : "The string to be parsed"
+        },
+        {
+          "name": "format",
+          "type": "string",
+          "description" : "The Golang date formatter"
+        }
+      ], 
+      "return": {
+        "type": "date"
+    }
     }
   ]
 }
