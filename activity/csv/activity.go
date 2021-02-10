@@ -42,7 +42,9 @@ func (a *ParseCSVActivity) Metadata() *activity.Metadata {
 // Eval implements activity.Activity.Eval
 func (a *ParseCSVActivity) Eval(ctx activity.Context) (done bool, err error) {
 	fieldNames := ctx.GetInput(ivFieldNames).([]interface{})
-	comma := ctx.GetInput(ivComma).(rune)
+	commaStr := ctx.GetInput(ivComma).(string)
+	runes := []rune(commaStr)
+	comma := runes[0]
 
 	var reader io.Reader
 
@@ -59,6 +61,8 @@ func (a *ParseCSVActivity) Eval(ctx activity.Context) (done bool, err error) {
 	}
 
 	r := csv.NewReader(reader)
+
+	activityLog.Debugf("Passed Delimter: %s", comma)
 	r.LazyQuotes = true
 	r.Comma = comma
 	r.Comment = '#'

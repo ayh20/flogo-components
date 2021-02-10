@@ -7,7 +7,7 @@ This activity can be used to parse comma separated text strings into arrays
 ### Flogo CLI
 
 ```bash
-flogo install github.com/mellistibco/flogo-activities/activities/parsecsv
+flogo install github.com/ayh20/flogo-components/activity/parsecsv
 ```
 
 ## Schema
@@ -60,7 +60,7 @@ The below example will parse the supplied text.
   "name": "parsecsv",
   "description": "Parse CSV into a Flogo Array",
   "activity": {
-    "ref": "github.com/mellistibco/flogo-activities/activities/parsecsv",
+    "ref": "github.com/ayh20/flogo-component/activity/parsecsv",
     "input": {
       "fieldNames": ["field1", "field2", "field3"],
       "csv": "data1,data2,data3\ndata11,data22,data33"

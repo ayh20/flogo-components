@@ -15,7 +15,7 @@
     {
       "name": "delimiter",
       "type": "string",
-      "required": false
+      "required": true
     },
     {
       "name": "csv",
