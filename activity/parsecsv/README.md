@@ -23,6 +23,11 @@ Inputs and Outputs:
       "required": true
     },
     {
+      "name": "delimiter",
+      "type": "string",
+      "required": true
+    },
+    {
       "name": "csv",
       "type": "string",
       "required": false
@@ -47,6 +52,7 @@ Inputs and Outputs:
 | Setting    | Required | Description                                                                                         |
 | :--------- | :------- | :-------------------------------------------------------------------------------------------------- |
 | fieldNames | True     | The expected fields from the csv (the headers, will be used for the field name in the JSON object.) |
+| delimter   | True     | The delimter to be used to parse the file                                                           |
 | csv        | False    | The csv text (field1,field2,field3)                                                                 |
 | file       | False    | The optional location to a CSV file on disk                                                         |
 
@@ -63,6 +69,7 @@ The below example will parse the supplied text.
     "ref": "github.com/ayh20/flogo-component/activity/parsecsv",
     "input": {
       "fieldNames": ["field1", "field2", "field3"],
+      "delimter": ",",
       "csv": "data1,data2,data3\ndata11,data22,data33"
     }
   }
