@@ -1,10 +1,10 @@
 {
   "name": "CSV Parser",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "ref": "github.com/ayh20/flogo-components/activity/parsecsv",
   "type": "flogo:activity",
   "title": "ParseCSV",
-  "description": "Parse CSV into a Flogo Array Forked from activity created by Matt Ellis",
+  "description": "Parse CSV into a Flogo Array (Forked from activity created by Matt Ellis)",
   "author": "Andy Hampshire <ahampshi@tibco.com>",
   "inputs":[
     {
