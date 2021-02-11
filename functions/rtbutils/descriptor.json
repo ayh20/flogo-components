@@ -58,7 +58,7 @@
     },
     {
       "name": "stringtodate",
-      "description": "Takes a string date and parses it using the passed Golang format string string",
+      "description": "Takes a string date and parses it using the passed Golang format string",
       "args": [
         {
           "name": "datestring",

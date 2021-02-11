@@ -19,8 +19,8 @@ https://github.com/ayh20/flogo-components/functions/rtbutils
 
 ## Functions
 
-| Name         | Decription                           | Sample                                                           |
-| :----------- | :----------------------------------- | :--------------------------------------------------------------- |
-| urlencode    | Make the passed string url safe      | rtbutils.urlencode(\"Hello World\")                              |
-| pathencode   | Make the path string url safe        | rtbutils.pathencode(\"path with?reserved+characters\")           |
-| stringtodate | convert a date string to a date type | rtbutils.stringtodate(\"10 February 2021\", \"02 January 2006\") |
+| Name         | Decription                               | Sample                                                           |
+| :----------- | :--------------------------------------- | :--------------------------------------------------------------- |
+| urlencode    | Make the passed string url safe          | rtbutils.urlencode(\"Hello World\")                              |
+| pathencode   | Make the path string url safe            | rtbutils.pathencode(\"path with?reserved+characters\")           |
+| stringtodate | convert a date string to a datetime type | rtbutils.stringtodate(\"10 February 2021\", \"02 January 2006\") |
