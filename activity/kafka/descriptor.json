@@ -1,0 +1,58 @@
+{
+    "name": "flogo-kafkabyte",
+    "version": "0.10.0",
+    "title": "Publish Kafka Byte message",
+    "type": "flogo:activity",
+    "description": "Publish a Byte message to a kafka topic",
+    "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/kafka",
+    "author": "Forked from Wendell Nichols <wnichols@tibco.com> by Andy Hampshire <ahampshi@tibco.com>",
+    "settings":[
+      {
+        "name": "brokerUrls",
+        "type": "string",
+        "required": true,
+        "description": "The Kafka cluster to connect to"
+      },
+      {
+        "name": "topic",
+        "type": "string",
+        "required": true,
+        "description": "The Kafka topic on which to place the message"
+      },
+      {
+        "name": "user",
+        "type": "string",
+        "description": "If connecting to a SASL enabled port, the user id to use for authentication"
+      },
+      {
+        "name": "password",
+        "type": "string",
+        "description": "If connecting to a SASL enabled port, the password to use for authentication"
+      },
+      {
+        "name": "trustStore",
+        "type": "string",
+        "description": "If connecting to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate"
+      }
+    ],
+    "input":[
+      {
+        "name": "message",
+        "type": "any",
+        "required": true,
+        "description": "The message to send"
+      }
+    ],
+    "output": [
+      {
+        "name": "partition",
+        "type": "int",
+        "description": "Documents the partition that the message was placed on"
+      },
+      {
+        "name": "offset",
+        "type": "long",
+        "description": "Documents the offset for the message"
+      }
+    ]
+  }
