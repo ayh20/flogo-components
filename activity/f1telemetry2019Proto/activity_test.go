@@ -1,4 +1,4 @@
-package f1telemetry2020
+package f1telemetry2019Proto
 
 import (
 	"bytes"
