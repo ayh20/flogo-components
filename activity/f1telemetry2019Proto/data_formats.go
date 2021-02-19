@@ -1,4 +1,4 @@
-package f1telemetry2019Proto
+package f1telemetry2019proto
 
 // F1Header - Struct for the unpacking of the UDP Header
 type F1Header struct {

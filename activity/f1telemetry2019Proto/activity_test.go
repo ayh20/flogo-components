@@ -1,4 +1,4 @@
-package f1telemetry2019Proto
+package f1telemetry2019proto
 
 import (
 	"bytes"
@@ -21,21 +21,6 @@ func TestRegister(t *testing.T) {
 
 	assert.NotNil(t, act)
 }
-
-/* func TestEval(t *testing.T) {
-
-	act := &Activity{}
-	tc := test.NewActivityContext(act.Metadata())
-
-	aInput := &Input{XmlData: `<?xml version="1.0" encoding="UTF-8"?><hello>world</hello>`}
-	tc.SetInputObject(aInput)
-	done, _ := act.Eval(tc)
-	assert.True(t, done)
-	aOutput := &Output{}
-	err := tc.GetOutputObject(aOutput)
-	assert.Nil(t, err)
-	assert.Equal(t, "world", aOutput.JsonObject["hello"])
-} */
 
 func TestEvalQuality(t *testing.T) {
 

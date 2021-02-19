@@ -1,4 +1,4 @@
-package f1telemetry2019Proto
+package f1telemetry2019proto
 
 import (
 	"github.com/project-flogo/core/data/coerce"
@@ -30,7 +30,8 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 //Output data structure
 type Output struct {
 	MsgType int    `md:"msgtype"` // The data format type of this UDP packet
-	Data    string `md:"data"`    // The formatted CSV like data
+	Data    []byte `md:"data"`    // The protobuff data
+	AuxData []byte `md:"data"`    // The protobuff data for session record (msgtype=1)
 }
 
 //ToMap Output mapper
@@ -38,6 +39,7 @@ func (o *Output) ToMap() map[string]interface{} {
 	return map[string]interface{}{
 		"msgtype": o.MsgType,
 		"data":    o.Data,
+		"auxdata": o.AuxData,
 	}
 }
 
@@ -50,7 +52,12 @@ func (o *Output) FromMap(values map[string]interface{}) error {
 		return err
 	}
 
-	o.Data, err = coerce.ToString(values["data"])
+	o.Data, err = coerce.ToBytes(values["data"])
+	if err != nil {
+		return err
+	}
+
+	o.AuxData, err = coerce.ToBytes(values["auxdata"])
 	if err != nil {
 		return err
 	}
