@@ -290,25 +290,56 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	case 2: //Lap Data
 
-		// Bypass processing ...
-		return false, nil
+		// Unpack the 20 item lap data array
+		// Note - Output array is:  Timestamp + array of car CSV data seprated by a "|"
+		unpLapdata := &F1LapData{}
 
-		/* 		// Unpack the 20 item lap data array
-		   		// Note - Output array is:  Timestamp + array of car CSV data seprated by a "|"
-		   		unpLapdata := &F1LapData{}
+		// First task is to create the data for the "current driver"
+		// we have two indexes ... one for the "drivers" car iDPDriver and one for the rest
+		var iDPDriver int32 = 1020
+		var iDP int32 = 4000
 
-		   		arraystring := ""
+		// this is the index used for a loop iteration
+		var iDPlocal int32 = 0
 
-		   		for i := 0; i <= 19; i++ {
-		   			err = struc.Unpack(buf, unpLapdata)
-		   			if err != nil {
-		   				ctx.Logger().Debugf("Unpack Fail: F1LapData ", err.Error())
-		   				return false, err
-		   			}
-		   			ctx.Logger().Debugf("LapData unpacked: %v\n%+v\n", i, unpLapdata)
-		   			arraystring = arraystring + fmt.Sprintf("|%v,", i) + getStrings(unpLapdata)
-		   		}
-		   		output.Data = outputHeader + arraystring */
+		for i := 0; i <= 19; i++ {
+			err = struc.Unpack(buf, unpLapdata)
+			if err != nil {
+				ctx.Logger().Debugf("Unpack Fail: F1LapData ", err.Error())
+				return false, err
+			}
+			ctx.Logger().Debugf("LapData unpacked: %v\n%+v\n", i, unpLapdata)
+
+			if i == int(iCurrentPlayer) {
+				iDPlocal = iDPDriver
+			} else {
+				iDPlocal = iDP
+			}
+
+			td.DataPoints = append(td.DataPoints,
+				setDataPoint(iDPlocal, float64(unpLapdata.LastLapTime)),
+				setDataPoint(iDPlocal+1, float64(unpLapdata.CurrentLapNum)),
+				setDataPoint(iDPlocal+2, float64(unpLapdata.BestLapTime)),
+				setDataPoint(iDPlocal+3, float64(unpLapdata.Sector1Time)),
+				setDataPoint(iDPlocal+4, float64(unpLapdata.Sector2Time)),
+				setDataPoint(iDPlocal+5, float64(unpLapdata.LapDistance)),
+				setDataPoint(iDPlocal+6, float64(unpLapdata.TotalDistance)),
+				setDataPoint(iDPlocal+7, float64(unpLapdata.SafetyCarDelta)),
+				setDataPoint(iDPlocal+8, float64(unpLapdata.CarPosition)),
+				setDataPoint(iDPlocal+9, float64(unpLapdata.CurrentLapNum)),
+				setDataPoint(iDPlocal+10, float64(unpLapdata.PitStatus)),
+				setDataPoint(iDPlocal+11, float64(unpLapdata.Sector)),
+				setDataPoint(iDPlocal+12, float64(unpLapdata.CurrentLapInvalid)),
+				setDataPoint(iDPlocal+13, float64(unpLapdata.Penalties)),
+				setDataPoint(iDPlocal+14, float64(unpLapdata.GridPosition)),
+				setDataPoint(iDPlocal+15, float64(unpLapdata.DriverStatus)),
+				setDataPoint(iDPlocal+16, float64(unpLapdata.ResultStatus)),
+			)
+			iDP += 30
+
+		}
+
+		output.Data, err = proto.Marshal(td)
 
 	case 3: //Event
 
