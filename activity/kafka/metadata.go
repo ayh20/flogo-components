@@ -6,13 +6,13 @@ import (
 
 type Settings struct {
 	BrokerUrls string `md:"brokerUrls,required"` // The Kafka cluster to connect to
-	User       string `md:"user"`       // If connecting to a SASL enabled port, the user id to use for authentication
-	Password   string `md:"password"`   // If connecting to a SASL enabled port, the password to use for authentication
-	TrustStore string `md:"trustStore"` // If connecting to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate
-	Topic      string `md:"topic,required"` // The Kafka topic on which to place the message
+	User       string `md:"user"`                // If connecting to a SASL enabled port, the user id to use for authentication
+	Password   string `md:"password"`            // If connecting to a SASL enabled port, the password to use for authentication
+	TrustStore string `md:"trustStore"`          // If connecting to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate
+	Topic      string `md:"topic,required"`      // The Kafka topic on which to place the message
 }
 type Input struct {
-	Message string `md:"message,required"` // The message to send
+	Message []byte `md:"message,required"` // The message to send
 }
 
 func (i *Input) ToMap() map[string]interface{} {
@@ -24,7 +24,7 @@ func (i *Input) ToMap() map[string]interface{} {
 func (i *Input) FromMap(values map[string]interface{}) error {
 
 	var err error
-	i.Message, err = coerce.ToString(values["message"])
+	i.Message, err = coerce.ToBytes(values["message"])
 	return err
 }
 

@@ -52,7 +52,7 @@ func (act *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		return true, err
 	}
 
-	if input.Message == "" {
+	if len(input.Message) == 0 {
 		return false, fmt.Errorf("no message to publish")
 	}
 
