@@ -3,7 +3,7 @@
   "author": "Andy Hampshire",
   "type": "flogo:activity",
   "ref": "github.com/ayh20/flogo-components/activity/f1telemetry2019Proto",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "title": "F1 2019 Telemetry decoder to Protobuf",
   "description": "Decodes telemetry data from Codemasters F1-2019 outputs protobuf bytes",
   "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/f1telemetry2010Proto",
