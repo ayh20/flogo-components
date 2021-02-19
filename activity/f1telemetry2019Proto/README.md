@@ -40,6 +40,10 @@ Inputs and Outputs:
     {
       "name": "data",
       "type": "string"
+    },
+    {
+      "name": "auxdata",
+      "type": "string"
     }
   ]
 }
@@ -53,10 +57,11 @@ Inputs and Outputs:
 
 ## Outputs
 
-| Output  | Description                                     |
-| :------ | :---------------------------------------------- |
-| data    | CSV formatted car data for current driver       |
-| msgtype | Message type from the game for optional routing |
+| Output  | Description                                       |
+| :------ | :------------------------------------------------ |
+| data    | Protobuf data for Telemetry buffer                |
+| msgtype | Message type from the game for optional routing   |
+| auxdata | Protobuf data for NameValue buffer (Session only) |
 
 ## Configuration Examples
 
