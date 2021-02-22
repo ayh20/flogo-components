@@ -30,8 +30,8 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 //Output data structure
 type Output struct {
 	MsgType int    `md:"msgtype"` // The data format type of this UDP packet
-	Data    []byte `md:"data"`    // The protobuff data
-	AuxData []byte `md:"data"`    // The protobuff data for session record (msgtype=1)
+	Data    []byte `md:"data"`    // The protobuf data
+	AuxData []byte `md:"auxdata"` // The protobuf data for session record (msgtype=1)
 }
 
 //ToMap Output mapper
