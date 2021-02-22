@@ -38,7 +38,6 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 var nsMid = time.Now().UnixNano()
 
 // Eval implements api.Activity.Eval - Logs the Message
-//func (a *f1telemetry) Eval(context activity.Context) (done bool, err error) {
 func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	// Get the runtime values
@@ -50,7 +49,6 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		return false, err
 	}
 
-	//input, _ := context.GetInput(ivInput).([]byte)
 	buf := bytes.NewBuffer(in.Buffer)
 
 	ctx.Logger().Debugf("input : \n %x \n", in.Buffer)
@@ -80,15 +78,12 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	var iCurrentPlayer int32 = int32(unpHeader.PlayerCarIndex)
 
 	output := &Output{}
-	//output.Data = ""
 	output.MsgType = int(unpHeader.PacketID)
 
-	//outputHeader := fmt.Sprintf("%v,%v,%g,%v,%v.%v", unpHeader.PacketID, unpHeader.SessionUID, unpHeader.SessionTime, unpHeader.PlayerCarIndex, unpHeader.GameMajorVersion, unpHeader.GameMinorVersion)
-
 	td := &TelemetryData{
-		FeedGUID:    "ygyugfyawfgawyilgfayilrg",
-		FeedName:    "eSportTelemData",
-		StreamId:    "eSportAdaptotFeed1",
+		FeedGUID:    "FTYYYGFY-HGUGUIGIUGUI-BKJJGKGK",
+		FeedName:    "eSportTelemetryData",
+		StreamId:    "eSportAdaptorFeed1",
 		StreamType:  StreamType_STREAM_TYPE_LIVE,
 		FeedType:    DataFeedType_DATA_FEED_TYPE_TELEMETRY,
 		Source:      "eSportAdaptor",
@@ -150,7 +145,6 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				setDataPoint(iDPlocal+17, float64(unpMotion.Roll)),
 			)
 			iDP += 30
-
 		}
 
 		// unpack the trailing extra data for the player
@@ -196,6 +190,9 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 		// put the data into the return message
 		output.Data, err = proto.Marshal(td)
+		if err != nil {
+			return false, err
+		}
 
 	case 1: //Session
 		unpSession := &F1Session{}
@@ -240,6 +237,9 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			setDataPoint(977, float64(unpSession.SpectatorCarIndex)),
 		)
 		output.Data, err = proto.Marshal(td)
+		if err != nil {
+			return false, err
+		}
 
 		//create sessiondata object
 		sd := &SessionData{
@@ -287,6 +287,9 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		)
 
 		output.AuxData, err = proto.Marshal(sd)
+		if err != nil {
+			return false, err
+		}
 
 	case 2: //Lap Data
 
@@ -336,10 +339,12 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				setDataPoint(iDPlocal+16, float64(unpLapdata.ResultStatus)),
 			)
 			iDP += 30
-
 		}
 
 		output.Data, err = proto.Marshal(td)
+		if err != nil {
+			return false, err
+		}
 
 	case 3: //Event
 
@@ -502,6 +507,9 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 		// Send all fields
 		output.Data, err = proto.Marshal(td)
+		if err != nil {
+			return false, err
+		}
 
 	case 7: //Car Status
 		// Bypass processing ...

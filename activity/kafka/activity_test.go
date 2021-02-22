@@ -19,7 +19,7 @@ func TestRegister(t *testing.T) {
 
 func TestPlain(t *testing.T) {
 
-	settings := &Settings{BrokerUrls: "localhost:9092", Topic: "syslog"}
+	settings := &Settings{BrokerUrls: "localhost:9092", Topic: "F12019Data"}
 
 	iCtx := test.NewActivityInitContext(settings, nil)
 	act, err := New(iCtx)

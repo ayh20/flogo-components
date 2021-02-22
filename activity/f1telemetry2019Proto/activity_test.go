@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/hex"
 	"fmt"
+	"log"
 
 	//"io/ioutil"
 	"testing"
@@ -12,6 +13,7 @@ import (
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/support/test"
 	"github.com/stretchr/testify/assert"
+	"google.golang.org/protobuf/proto"
 )
 
 func TestRegister(t *testing.T) {
@@ -24,6 +26,8 @@ func TestRegister(t *testing.T) {
 
 func TestEvalQuality(t *testing.T) {
 
+	auxResult := &SessionData{}
+	coreResult := &TelemetryData{}
 	act := &Activity{}
 	tc := test.NewActivityContext(act.Metadata())
 
@@ -59,7 +63,14 @@ func TestEvalQuality(t *testing.T) {
 	rdata := tc.GetOutput("data")
 
 	fmt.Printf("Msg Type: %v \n", rtype)
-	fmt.Printf("csv data: %v \n", rdata)
+	fmt.Printf("byte data: %x \n", rdata)
+
+	coreData, _ := rdata.([]byte)
+	err = proto.Unmarshal(coreData, coreResult)
+	if err != nil {
+		log.Fatal("unmarshaling error: ", err)
+	}
+	fmt.Printf("object data: %v \n", coreResult)
 
 	if tc.GetOutput("msgtype") == nil {
 		t.Fail()
@@ -87,7 +98,14 @@ func TestEvalQuality(t *testing.T) {
 	rdata = tc.GetOutput("data")
 
 	fmt.Printf("Msg Type: %v \n", rtype)
-	fmt.Printf("csv data: %v \n", rdata)
+	fmt.Printf("byte data: %x \n", rdata)
+
+	coreData, _ = rdata.([]byte)
+	err = proto.Unmarshal(coreData, coreResult)
+	if err != nil {
+		log.Fatal("unmarshaling error: ", err)
+	}
+	fmt.Printf("object data: %v \n", coreResult)
 
 	if tc.GetOutput("msgtype") == nil {
 		t.Fail()
@@ -108,14 +126,25 @@ func TestEvalQuality(t *testing.T) {
 	err = struc.Unpack(&buf, o)
 	fmt.Printf("F1 Header : \n %+v \n", o)
 
-	fmt.Println("#######   call routine ")
+	fmt.Println("#######   call routine")
 	act.Eval(tc)
 
 	rtype = tc.GetOutput("msgtype")
 	rdata = tc.GetOutput("data")
 
 	fmt.Printf("Msg Type: %v \n", rtype)
-	fmt.Printf("csv data: %v \n", rdata)
+	fmt.Printf("byte data: %x \n", rdata)
+
+	rdata = tc.GetOutput("auxdata")
+	fmt.Println("#######   auxdata")
+	//fmt.Printf("byte data: %x \n", rdata)
+
+	auxData, _ := rdata.([]byte)
+	err = proto.Unmarshal(auxData, auxResult)
+	if err != nil {
+		log.Fatal("unmarshaling error: ", err)
+	}
+	fmt.Printf("object data: %v \n", auxResult)
 
 	if tc.GetOutput("msgtype") == nil {
 		t.Fail()
@@ -143,7 +172,7 @@ func TestEvalQuality(t *testing.T) {
 	rdata = tc.GetOutput("data")
 
 	fmt.Printf("Msg Type: %v \n", rtype)
-	fmt.Printf("csv data: %v \n", rdata)
+	fmt.Printf("byte data: %x \n", rdata)
 
 	if tc.GetOutput("msgtype") == nil {
 		t.Fail()
@@ -170,7 +199,7 @@ func TestEvalQuality(t *testing.T) {
 	rdata = tc.GetOutput("data")
 
 	fmt.Printf("Msg Type: %v \n", rtype)
-	fmt.Printf("csv data: %v \n", rdata)
+	fmt.Printf("byte data: %x \n", rdata)
 
 	if tc.GetOutput("msgtype") == nil {
 		t.Fail()
@@ -197,7 +226,7 @@ func TestEvalQuality(t *testing.T) {
 	rdata = tc.GetOutput("data")
 
 	fmt.Printf("Msg Type: %v \n", rtype)
-	fmt.Printf("csv data: %v \n", rdata)
+	fmt.Printf("byte data: %x \n", rdata)
 
 	if tc.GetOutput("msgtype") == nil {
 		t.Fail()
@@ -224,7 +253,7 @@ func TestEvalQuality(t *testing.T) {
 	rdata = tc.GetOutput("data")
 
 	fmt.Printf("Msg Type: %v \n", rtype)
-	fmt.Printf("csv data: %v \n", rdata)
+	fmt.Printf("byte data: %x \n", rdata)
 
 	if tc.GetOutput("msgtype") == nil {
 		t.Fail()
@@ -251,7 +280,7 @@ func TestEvalQuality(t *testing.T) {
 	rdata = tc.GetOutput("data")
 
 	fmt.Printf("Msg Type: %v \n", rtype)
-	fmt.Printf("csv data: %v \n", rdata)
+	fmt.Printf("byte data: %x \n", rdata)
 
 	if tc.GetOutput("msgtype") == nil {
 		t.Fail()
