@@ -79,6 +79,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	output := &Output{}
 	output.MsgType = int(unpHeader.PacketID)
+	output.SessionGUID = fmt.Sprintf("%v", unpHeader.SessionUID)
 
 	td := &TelemetryData{
 		FeedGUID:    "FTYYYGFY-HGUGUIGIUGUI-BKJJGKGK",
@@ -243,9 +244,9 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 		//create sessiondata object
 		sd := &SessionData{
-			FeedGUID:    "ygyugfyawfgawyilgfayilrg",
+			FeedGUID:    "FTYYYGFY-HGUGUIGIUGUI-BKJJGKGK",
 			FeedName:    "eSportSessData",
-			StreamId:    "eSportAdaptotFeed1",
+			StreamId:    "eSportAdaptorFeed1",
 			StreamType:  StreamType_STREAM_TYPE_LIVE,
 			Source:      "eSportAdaptor",
 			Quality:     90,

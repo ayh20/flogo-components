@@ -29,17 +29,19 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 
 //Output data structure
 type Output struct {
-	MsgType int    `md:"msgtype"` // The data format type of this UDP packet
-	Data    []byte `md:"data"`    // The protobuf data
-	AuxData []byte `md:"auxdata"` // The protobuf data for session record (msgtype=1)
+	MsgType     int    `md:"msgtype"`     // The data format type of this UDP packet
+	Data        []byte `md:"data"`        // The protobuf data
+	AuxData     []byte `md:"auxdata"`     // The protobuf data for session record (msgtype=1)
+	SessionGUID string `md:"sessionguid"` // The protobuf data
 }
 
 //ToMap Output mapper
 func (o *Output) ToMap() map[string]interface{} {
 	return map[string]interface{}{
-		"msgtype": o.MsgType,
-		"data":    o.Data,
-		"auxdata": o.AuxData,
+		"msgtype":     o.MsgType,
+		"data":        o.Data,
+		"auxdata":     o.AuxData,
+		"sessionguid": o.SessionGUID,
 	}
 }
 
@@ -58,6 +60,11 @@ func (o *Output) FromMap(values map[string]interface{}) error {
 	}
 
 	o.AuxData, err = coerce.ToBytes(values["auxdata"])
+	if err != nil {
+		return err
+	}
+
+	o.SessionGUID, err = coerce.ToString(values["sessionguid"])
 	if err != nil {
 		return err
 	}
