@@ -61,6 +61,7 @@ func (act *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	msg := &sarama.ProducerMessage{
 		Topic: act.topic,
 		Value: sarama.ByteEncoder(input.Message),
+		Key:   sarama.StringEncoder(input.Key),
 	}
 
 	partition, offset, err := act.conn.Connection().SendMessage(msg)

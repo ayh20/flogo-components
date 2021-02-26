@@ -41,6 +41,12 @@
         "type": "any",
         "required": true,
         "description": "The message to send"
+      },
+      {
+        "name": "key",
+        "type": "string",
+        "required": true,
+        "description": "The message key"
       }
     ],
     "output": [
