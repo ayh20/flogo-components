@@ -61,7 +61,9 @@ func TestEvalQuality(t *testing.T) {
 
 	rtype := tc.GetOutput("msgtype")
 	rdata := tc.GetOutput("data")
+	rguid := tc.GetOutput("sessionguid")
 
+	fmt.Printf("Session GUID: %v \n", rguid)
 	fmt.Printf("Msg Type: %v \n", rtype)
 	fmt.Printf("byte data: %x \n", rdata)
 
@@ -96,6 +98,9 @@ func TestEvalQuality(t *testing.T) {
 
 	rtype = tc.GetOutput("msgtype")
 	rdata = tc.GetOutput("data")
+	rguid = tc.GetOutput("sessionguid")
+
+	fmt.Printf("Session GUID: %v \n", rguid)
 
 	fmt.Printf("Msg Type: %v \n", rtype)
 	fmt.Printf("byte data: %x \n", rdata)

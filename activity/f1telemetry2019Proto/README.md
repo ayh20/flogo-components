@@ -39,10 +39,14 @@ Inputs and Outputs:
     },
     {
       "name": "data",
-      "type": "string"
+      "type": "any"
     },
     {
       "name": "auxdata",
+      "type": "any"
+    },
+    {
+      "name": "sessionguid",
       "type": "string"
     }
   ]
