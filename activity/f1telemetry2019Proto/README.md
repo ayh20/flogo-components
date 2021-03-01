@@ -15,7 +15,7 @@ Information about the format of the raw data can be found here: https://forums.c
 Navigate to the Flogo app directory [Essential !] and issue the following command
 
 ```bash
-flogo install github.com/ayh20/flogo-components/activity/f1telemetry2019Proto
+flogo install github.com/ayh20/flogo-components/activity/f1telemetry2019proto
 ```
 
 ## Schema

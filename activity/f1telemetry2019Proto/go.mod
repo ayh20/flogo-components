@@ -1,4 +1,4 @@
-module github.com/ayh20/flogo-components/activity/f1telemetry2019Proto
+module github.com/ayh20/flogo-components/activity/f1telemetry2019proto
 
 go 1.14
 

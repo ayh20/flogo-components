@@ -1,4 +1,4 @@
-package f1telemetry2019Proto
+package f1telemetry2019proto
 
 import (
 	"github.com/project-flogo/core/data/coerce"
