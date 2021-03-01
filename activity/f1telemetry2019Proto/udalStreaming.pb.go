@@ -4,7 +4,7 @@
 // 	protoc        v3.14.0
 // source: udalStreaming.proto
 
-package f1telemetry2019proto
+package f1telemetry2019Proto
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"

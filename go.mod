@@ -3,17 +3,14 @@ module github.com/ayh20/flogo-components
 go 1.12
 
 require (
-	github.com/Shopify/sarama v1.28.0
-	github.com/TIBCOSoftware/eftl v0.0.0-20200518161032-af6d1c9c2e62
-	github.com/TIBCOSoftware/flogo-contrib v0.5.8
-	github.com/TIBCOSoftware/flogo-lib v0.5.8
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/eclipse/paho.mqtt.golang v1.2.0
-	github.com/gorilla/websocket v1.4.2 // indirect
-	github.com/konsorten/go-windows-terminal-sequences v1.0.3 // indirect
+	github.com/google/go-cmp v0.5.4 // indirect
+	github.com/kr/text v0.2.0 // indirect
 	github.com/lunixbochs/struc v0.0.0-20200707160740-784aaebc1d40
 	github.com/project-flogo/core v1.1.0
-	github.com/sirupsen/logrus v1.7.0 // indirect
 	github.com/stretchr/objx v0.3.0 // indirect
 	github.com/stretchr/testify v1.7.0
+	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
+	google.golang.org/protobuf v1.25.0
+	gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c // indirect
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
