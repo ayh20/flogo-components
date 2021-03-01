@@ -3,7 +3,7 @@ module github.com/ayh20/flogo-components
 go 1.12
 
 require (
-	github.com/Shopify/sarama v1.28.0 // indirect
+	github.com/Shopify/sarama v1.28.0
 	github.com/TIBCOSoftware/eftl v0.0.0-20200518161032-af6d1c9c2e62
 	github.com/TIBCOSoftware/flogo-contrib v0.5.8
 	github.com/TIBCOSoftware/flogo-lib v0.5.8
