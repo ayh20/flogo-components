@@ -1,0 +1,35 @@
+{
+  "name": "f1telemetry2019proto",
+  "author": "Andy Hampshire",
+  "type": "flogo:activity",
+  "ref": "github.com/ayh20/flogo-components/activity/f1telemetry2019proto",
+  "version": "0.0.7",
+  "title": "F1 2019 Telemetry decoder to Protobuf",
+  "description": "Decodes telemetry data from Codemasters F1-2019 outputs protobuf bytes",
+  "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/f1telemetry2019proto",
+  "input": [
+    {
+      "name": "buffer",
+      "required": true,
+      "type": "any"
+    }
+  ],
+  "output": [
+    {
+      "name": "msgtype",
+      "type": "integer"
+    },
+    {
+      "name": "data",
+      "type": "any"
+    },
+    {
+      "name": "auxdata",
+      "type": "any"
+    },
+    {
+      "name": "sessionguid",
+      "type": "string"
+    }
+  ]
+}
