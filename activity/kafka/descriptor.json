@@ -1,6 +1,6 @@
 {
     "name": "flogo-kafkabyte",
-    "version": "0.10.1",
+    "version": "0.10.2",
     "title": "Publish Kafka Byte message",
     "type": "flogo:activity",
     "description": "Publish a Byte message to a kafka topic",
