@@ -44,6 +44,7 @@ func TestEvalQuality(t *testing.T) {
 	}
 
 	tc.SetInput("buffer", arr)
+	tc.SetInput("params", `{ "FeedNameGUID": "FTYYYGFY-HGUGUIGIUGUI-BKJJGKGK", "FeedName": "eSportTelemetryData", "StreamId": "eSportAdaptorFeed1", "Source": "eSportAdaptor", "Quality": 90, "Frequency": 20}`)
 	err := struc.Pack(&buf, arr)
 
 	o := &F1Header{}

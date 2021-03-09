@@ -102,12 +102,20 @@ func getKafkaConnection(logger log.Logger, settings *Settings) (*KafkaConnection
 		}
 	}
 
+	// For TCM : Take the following from the yaml
+	// kafka_broker: tib-sub-01bbc.......8jkdn-akd.eu.messaging.cloud.tibco.com:10171
+	// kafka_username: TIB_SUB_01BBC.......A8JKDN/channel
+	// tcm_authentication_key: eyJhbGciOiJSUzI1NiIsI....etc.....ONWaw
+	//     User     = kafka_username
+	//     Password = "token:" + tcm_authentication_key
+
 	// SASL
-	if settings.User != "" {
+	if settings.User != "" && settings.User != " " {
 		if len(settings.Password) == 0 {
 			return nil, fmt.Errorf("password not provided for user: %s", settings.User)
 		}
 		newConn.kafkaConfig.Net.SASL.Enable = true
+		newConn.kafkaConfig.Net.SASL.Mechanism = "SASL_SSL"
 		newConn.kafkaConfig.Net.SASL.User = settings.User
 		newConn.kafkaConfig.Net.SASL.Password = settings.Password
 		logger.Debugf("Kafka SASL params initialized; user [%v]", settings.User)

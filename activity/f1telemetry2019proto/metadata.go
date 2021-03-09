@@ -7,12 +7,14 @@ import (
 // Input data structure
 type Input struct {
 	Buffer []byte `md:"buffer"` // the UDP data packet
+	Params string `md:"params"` // params
 }
 
 //ToMap Input mapper
 func (i *Input) ToMap() map[string]interface{} {
 	return map[string]interface{}{
 		"buffer": i.Buffer,
+		"params": i.Params,
 	}
 }
 
@@ -21,6 +23,10 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 
 	var err error
 	i.Buffer, err = coerce.ToBytes(values["buffer"])
+	if err != nil {
+		return err
+	}
+	i.Params, err = coerce.ToString(values["params"])
 	if err != nil {
 		return err
 	}
@@ -70,4 +76,14 @@ func (o *Output) FromMap(values map[string]interface{}) error {
 	}
 
 	return nil
+}
+
+// F1Parms - struct for inbound params
+type F1Parms struct {
+	FeedNameGUID string `json:"FeedNameGUID"`
+	FeedName     string `json:"FeedName"`
+	StreamID     string `json:"StreamId"`
+	Source       string `json:"Source"`
+	Quality      int    `json:"Quality"`
+	Frequency    int    `json:"Frequency"`
 }

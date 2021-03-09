@@ -1,6 +1,8 @@
 package f1telemetry2019proto
 
 import (
+	"encoding/json"
+
 	"github.com/project-flogo/core/activity"
 	"google.golang.org/protobuf/proto"
 
@@ -48,6 +50,11 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	if err != nil {
 		return false, err
 	}
+	// dump params
+
+	ctx.Logger().Debug(in.Params)
+	prms := F1Parms{}
+	json.Unmarshal([]byte(in.Params), &prms)
 
 	buf := bytes.NewBuffer(in.Buffer)
 
@@ -82,14 +89,14 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	output.SessionGUID = fmt.Sprintf("%v", unpHeader.SessionUID)
 
 	td := &TelemetryData{
-		FeedGUID:    "FTYYYGFY-HGUGUIGIUGUI-BKJJGKGK",
-		FeedName:    "eSportTelemetryData",
-		StreamId:    "eSportAdaptorFeed1",
+		FeedGUID:    prms.FeedNameGUID,
+		FeedName:    prms.FeedName,
+		StreamId:    prms.StreamID,
 		StreamType:  StreamType_STREAM_TYPE_LIVE,
 		FeedType:    DataFeedType_DATA_FEED_TYPE_TELEMETRY,
-		Source:      "eSportAdaptor",
-		Frequency:   60,
-		Quality:     90,
+		Source:      prms.Source,
+		Frequency:   float64(prms.Frequency),
+		Quality:     int32(prms.Quality),
 		Format:      fmt.Sprintf("%v %v %v %v", unpHeader.PacketFormat, unpHeader.GameMajorVersion, unpHeader.GameMinorVersion, unpHeader.PacketVersion),
 		SessionGUID: fmt.Sprintf("%v", unpHeader.SessionUID),
 		EpochNano:   nsMid,
@@ -244,12 +251,12 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 		//create sessiondata object
 		sd := &SessionData{
-			FeedGUID:    "FTYYYGFY-HGUGUIGIUGUI-BKJJGKGK",
-			FeedName:    "eSportSessData",
-			StreamId:    "eSportAdaptorFeed1",
+			FeedGUID:    prms.FeedNameGUID,
+			FeedName:    prms.FeedName,
+			StreamId:    prms.StreamID,
 			StreamType:  StreamType_STREAM_TYPE_LIVE,
-			Source:      "eSportAdaptor",
-			Quality:     90,
+			Source:      prms.Source,
+			Quality:     int32(prms.Quality),
 			SessionGUID: fmt.Sprintf("%v", unpHeader.SessionUID),
 			EpochNano:   nsMid,
 			Identifier:  fmt.Sprintf("%v", unpHeader.FrameIdentifier),

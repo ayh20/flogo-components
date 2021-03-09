@@ -12,6 +12,10 @@
       "name": "buffer",
       "required": true,
       "type": "any"
+    },
+    {
+      "name": "params",
+      "type": "string"
     }
   ],
   "output": [
