@@ -152,7 +152,9 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				setDataPoint(iDPlocal+16, float64(unpMotion.Pitch)),
 				setDataPoint(iDPlocal+17, float64(unpMotion.Roll)),
 			)
-			iDP += 30
+			if i != int(iCurrentPlayer) {
+				iDP += 30
+			}
 		}
 
 		// unpack the trailing extra data for the player
@@ -262,6 +264,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			Identifier:  fmt.Sprintf("%v", unpHeader.FrameIdentifier),
 		}
 		sd.Details = append(sd.Details,
+			setNameValue("PlayerCarIndex", fmt.Sprintf("%v", unpHeader.PlayerCarIndex)),
 			setNameValue("ZoneStart1", fmt.Sprintf("%f", unpSession.ZoneStart1)),
 			setNameValue("ZoneStart2", fmt.Sprintf("%f", unpSession.ZoneStart2)),
 			setNameValue("ZoneStart3", fmt.Sprintf("%f", unpSession.ZoneStart3)),
@@ -346,7 +349,9 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				setDataPoint(iDPlocal+15, float64(unpLapdata.DriverStatus)),
 				setDataPoint(iDPlocal+16, float64(unpLapdata.ResultStatus)),
 			)
-			iDP += 30
+			if i != int(iCurrentPlayer) {
+				iDP += 30
+			}
 		}
 
 		output.Data, err = proto.Marshal(td)
@@ -356,17 +361,31 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	case 3: //Event
 
-		// Bypass processing ...
-		return false, nil
+		//create sessiondata object
+		sd := &SessionData{
+			FeedGUID:    prms.FeedNameGUID,
+			FeedName:    prms.FeedName,
+			StreamId:    prms.StreamID,
+			StreamType:  StreamType_STREAM_TYPE_LIVE,
+			Source:      prms.Source,
+			Quality:     int32(prms.Quality),
+			SessionGUID: fmt.Sprintf("%v", unpHeader.SessionUID),
+			EpochNano:   nsMid,
+			Identifier:  fmt.Sprintf("%v", unpHeader.FrameIdentifier),
+		}
 
-		/* unpEvent := &F1Event{}
-		extradata := ""
+		unpEvent := &F1Event{}
 
 		err = struc.Unpack(buf, unpEvent)
 		if err != nil {
 			ctx.Logger().Debugf("Unpack Fail: F1Event ", err.Error())
 			return false, err
 		}
+
+		sd.Details = append(sd.Details,
+			setNameValue("PlayerCarIndex", fmt.Sprintf("%v", unpHeader.PlayerCarIndex)),
+			setNameValue("EventCode", fmt.Sprintf("%v", unpEvent.EventString)),
+		)
 
 		switch unpEvent.EventString {
 		case "FTLP":
@@ -376,7 +395,11 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				ctx.Logger().Debugf("Unpack Fail: F1LapData ", err.Error())
 				return false, err
 			}
-			extradata = "," + getStrings(unpEventFL)
+
+			sd.Details = append(sd.Details,
+				setNameValue("lapTime", fmt.Sprintf("%v", unpEventFL.LapTime)),
+				setNameValue("vehicleIdx", fmt.Sprintf("%v", unpEventFL.VehicleIndex)),
+			)
 
 		case "RTMT", "TMPT", "RCWN":
 			//
@@ -386,63 +409,121 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				ctx.Logger().Debugf("Unpack Fail: F1LapData ", err.Error())
 				return false, err
 			}
-			extradata = "," + getStrings(unpEventExtra)
+			sd.Details = append(sd.Details,
+				setNameValue("vehicleIdx", fmt.Sprintf("%v", unpEventExtra.VehicleIndex)),
+			)
 		}
 
-		output.Data = outputHeader + "|" + unpEvent.EventString + extradata
-		*/
+		output.AuxData, err = proto.Marshal(sd)
+		if err != nil {
+			return false, err
+		}
+
 	case 4: //Participants
 
-		// Bypass processing ...
-		return false, nil
+		//create sessiondata object
+		sd := &SessionData{
+			FeedGUID:    prms.FeedNameGUID,
+			FeedName:    prms.FeedName,
+			StreamId:    prms.StreamID,
+			StreamType:  StreamType_STREAM_TYPE_LIVE,
+			Source:      prms.Source,
+			Quality:     int32(prms.Quality),
+			SessionGUID: fmt.Sprintf("%v", unpHeader.SessionUID),
+			EpochNano:   nsMid,
+			Identifier:  fmt.Sprintf("%v", unpHeader.FrameIdentifier),
+		}
 
-		/* 		unpParticipant := &F1Participant{}
-		   		unpParticpantData := &F1ParticipantData{}
+		unpParticipant := &F1Participant{}
+		unpParticpantData := &F1ParticipantData{}
 
-		   		err = struc.Unpack(buf, unpParticipant)
-		   		if err != nil {
-		   			ctx.Logger().Debugf("Unpack Fail: F1Participant ", err.Error())
-		   			return false, err
-		   		}
-		   		arraystring := ""
+		err = struc.Unpack(buf, unpParticipant)
+		if err != nil {
+			ctx.Logger().Debugf("Unpack Fail: F1Participant ", err.Error())
+			return false, err
+		}
+		sd.Details = append(sd.Details,
+			setNameValue("PlayerCarIndex", fmt.Sprintf("%v", unpHeader.PlayerCarIndex)),
+		)
 
-		   		for i := 0; i <= 19; i++ {
-		   			err = struc.Unpack(buf, unpParticpantData)
-		   			if err != nil {
-		   				ctx.Logger().Debugf("Unpack Fail: F1ParticipantData ", err.Error())
-		   				return false, err
-		   			}
-		   			ctx.Logger().Debugf("F1Participant unpacked: %v\n%+v\n", i, unpParticpantData)
-		   			arraystring = arraystring + fmt.Sprintf("|%v,", i) + getStrings(unpParticpantData)
+		for i := 0; i <= 19; i++ {
+			err = struc.Unpack(buf, unpParticpantData)
+			if err != nil {
+				ctx.Logger().Debugf("Unpack Fail: F1ParticipantData ", err.Error())
+				return false, err
+			}
+			ctx.Logger().Debugf("F1Participant unpacked: %v\n%+v\n", i, unpParticpantData)
+			sd.Details = append(sd.Details,
+				setNameValue("DriverData", fmt.Sprintf(`{"AiControlled": %v, "DriverID": %v, "TeamID": %v, "RaceNumber": %v, "Nationality": %v, "Name": "%v", "YourTelemetry":  %v}`, unpParticpantData.AiControlled, unpParticpantData.DriverID, unpParticpantData.TeamID, unpParticpantData.RaceNumber, unpParticpantData.Nationality, unpParticpantData.Name, unpParticpantData.YourTelemetry)),
+			)
 
-		   		}
-		   		output.Data = outputHeader + fmt.Sprintf("|%v", unpParticipant.NumActiveCars) + arraystring */
+		}
+
+		output.AuxData, err = proto.Marshal(sd)
+		if err != nil {
+			return false, err
+		}
 
 	case 5: //Car Setups
 
-		// Bypass processing ...
-		return false, nil
+		unpCarSetupData := &F1SetupData{}
 
-		/* 		unpCarSetupData := &F1SetupData{}
+		// First task is to create the data for the "current driver"
+		// we have two indexes ... one for the "drivers" car iDPDriver and one for the rest
+		var iDPDriver int32 = 1100
+		var iDP int32 = 6000
 
-		   		arraystring := ""
+		// this is the index used for a loop iteration
+		var iDPlocal int32 = 0
 
-		   		for i := 0; i <= 19; i++ {
-		   			err = struc.Unpack(buf, unpCarSetupData)
-		   			if err != nil {
-		   				ctx.Logger().Debugf("Unpack Fail: F1CarSetupData ", err.Error())
-		   				return false, err
-		   			}
-		   			ctx.Logger().Debugf("F1CarSetupData unpacked: %v\n%+v\n", i, unpCarSetupData)
-		   			arraystring = arraystring + fmt.Sprintf("|%v,", i) + getStrings(unpCarSetupData)
-		   		}
-		   		output.Data = outputHeader + arraystring
-		*/
+		for i := 0; i <= 19; i++ {
+			err = struc.Unpack(buf, unpCarSetupData)
+			if err != nil {
+				ctx.Logger().Debugf("Unpack Fail: F1CarSetupData ", err.Error())
+				return false, err
+			}
+			ctx.Logger().Debugf("F1CarSetupData unpacked: %v\n%+v\n", i, unpCarSetupData)
+
+			if i == int(iCurrentPlayer) {
+				iDPlocal = iDPDriver
+			} else {
+				iDPlocal = iDP
+			}
+
+			td.DataPoints = append(td.DataPoints,
+				setDataPoint(iDPlocal, float64(unpCarSetupData.FrontWing)),
+				setDataPoint(iDPlocal+1, float64(unpCarSetupData.RearWing)),
+				setDataPoint(iDPlocal+2, float64(unpCarSetupData.OnThrottle)),
+				setDataPoint(iDPlocal+3, float64(unpCarSetupData.OffThrottle)),
+				setDataPoint(iDPlocal+4, float64(unpCarSetupData.FrontCamber)),
+				setDataPoint(iDPlocal+5, float64(unpCarSetupData.RearCamber)),
+				setDataPoint(iDPlocal+6, float64(unpCarSetupData.FrontToe)),
+				setDataPoint(iDPlocal+7, float64(unpCarSetupData.RearToe)),
+				setDataPoint(iDPlocal+8, float64(unpCarSetupData.FrontSuspension)),
+				setDataPoint(iDPlocal+9, float64(unpCarSetupData.RearSuspension)),
+				setDataPoint(iDPlocal+10, float64(unpCarSetupData.FrontAntiRollBar)),
+				setDataPoint(iDPlocal+11, float64(unpCarSetupData.RearAntiRollBar)),
+				setDataPoint(iDPlocal+12, float64(unpCarSetupData.FrontSuspensionHeight)),
+				setDataPoint(iDPlocal+13, float64(unpCarSetupData.RearSuspensionHeight)),
+				setDataPoint(iDPlocal+14, float64(unpCarSetupData.BrakePressure)),
+				setDataPoint(iDPlocal+15, float64(unpCarSetupData.BrakeBias)),
+				setDataPoint(iDPlocal+16, float64(unpCarSetupData.FrontTyrePressure)),
+				setDataPoint(iDPlocal+17, float64(unpCarSetupData.RearTyrePressure)),
+				setDataPoint(iDPlocal+18, float64(unpCarSetupData.Ballast)),
+				setDataPoint(iDPlocal+19, float64(unpCarSetupData.FuelLoad)),
+			)
+			if i != int(iCurrentPlayer) {
+				iDP += 40
+			}
+			// Send all fields
+			output.Data, err = proto.Marshal(td)
+			if err != nil {
+				return false, err
+			}
+		}
 	case 6: //Car Telemetery
 		unpCarTelemetry := &F1CarTelemetryData{}
 		unpCarTelemetryExtra := &F1CarTelemetryDataExtra{}
-
-		//arraystring := ""
 
 		// First task is to create the data for the "current driver"
 		// we have two indexes ... one for the "drivers" car iDPDriver and one for the rest
@@ -498,7 +579,9 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				setDataPoint(iDPlocal+28, float64(unpCarTelemetry.SurfaceTypeFL)),
 				setDataPoint(iDPlocal+29, float64(unpCarTelemetry.SurfaceTypeFR)),
 			)
-			iDP += 35
+			if i != int(iCurrentPlayer) {
+				iDP += 35
+			}
 
 		}
 
@@ -520,22 +603,75 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		}
 
 	case 7: //Car Status
-		// Bypass processing ...
-		return false, nil
-		/* 		unpCarStatus := &F1CarStatus{}
-		   		arraystring := ""
 
-		   		for i := 0; i <= 19; i++ {
-		   			err = struc.Unpack(buf, unpCarStatus)
-		   			if err != nil {
-		   				ctx.Logger().Debugf("Unpack Fail: F1CarStatus ", err.Error())
-		   				return false, err
-		   			}
-		   			ctx.Logger().Debugf("CarStatus unpacked: %v\n%+v\n", i, unpCarStatus)
-		   			arraystring = arraystring + fmt.Sprintf("|%v,", i) + getStrings(unpCarStatus)
+		unpCarStatus := &F1CarStatus{}
 
-		   		}
-		   		output.Data = outputHeader + arraystring */
+		// First task is to create the data for the "current driver"
+		// we have two indexes ... one for the "drivers" car iDPDriver and one for the rest
+		var iDPDriver int32 = 1050
+		var iDP int32 = 5000
+
+		// this is the index used for a loop iteration
+		var iDPlocal int32 = 0
+
+		for i := 0; i <= 19; i++ {
+			err = struc.Unpack(buf, unpCarStatus)
+			if err != nil {
+				ctx.Logger().Debugf("Unpack Fail: F1CarStatus ", err.Error())
+				return false, err
+			}
+			ctx.Logger().Debugf("F1CarStatus unpacked: %v\n%+v\n", i, unpCarStatus)
+
+			if i == int(iCurrentPlayer) {
+				iDPlocal = iDPDriver
+			} else {
+				iDPlocal = iDP
+			}
+
+			td.DataPoints = append(td.DataPoints,
+				setDataPoint(iDPlocal, float64(unpCarStatus.TractionControl)),
+				setDataPoint(iDPlocal+1, float64(unpCarStatus.AntiLockBrakes)),
+				setDataPoint(iDPlocal+2, float64(unpCarStatus.FuelMix)),
+				setDataPoint(iDPlocal+3, float64(unpCarStatus.FrontBrakeBias)),
+				setDataPoint(iDPlocal+4, float64(unpCarStatus.PitLimiterStatus)),
+				setDataPoint(iDPlocal+5, float64(unpCarStatus.FuelInTank)),
+				setDataPoint(iDPlocal+6, float64(unpCarStatus.FuelCapacity)),
+				setDataPoint(iDPlocal+7, float64(unpCarStatus.FuelRemainingLaps)),
+				setDataPoint(iDPlocal+8, float64(unpCarStatus.MaxRPM)),
+				setDataPoint(iDPlocal+9, float64(unpCarStatus.IdleRPM)),
+				setDataPoint(iDPlocal+10, float64(unpCarStatus.MaxGears)),
+				setDataPoint(iDPlocal+11, float64(unpCarStatus.DrsAllowed)),
+				setDataPoint(iDPlocal+12, float64(unpCarStatus.TyresWearRL)),
+				setDataPoint(iDPlocal+13, float64(unpCarStatus.TyresWearRR)),
+				setDataPoint(iDPlocal+14, float64(unpCarStatus.TyresWearFL)),
+				setDataPoint(iDPlocal+15, float64(unpCarStatus.TyresWearFR)),
+				setDataPoint(iDPlocal+16, float64(unpCarStatus.ActualTyreCompound)),
+				setDataPoint(iDPlocal+17, float64(unpCarStatus.VisualTyreCompound)),
+				setDataPoint(iDPlocal+18, float64(unpCarStatus.TyresDamageRL)),
+				setDataPoint(iDPlocal+19, float64(unpCarStatus.TyresDamageRR)),
+				setDataPoint(iDPlocal+20, float64(unpCarStatus.TyresDamageFL)),
+				setDataPoint(iDPlocal+21, float64(unpCarStatus.TyresDamageFR)),
+				setDataPoint(iDPlocal+22, float64(unpCarStatus.FrontLeftWingDamage)),
+				setDataPoint(iDPlocal+23, float64(unpCarStatus.FrontRightWingDamage)),
+				setDataPoint(iDPlocal+24, float64(unpCarStatus.RearWingDamage)),
+				setDataPoint(iDPlocal+25, float64(unpCarStatus.EngineDamage)),
+				setDataPoint(iDPlocal+26, float64(unpCarStatus.GearBoxDamage)),
+				setDataPoint(iDPlocal+27, float64(unpCarStatus.VehicleFiaFlags)),
+				setDataPoint(iDPlocal+28, float64(unpCarStatus.ErsStoreEnergy)),
+				setDataPoint(iDPlocal+29, float64(unpCarStatus.ErsDeployMode)),
+				setDataPoint(iDPlocal+30, float64(unpCarStatus.ErsHarvestedThisLapMGUK)),
+				setDataPoint(iDPlocal+31, float64(unpCarStatus.ErsHarvestedThisLapMGUH)),
+				setDataPoint(iDPlocal+32, float64(unpCarStatus.ErsDeployedThisLap)),
+			)
+			if i != int(iCurrentPlayer) {
+				iDP += 40
+			}
+			// Send all fields
+			output.Data, err = proto.Marshal(td)
+			if err != nil {
+				return false, err
+			}
+		}
 
 	default:
 		fmt.Println("Error")
