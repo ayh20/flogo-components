@@ -14,7 +14,7 @@
       "description": "Port to listen on",
       "required": true,
       "display": {
-        "name": "MultiCast",
+        "name": "Port",
         "appPropertySupport": true
         }
     },
