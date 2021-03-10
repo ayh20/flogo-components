@@ -1,6 +1,6 @@
 {
     "name": "flogo-kafkabyte",
-    "version": "0.10.2",
+    "version": "0.10.3",
     "title": "Publish Kafka Byte message",
     "type": "flogo:activity",
     "description": "Publish a Byte message to a kafka topic",
@@ -11,12 +11,59 @@
         "name": "brokerUrls",
         "type": "string",
         "required": true,
+        "display": {
+            "name": "BrokerURLs",
+            "appPropertySupport": true
+        },
         "description": "The Kafka cluster to connect to"
       },
       {
         "name": "topic",
         "type": "string",
+        "description": "The Kafka topic on which to place the message",
         "required": true,
+        "display": {
+            "name": "Topic",
+            "appPropertySupport": true
+        }
+      },
+      {
+        "name": "user",
+        "type": "string",
+        "description": "If connecting to a SASL enabled port, the user id to use for authentication",
+        "display": {
+            "name": "User",
+            "appPropertySupport": true
+        }
+      },
+      {
+        "name": "password",
+        "type": "string",
+        "description": "If connecting to a SASL enabled port, the password to use for authentication",
+        "display": {
+            "name": "Password",
+            "appPropertySupport": true
+        }
+      },
+      {
+        "name": "trustStore",
+        "type": "string",
+        "description": "If connecting to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate",
+        "display": {
+            "name": "TrustStore",
+            "appPropertySupport": true
+        }
+      }
+    ],
+    "input":[
+      {
+        "name": "brokerUrls",
+        "type": "string",
+        "description": "The Kafka cluster to connect to"
+      },
+      {
+        "name": "topic",
+        "type": "string",
         "description": "The Kafka topic on which to place the message"
       },
       {
@@ -29,13 +76,6 @@
         "type": "string",
         "description": "If connecting to a SASL enabled port, the password to use for authentication"
       },
-      {
-        "name": "trustStore",
-        "type": "string",
-        "description": "If connecting to a TLS secured port, the directory containing the certificates representing the trust chain for the connection. This is usually just the CACert used to sign the server's certificate"
-      }
-    ],
-    "input":[
       {
         "name": "message",
         "type": "any",

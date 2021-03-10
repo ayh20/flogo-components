@@ -16,16 +16,19 @@ import (
 // todo core should add support for shared connections and replace this
 var connections = make(map[string]*KafkaConnection)
 
+// KafkaConnection - xxxx
 type KafkaConnection struct {
 	kafkaConfig  *sarama.Config
 	brokers      []string
 	syncProducer sarama.SyncProducer
 }
 
+// Connection - xxx
 func (c *KafkaConnection) Connection() sarama.SyncProducer {
 	return c.syncProducer
 }
 
+// Stop - xxxx
 func (c *KafkaConnection) Stop() error {
 	return c.syncProducer.Close()
 }
