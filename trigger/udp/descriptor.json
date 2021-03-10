@@ -1,6 +1,6 @@
 { 
   "name": "udp",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "type": "flogo:trigger",
   "ref": "github.com/ayh20/flogo-components/trigger/udp",
   "title": "Receive UDP Message",
