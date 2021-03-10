@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"net"
+	"strings"
 
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
@@ -75,16 +76,6 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 	t.port = port
 	t.multicastGroup = multicastGroup
 
-	t.logger.Infof("Binding to %v : %v", t.address.Network(), t.address.Port)
-
-	return err
-}
-
-// Start starts the trigger
-func (t *Trigger) Start() error {
-	t.logger.Info("Starting to listen for incoming udp messages")
-
-	var err error
 	if t.multicastGroup == "" {
 		t.connection, err = net.ListenUDP("udp", t.address)
 	} else {
@@ -97,6 +88,33 @@ func (t *Trigger) Start() error {
 
 	t.connection.SetReadBuffer(maxDatagramSize)
 
+	t.logger.Infof("Binding to %v : %v", t.address.Network(), t.address.Port)
+
+	return err
+}
+
+// Start starts the trigger
+func (t *Trigger) Start() error {
+	t.logger.Info("Starting to listen for incoming udp messages")
+
+	/*	var err error
+		/* 	if t.multicastGroup == "" {
+				t.connection, err = net.ListenUDP("udp", t.address)
+			} else {
+				t.connection, err = net.ListenMulticastUDP("udp", nil, t.address)
+			}
+
+			if err != nil {
+				return err
+			}
+
+			t.connection.SetReadBuffer(maxDatagramSize)*/
+	go t.ReadLoop()
+	return nil
+}
+
+// ReadLoop process inbound messages
+func (t *Trigger) ReadLoop() {
 	for {
 		buf := make([]byte, maxDatagramSize)
 
@@ -106,7 +124,12 @@ func (t *Trigger) Start() error {
 
 		// Read ok ?
 		if err != nil {
-			t.logger.Errorf("ReadFromUDP failed: %v", err)
+			//t.logger.Errorf("ReadFromUDP failed: %v", err)
+			errString := err.Error()
+			if !strings.Contains(errString, "use of closed network connection") {
+				t.logger.Error("Error ReadFromUDP failed: ", err.Error())
+			}
+			return
 		}
 
 		t.logger.Debug("after ReadFromUDP")
@@ -134,7 +157,7 @@ func (t *Trigger) Start() error {
 	}
 }
 
-// Stop implements trigger.Trigger.Start
+// Stop implements trigger.Trigger.Stop
 func (t *Trigger) Stop() error {
 	// stop the trigger
 	if t.connection != nil {

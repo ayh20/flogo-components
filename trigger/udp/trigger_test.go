@@ -65,7 +65,7 @@ func TestTrigger_Initialize(t *testing.T) {
 	t.Log("Running test udp trigger")
 
 	config := &trigger.Config{}
-	err := json.Unmarshal([]byte(testConfig1), config)
+	err := json.Unmarshal([]byte(testConfig2), config)
 	assert.Nil(t, err)
 
 	actions := map[string]action.Action{"dummy": test.NewDummyAction(func() {
