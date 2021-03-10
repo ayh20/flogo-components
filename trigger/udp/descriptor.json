@@ -11,12 +11,21 @@
     {
       "name": "port",
       "type": "string",
-      "description": "Port to listen on"
+      "description": "Port to listen on",
+      "required": true,
+      "display": {
+        "name": "MultiCast",
+        "appPropertySupport": true
+        }
     },
     {
       "name": "multicastGroup",
       "type": "string",
-      "description": "IP multicast group address"
+      "description": "IP multicast group address",
+      "display": {
+        "name": "MultiCast",
+        "appPropertySupport": true
+        }
     }
   ],
   "outputs": [
