@@ -1,0 +1,63 @@
+{
+    "name": "sagemaker",
+    "type": "flogo:activity",
+    "ref": "github.com/ayh20/flogo-components/activity/sagemaker",
+    "version": "0.1.0",
+    "title": "Amazon Sagemaker",
+    "description": "Invoke the Sagemaker runtime",
+    "author": "ayh20",
+    "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/sagemaker",
+    "inputs": [
+        {
+            "name": "awsAccessKeyID",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "awsSecretAccessKey",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "assumeRole",
+            "type": "boolean",
+            "required": true
+        },
+        {
+            "name": "roleARN",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "roleSessionName",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "awsRegion",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "endpointname",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "body",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "contenttype",
+            "type": "string",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "result",
+            "type": "string"
+        }
+    ]
+}
