@@ -34,11 +34,11 @@ func (fndatetostring) Eval(params ...interface{}) (interface{}, error) {
 		return nil, fmt.Errorf("Format date second argument must be string")
 	}
 
-	t, err := date.Format(format)
+	t := date.Format(format)
 
-	if err != nil {
-		return nil, fmt.Errorf("Error Occured: %w", err)
-	}
+	//if err != nil {
+	//	return nil, fmt.Errorf("Error Occured: %w", err)
+	//}
 
 	return t, nil
 }
