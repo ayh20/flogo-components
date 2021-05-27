@@ -73,7 +73,26 @@
       ], 
       "return": {
         "type": "datetime"
-    }
+      }
+    },
+    {
+      "name": "datetostring",
+      "description": "Takes a date and formats it using the passed Golang format string",
+      "args": [
+        {
+          "name": "date",
+          "type": "datetime",
+          "description" : "The date to be formatted"
+        },
+        {
+          "name": "format",
+          "type": "string",
+          "description" : "The Golang date formatter"
+        }
+      ], 
+      "return": {
+        "type": "string"
+      }
     }
   ]
 }
