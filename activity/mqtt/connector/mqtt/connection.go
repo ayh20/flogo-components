@@ -167,7 +167,8 @@ func parseCert(cert string) string {
 	}
 	content := m["content"].(string)
 	lastBin := strings.LastIndex(content, "base64,")
-	sEnc := content[lastBin+7 : len(content)]
+	endofString := len(content)
+	sEnc := content[lastBin+7 : endofString]
 	sDec, _ := b64.StdEncoding.DecodeString(sEnc)
 	return (string(sDec))
 }
