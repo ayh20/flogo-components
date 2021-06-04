@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"testing"
 
-	_ "github.com/ayh20/flogo-components/activity/mqtt/connection"
+	_ "github.com/ayh20/flogo-components/activity/mqtt/connector/mqtt"
 	"github.com/project-flogo/core/activity"
 	"github.com/project-flogo/core/data/mapper"
 	"github.com/project-flogo/core/data/resolve"
@@ -22,7 +22,7 @@ var settingsjson = `{
 		"connection": {
 			"name": "myConn",
 			"description": "Local MQTT Connection",
-			"ref": "github.com/ayh20/flogo-components/activity/mqtt/connection",
+			"ref": "github.com/ayh20/flogo-components/activity/mqtt/connector/mqtt",
 			"settings": {
 				"name": "myConn",
 				"description": "Local MQTT Connection",
