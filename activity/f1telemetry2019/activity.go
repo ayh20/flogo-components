@@ -357,8 +357,9 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	// Test for valid 2019 data..
 	if unpHeader.PacketFormat != 2019 {
-		ctx.Logger().Debugf("F1 Data: Unsupported packet format %v", unpHeader.PacketFormat)
-		return false, fmt.Errorf("F1 Data: Unsupported packet format %v", unpHeader.PacketFormat)
+		ctx.Logger().Warnf("F1 Data: Unsupported packet format %v %v.%v %v %v", unpHeader.PacketFormat, unpHeader.GameMajorVersion, unpHeader.GameMinorVersion, unpHeader.PacketID, unpHeader.PacketVersion)
+
+		return false, fmt.Errorf("F1 Data: Unsupported packet format %v %v.%v %v %v", unpHeader.PacketFormat, unpHeader.GameMajorVersion, unpHeader.GameMinorVersion, unpHeader.PacketID, unpHeader.PacketVersion)
 	}
 
 	output := &Output{}

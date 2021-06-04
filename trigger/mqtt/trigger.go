@@ -11,11 +11,12 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/TIBCOSoftware/flogo-lib/core/data"
-	"github.com/TIBCOSoftware/flogo-lib/core/trigger"
-
-	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/eclipse/paho.mqtt.golang"
+	"github.com/project-flogo/core/activity"
+	"github.com/project-flogo/core/data/coerce"
+	"github.com/project-flogo/core/data/metadata"
+	"github.com/project-flogo/core/support/log"
+	"github.com/project-flogo/core/trigger"
 )
 
 // log is the default package logger
