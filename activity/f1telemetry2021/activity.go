@@ -202,7 +202,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 				ctx.Logger().Debugf("Unpack Fail: F1EventDetailsButtons ", err.Error())
 				return false, err
 			}
-			extradata = "," + getStrings(unpEventBut)
+			extradata = "," + fmt.Sprintf("%08b", unpEventBut.ButtonStatus) + "," + getStrings(unpEventBut)
 
 		case "STLG":
 			//

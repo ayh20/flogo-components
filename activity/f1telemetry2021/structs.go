@@ -216,7 +216,7 @@ type F1EventDetailsFlashback struct {
 // F1EventDetailsButtons (Type 3 x1) - Struct for the unpacking of the UDP data format
 // Frequency: When the event occurs
 type F1EventDetailsButtons struct {
-	m_buttonStatus uint32 `struc:"uint32,little"` // Bit flags specifying which buttons are being pressed currently
+	ButtonStatus uint32 `struc:"uint32,little"` // Bit flags specifying which buttons are being pressed currently
 }
 
 // F1EventDetailsExtraIndex (Type 3 x1) - Struct for the unpacking of the UDP data format
@@ -349,21 +349,19 @@ type F1CarStatus struct {
 // F1FinalClassificationData - (Type 8 x22) Struct for the unpacking of the UDP data format
 // Frequency: Once at the end of a race
 type F1FinalClassificationData struct {
-	m_position     uint8 `struc:"uint8,little"` // Finishing position
-	m_numLaps      uint8 `struc:"uint8,little"` // Number of laps completed
-	m_gridPosition uint8 `struc:"uint8,little"` // Grid position of the car
-	m_points       uint8 `struc:"uint8,little"` // Number of points scored
-	m_numPitStops  uint8 `struc:"uint8,little"` // Number of pit stops made
-	m_resultStatus uint8 `struc:"uint8,little"` // Result status - 0 = invalid, 1 = inactive, 2 = active
-	// 3 = finished, 4 = didnotfinish, 5 = disqualified
-	// 6 = not classified, 7 = retired
-	m_bestLapTimeInMS  uint32   `struc:"uint32,little"`   // Best lap time of the session in milliseconds
-	m_totalRaceTime    float64  `struc:"float64,little"`  // Total race time in seconds without penalties
-	m_penaltiesTime    uint8    `struc:"uint8,little"`    // Total penalties accumulated in seconds
-	m_numPenalties     uint8    `struc:"uint8,little"`    // Number of penalties applied to this driver
-	m_numTyreStints    uint8    `struc:"uint8,little"`    // Number of tyres stints up to maximum
-	m_tyreStintsActual [8]uint8 `struc:"[8]uint8,little"` // Actual tyres used by this driver
-	m_tyreStintsVisual [8]uint8 `struc:"[8]uint8,little"` // Visual tyres used by this driver
+	Position         uint8    `struc:"uint8,little"`    // Finishing position
+	NumLaps          uint8    `struc:"uint8,little"`    // Number of laps completed
+	GridPosition     uint8    `struc:"uint8,little"`    // Grid position of the car
+	Points           uint8    `struc:"uint8,little"`    // Number of points scored
+	NumPitStops      uint8    `struc:"uint8,little"`    // Number of pit stops made
+	ResultStatus     uint8    `struc:"uint8,little"`    // Result status - 0 = invalid, 1 = inactive, 2 = active,  3 = finished, 4 = didnotfinish, 5 = disqualified, 6 = not classified, 7 = retired
+	BestLapTimeInMS  uint32   `struc:"uint32,little"`   // Best lap time of the session in milliseconds
+	TotalRaceTime    float64  `struc:"float64,little"`  // Total race time in seconds without penalties
+	PenaltiesTime    uint8    `struc:"uint8,little"`    // Total penalties accumulated in seconds
+	NumPenalties     uint8    `struc:"uint8,little"`    // Number of penalties applied to this driver
+	NumTyreStints    uint8    `struc:"uint8,little"`    // Number of tyres stints up to maximum
+	TyreStintsActual [8]uint8 `struc:"[8]uint8,little"` // Actual tyres used by this driver
+	TyreStintsVisual [8]uint8 `struc:"[8]uint8,little"` // Visual tyres used by this driver
 }
 
 // F1FinalClassificationPacket - (Type 8 x1) Struct for the unpacking of the UDP data format
@@ -389,7 +387,7 @@ type F1LobbyInfoData struct {
 // Frequency: Two every second when in the lobby
 type F1LobbyInfo struct {
 	// Packet specific data
-	m_numPlayers uint8 `struc:"uint8,little"` // Number of players in the lobby data
+	NumPlayers uint8 `struc:"uint8,little"` // Number of players in the lobby data
 }
 
 // F1CarDamageData - (Type 10 x22) Struct for the unpacking of the UDP data format
@@ -435,27 +433,27 @@ type F1CarDamageData struct {
 // a final bulk update of all the session histories for the vehicles in that session will be sent.
 // Frequency: 20 per second but cycling through cars
 type F1SessionHistoryData struct {
-	m_carIdx             uint8                     `struc:"uint8,little"`          // Index of the car this lap data relates to
-	m_numLaps            uint8                     `struc:"uint8,little"`          // Num laps in the data (including current partial lap)
-	m_numTyreStints      uint8                     `struc:"uint8,little"`          // Number of tyre stints in the data
-	m_bestLapTimeLapNum  uint8                     `struc:"uint8,little"`          // Lap the best lap time was achieved on
-	m_bestSector1LapNum  uint8                     `struc:"uint8,little"`          // Lap the best Sector 1 time was achieved on
-	m_bestSector2LapNum  uint8                     `struc:"uint8,little"`          // Lap the best Sector 2 time was achieved on
-	m_bestSector3LapNum  uint8                     `struc:"uint8,little"`          // Lap the best Sector 3 time was achieved on
+	CarIdx               uint8                     `struc:"uint8,little"`          // Index of the car this lap data relates to
+	NumLaps              uint8                     `struc:"uint8,little"`          // Num laps in the data (including current partial lap)
+	NumTyreStints        uint8                     `struc:"uint8,little"`          // Number of tyre stints in the data
+	BestLapTimeLapNum    uint8                     `struc:"uint8,little"`          // Lap the best lap time was achieved on
+	BestSector1LapNum    uint8                     `struc:"uint8,little"`          // Lap the best Sector 1 time was achieved on
+	BestSector2LapNum    uint8                     `struc:"uint8,little"`          // Lap the best Sector 2 time was achieved on
+	BestSector3LapNum    uint8                     `struc:"uint8,little"`          // Lap the best Sector 3 time was achieved on
 	LapHistoryData       [100]F1LapHistoryData     `struc:"[100]F1LapHistoryData"` // 100 laps of data max
 	TyreStintHistoryData [8]F1TyreStintHistoryData `struc:"[8]F1TyreStintHistoryData"`
 }
 
 type F1LapHistoryData struct {
-	m_lapTimeInMS      uint32 `struc:"uint32,little"` // Lap time in milliseconds
-	m_sector1TimeInMS  uint16 `struc:"uint16,little"` // Sector 1 time in milliseconds
-	m_sector2TimeInMS  uint16 `struc:"uint16,little"` // Sector 2 time in milliseconds
-	m_sector3TimeInMS  uint16 `struc:"uint16,little"` // Sector 3 time in milliseconds
-	m_lapValidBitFlags uint8  `struc:"uint8,little"`  // 0x01 bit set-lap valid, 0x02 bit set-sector 1 valid, 0x04 bit set-sector 2 valid, 0x08 bit set-sector 3 valid
+	lapTimeInMS      uint32 `struc:"uint32,little"` // Lap time in milliseconds
+	Sector1TimeInMS  uint16 `struc:"uint16,little"` // Sector 1 time in milliseconds
+	Sector2TimeInMS  uint16 `struc:"uint16,little"` // Sector 2 time in milliseconds
+	Sector3TimeInMS  uint16 `struc:"uint16,little"` // Sector 3 time in milliseconds
+	LapValidBitFlags uint8  `struc:"uint8,little"`  // 0x01 bit set-lap valid, 0x02 bit set-sector 1 valid, 0x04 bit set-sector 2 valid, 0x08 bit set-sector 3 valid
 }
 
 type F1TyreStintHistoryData struct {
-	m_endLap             uint8 `struc:"uint8,little"` // Lap the tyre usage ends on (255 of current tyre)
-	m_tyreActualCompound uint8 `struc:"uint8,little"` // Actual tyres used by this driver
-	m_tyreVisualCompound uint8 `struc:"uint8,little"` // Visual tyres used by this driver
+	EndLap             uint8 `struc:"uint8,little"` // Lap the tyre usage ends on (255 of current tyre)
+	TyreActualCompound uint8 `struc:"uint8,little"` // Actual tyres used by this driver
+	TyreVisualCompound uint8 `struc:"uint8,little"` // Visual tyres used by this driver
 }
