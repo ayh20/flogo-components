@@ -374,15 +374,41 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	case 11: //Session History
 
-		unpF1SessionHistoryData := &F1SessionHistoryData{}
+		unpF1SessionHistory := &F1SessionHistory{}
+		unpF1LapHistory := &F1LapHistory{}
+		unpF1TyreStintHistory := &F1TyreStintHistory{}
 
-		err = struc.Unpack(buf, unpF1SessionHistoryData)
+		err = struc.Unpack(buf, unpF1SessionHistory)
 		if err != nil {
-			ctx.Logger().Debugf("Unpack Fail: F1SessionHistoryData ", err.Error())
+			ctx.Logger().Debugf("Unpack Fail: F1SessionHistory ", err.Error())
 			return false, err
 		}
 
-		output.Data = outputHeader + "|" + getStrings(unpF1SessionHistoryData)
+		sessHistory := "|" + getStrings(unpF1SessionHistory)
+
+		arraystring := ""
+		arraystring2 := ""
+
+		for i := 0; i <= 99; i++ {
+			err = struc.Unpack(buf, unpF1LapHistory)
+			if err != nil {
+				ctx.Logger().Debugf("Unpack Fail: F1LapHistory ", err.Error())
+				return false, err
+			}
+			ctx.Logger().Debugf("F1LapHistory unpacked: %v\n%+v\n", i, unpF1LapHistory)
+			arraystring = arraystring + fmt.Sprintf("|%v,", i) + getStrings(unpF1LapHistory)
+		}
+
+		for i := 0; i <= 7; i++ {
+			err = struc.Unpack(buf, unpF1TyreStintHistory)
+			if err != nil {
+				ctx.Logger().Debugf("Unpack Fail: F1TyreStintHistory ", err.Error())
+				return false, err
+			}
+			ctx.Logger().Debugf("F1TyreStintHistory unpacked: %v\n%+v\n", i, unpF1TyreStintHistory)
+			arraystring2 = arraystring2 + fmt.Sprintf("|%v,", i) + getStrings(unpF1TyreStintHistory)
+		}
+		output.Data = outputHeader + sessHistory + arraystring + arraystring2
 
 	default:
 		//fmt.Println("Error")

@@ -432,28 +432,28 @@ type F1CarDamageData struct {
 // Note that at the end of the race, after the final classification packet has been sent,
 // a final bulk update of all the session histories for the vehicles in that session will be sent.
 // Frequency: 20 per second but cycling through cars
-type F1SessionHistoryData struct {
-	CarIdx               uint8                     `struc:"uint8,little"`          // Index of the car this lap data relates to
-	NumLaps              uint8                     `struc:"uint8,little"`          // Num laps in the data (including current partial lap)
-	NumTyreStints        uint8                     `struc:"uint8,little"`          // Number of tyre stints in the data
-	BestLapTimeLapNum    uint8                     `struc:"uint8,little"`          // Lap the best lap time was achieved on
-	BestSector1LapNum    uint8                     `struc:"uint8,little"`          // Lap the best Sector 1 time was achieved on
-	BestSector2LapNum    uint8                     `struc:"uint8,little"`          // Lap the best Sector 2 time was achieved on
-	BestSector3LapNum    uint8                     `struc:"uint8,little"`          // Lap the best Sector 3 time was achieved on
-	LapHistoryData       [100]F1LapHistoryData     `struc:"[100]F1LapHistoryData"` // 100 laps of data max
-	TyreStintHistoryData [8]F1TyreStintHistoryData `struc:"[8]F1TyreStintHistoryData"`
+type F1SessionHistory struct {
+	CarIdx            uint8 `struc:"uint8,little"` // Index of the car this lap data relates to
+	NumLaps           uint8 `struc:"uint8,little"` // Num laps in the data (including current partial lap)
+	NumTyreStints     uint8 `struc:"uint8,little"` // Number of tyre stints in the data
+	BestLapTimeLapNum uint8 `struc:"uint8,little"` // Lap the best lap time was achieved on
+	BestSector1LapNum uint8 `struc:"uint8,little"` // Lap the best Sector 1 time was achieved on
+	BestSector2LapNum uint8 `struc:"uint8,little"` // Lap the best Sector 2 time was achieved on
+	BestSector3LapNum uint8 `struc:"uint8,little"` // Lap the best Sector 3 time was achieved on
+	//LapHistory       [100]F1LapHistory     `struc:"[100]F1LapHistory"` // 100 laps of data max
+	//TyreStintHistory [8]F1TyreStintHistory `struc:"[8]F1TyreStintHistory"`
 }
 
-type F1LapHistoryData struct {
-	lapTimeInMS      uint32 `struc:"uint32,little"` // Lap time in milliseconds
+type F1LapHistory struct {
+	LapTimeInMS      uint32 `struc:"uint32,little"` // Lap time in milliseconds
 	Sector1TimeInMS  uint16 `struc:"uint16,little"` // Sector 1 time in milliseconds
 	Sector2TimeInMS  uint16 `struc:"uint16,little"` // Sector 2 time in milliseconds
 	Sector3TimeInMS  uint16 `struc:"uint16,little"` // Sector 3 time in milliseconds
 	LapValidBitFlags uint8  `struc:"uint8,little"`  // 0x01 bit set-lap valid, 0x02 bit set-sector 1 valid, 0x04 bit set-sector 2 valid, 0x08 bit set-sector 3 valid
 }
 
-type F1TyreStintHistoryData struct {
+type F1TyreStintHistory struct {
 	EndLap             uint8 `struc:"uint8,little"` // Lap the tyre usage ends on (255 of current tyre)
-	TyreActualCompound uint8 `struc:"uint8,little"` // Actual tyres used by this driver
-	TyreVisualCompound uint8 `struc:"uint8,little"` // Visual tyres used by this driver
+	TyreActualCompound uint8 `struc:"uint8,little"` // Actual tyres used by this driver (16 = C5, 17 = C4, 18 = C3, 19 = C2, 20 = C1, 7 = inter, 8 = wet, F1 Classic - 9 = dry, 10 = wet, F2 – 11 = super soft, 12 = soft, 13 = medium, 14 = hard, 15 = wet)
+	TyreVisualCompound uint8 `struc:"uint8,little"` // Visual tyres used by this driver (16 = soft, 17 = medium, 18 = hard, 7 = inter, 8 = wet - F1 Classic and F2 as above)
 }
