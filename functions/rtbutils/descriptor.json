@@ -1,7 +1,8 @@
 {
   "name": "rtbutils",
   "type": "flogo:function",
-  "version": "0.0.11", 
+  "ref": "github.com/ayh20/flogo-components/tree/master/functions/rtbutils",
+  "version": "0.0.12", 
   "title": "functions to help RTB creation",
   "description": "misc utils",
   "homepage": "https://github.com/ayh20/flogo-components/tree/master/functions/rtbutils",
