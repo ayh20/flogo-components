@@ -1,7 +1,7 @@
 {
   "name": "rtbutils",
   "type": "flogo:function",
-  "version": "0.0.10", 
+  "version": "0.0.11", 
   "title": "functions to help RTB creation",
   "description": "misc utils",
   "homepage": "https://github.com/ayh20/flogo-components/tree/master/functions/rtbutils",
@@ -102,6 +102,34 @@
           "name": "format",
           "type": "string",
           "description" : "The Golang date formatter"
+        }
+      ], 
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "zipdata",
+      "description": "Zip the passed data",
+      "args": [
+        {
+          "name": "data",
+          "type": "string",
+          "description" : "The data to be zipped"
+        }
+      ], 
+      "return": {
+        "type": "bytes"
+      }
+    },
+    {
+      "name": "unzipdata",
+      "description": "unzip passed data",
+      "args": [
+        {
+          "name": "data",
+          "type": "bytes",
+          "description" : "The data to be unzipped"
         }
       ], 
       "return": {
