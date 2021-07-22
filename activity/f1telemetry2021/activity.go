@@ -80,7 +80,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	output.Data = ""
 	output.MsgType = int(unpHeader.PacketID)
 
-	outputHeader := fmt.Sprintf("%v,%v,%g,%v,%v.%v", unpHeader.PacketID, unpHeader.SessionUID, unpHeader.SessionTime, unpHeader.PlayerCarIndex, unpHeader.GameMajorVersion, unpHeader.GameMinorVersion)
+	outputHeader := fmt.Sprintf("%v,%v,%g,%v,%v.%v.%v", unpHeader.PacketID, unpHeader.SessionUID, unpHeader.SessionTime, unpHeader.PlayerCarIndex, unpHeader.PacketFormat, unpHeader.GameMajorVersion, unpHeader.GameMinorVersion)
 
 	switch unpHeader.PacketID {
 	case 0: //Motion
