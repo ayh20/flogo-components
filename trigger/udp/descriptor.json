@@ -30,6 +30,10 @@
   ],
   "outputs": [
     {
+      "name": "address",
+      "type": "string"
+    },
+    {
       "name": "payload",
       "type": "string"
     },

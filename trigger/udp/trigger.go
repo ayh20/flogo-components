@@ -118,7 +118,7 @@ func (t *Trigger) ReadLoop() {
 	for {
 		buf := make([]byte, maxDatagramSize)
 
-		output := &Output{}
+		//output := &Output{}
 
 		n, addr, err := t.connection.ReadFromUDP(buf)
 
@@ -141,9 +141,10 @@ func (t *Trigger) ReadLoop() {
 		trgData := make(map[string]interface{})
 		trgData["payload"] = payload
 		trgData["buffer"] = payloadB
+		trgData["address"] = addr.IP.String()
 
-		output.Payload = payload
-		output.Buffer = payloadB
+		//output.Payload = payload
+		//output.Buffer = payloadB
 
 		t.logger.Debug("Processing handlers")
 		for _, handler := range t.handlers {
@@ -151,7 +152,7 @@ func (t *Trigger) ReadLoop() {
 			if err != nil {
 				t.logger.Error("Error starting action: ", err.Error())
 			}
-			t.logger.Debugf("Ran Handler: [%s]", handler)
+			//t.logger.Debugf("Ran Handler: [%s]", handler)
 			t.logger.Debugf("Results: [%v]", results)
 		}
 	}

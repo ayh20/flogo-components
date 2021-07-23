@@ -79,7 +79,7 @@ func TestTrigger_Initialize(t *testing.T) {
 
 	err = trg.Start()
 	assert.Nil(t, err)
-	err = trg.Stop()
+	defer trg.Stop()
 	assert.Nil(t, err)
 
 }
