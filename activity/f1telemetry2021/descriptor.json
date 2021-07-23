@@ -12,6 +12,11 @@
       "name": "buffer",
       "required": true,
       "type": "any"
+    },
+    {
+      "name": "source",
+      "required": true,
+      "type": "string"
     }
   ],
   "output": [

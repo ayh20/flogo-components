@@ -69,7 +69,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	// dump header
 	ctx.Logger().Debugf("struct F1Header : \n %+v \n", unpHeader)
 
-	// Test for valid 2019 data..
+	// Test for valid 2021 data..
 	if unpHeader.PacketFormat != 2021 {
 		ctx.Logger().Warnf("F1 Data: Unsupported packet format %v %v.%v %v %v", unpHeader.PacketFormat, unpHeader.GameMajorVersion, unpHeader.GameMinorVersion, unpHeader.PacketID, unpHeader.PacketVersion)
 
@@ -80,7 +80,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	output.Data = ""
 	output.MsgType = int(unpHeader.PacketID)
 
-	outputHeader := fmt.Sprintf("%v,%v,%g,%v,%v.%v.%v", unpHeader.PacketID, unpHeader.SessionUID, unpHeader.SessionTime, unpHeader.PlayerCarIndex, unpHeader.PacketFormat, unpHeader.GameMajorVersion, unpHeader.GameMinorVersion)
+	outputHeader := fmt.Sprintf("%v,%v,%v,%g,%v,%v.%v.%v", unpHeader.PacketID, unpHeader.SessionUID, in.Source, unpHeader.SessionTime, unpHeader.PlayerCarIndex, unpHeader.PacketFormat, unpHeader.GameMajorVersion, unpHeader.GameMinorVersion)
 
 	switch unpHeader.PacketID {
 	case 0: //Motion
