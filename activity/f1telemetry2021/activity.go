@@ -238,7 +238,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		}
 		arraystring := ""
 
-		for i := 0; i <= 21; i++ {
+		cnt := int(unpParticipant.NumActiveCars) - 1
+		for i := 0; i <= cnt; i++ {
 			err = struc.Unpack(buf, unpParticpantData)
 			if err != nil {
 				ctx.Logger().Debugf("Unpack Fail: F1ParticipantData ", err.Error())
@@ -308,6 +309,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		output.Data = outputHeader + arraystring
 
 	case 8: //Final Classification
+		ctx.Logger().Error(unpHeader.PacketID)
 		unpFinalClassificationData := &F1FinalClassificationData{}
 		unpFinalClassificationPacket := &F1FinalClassificationPacket{}
 
@@ -318,8 +320,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			ctx.Logger().Debugf("Unpack Fail: F1FinalClassificationPacket ", err.Error())
 			return false, err
 		}
-
-		for i := 0; i <= 21; i++ {
+		cnt := int(unpFinalClassificationPacket.NumCars) - 1
+		for i := 0; i <= cnt; i++ {
 			err = struc.Unpack(buf, unpFinalClassificationData)
 			if err != nil {
 				ctx.Logger().Debugf("Unpack Fail: F1FinalClassificationData ", err.Error())
@@ -342,8 +344,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			ctx.Logger().Debugf("Unpack Fail: F1LobbyInfo ", err.Error())
 			return false, err
 		}
-
-		for i := 0; i <= 21; i++ {
+		cnt := int(unpF1LobbyInfo.NumPlayers) - 1
+		for i := 0; i <= cnt; i++ {
 			err = struc.Unpack(buf, unpF1LobbyInfoData)
 			if err != nil {
 				ctx.Logger().Debugf("Unpack Fail: F1LobbyInfoData ", err.Error())
@@ -374,6 +376,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	case 11: //Session History
 
+		ctx.Logger().Error(unpHeader.PacketID)
 		unpF1SessionHistory := &F1SessionHistory{}
 		unpF1LapHistory := &F1LapHistory{}
 		unpF1TyreStintHistory := &F1TyreStintHistory{}
