@@ -139,17 +139,17 @@ type F1Session struct {
 // F1LapData (Type 2 x22) - Struct for the unpacking of the UDP data format
 // Frequency: Rate as specified in menus
 type F1LapData struct {
-	LastLapTime    uint32 `struc:"uint32,little"` // Last lap time in seconds
-	CurrentLapTime uint32 `struc:"uint32,little"` // Current time around the lap in seconds
-	//	BestLapTime       float32 `struc:"float32,little"` // Best lap time of the session in seconds
-	Sector1Time                 uint16  `struc:"uint16,little"`  // Sector 1 time in seconds
-	Sector2Time                 uint16  `struc:"uint16,little"`  // Sector 2 time in seconds
+	LastLapTimeMs               uint32  `struc:"uint32,little"`  // Last lap time in milliseconds
+	CurrentLapTimeMS            uint32  `struc:"uint32,little"`  // Current time around the lap in milliseconds
+	Sector1TimeMS               uint16  `struc:"uint16,little"`  // Sector 1 time in milliseconds
+	Sector2TimeMS               uint16  `struc:"uint16,little"`  // Sector 2 time in milliseconds
 	LapDistance                 float32 `struc:"float32,little"` // Distance vehicle is around current lap in metres – could be negative if line hasn’t been crossed yet
 	TotalDistance               float32 `struc:"float32,little"` // Total distance travelled in session in metres – could be negative if line hasn’t been crossed yet
 	SafetyCarDelta              float32 `struc:"float32,little"` // Delta in seconds for safety car
 	CarPosition                 uint8   `struc:"uint8,little"`   // Car race position
 	CurrentLapNum               uint8   `struc:"uint8,little"`   // Current lap number
 	PitStatus                   uint8   `struc:"uint8,little"`   // 0 = none, 1 = pitting, 2 = in pit area
+	NumPitStops                 uint8   `struc:"uint8,little"`   // Number of pit stops taken in this race
 	Sector                      uint8   `struc:"uint8,little"`   // 0 = sector1, 1 = sector2, 2 = sector3
 	CurrentLapInvalid           uint8   `struc:"uint8,little"`   // Current lap invalid - 0 = valid, 1 = invalid
 	Penalties                   uint8   `struc:"uint8,little"`   // Accumulated time penalties in seconds to be added
