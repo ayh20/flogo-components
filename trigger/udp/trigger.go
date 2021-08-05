@@ -86,7 +86,7 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 		return err
 	}
 
-	t.connection.SetReadBuffer(maxDatagramSize)
+	t.connection.SetReadBuffer(maxDatagramSize * 20)
 
 	t.logger.Infof("Binding to %v : %v", t.address.Network(), t.address.Port)
 
