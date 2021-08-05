@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net"
 	"strings"
+	"sync"
 
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
@@ -45,6 +46,7 @@ type Trigger struct {
 	address        *net.UDPAddr
 	port           string
 	multicastGroup string
+	lock           sync.Mutex
 }
 
 const (
@@ -105,45 +107,39 @@ func (t *Trigger) Start() error {
 
 // ReadLoop process inbound messages
 func (t *Trigger) ReadLoop() {
-	buf := make([]byte, maxDatagramSize)
 	for {
-		//buf := make([]byte, maxDatagramSize)
-		//output := &Output{}
+		t.ReadFromUDP()
+	}
+}
 
-		n, addr, err := t.connection.ReadFromUDP(buf)
+func (t *Trigger) ReadFromUDP() {
+	t.lock.Lock()
+	defer t.lock.Unlock()
+	buf := make([]byte, maxDatagramSize)
+	n, addr, err := t.connection.ReadFromUDP(buf)
 
-		// Read ok ?
-		if err != nil {
-			//t.logger.Errorf("ReadFromUDP failed: %v", err)
-			errString := err.Error()
-			if !strings.Contains(errString, "use of closed network connection") {
-				t.logger.Error("Error ReadFromUDP failed: ", err.Error())
-			}
-			return
+	// Read ok ?
+	if err != nil {
+		//t.logger.Errorf("ReadFromUDP failed: %v", err)
+		errString := err.Error()
+		if !strings.Contains(errString, "use of closed network connection") {
+			t.logger.Error("Error ReadFromUDP failed: ", err.Error())
 		}
+		return
+	}
 
-		//t.logger.Debug("after ReadFromUDP")
-		//payloadB := buf[0:n]
-		//payload := string(payloadB)
+	//t.logger.Debugf("Received %v from %v", payload, addr)
 
-		//t.logger.Debugf("Received %v from %v", payload, addr)
+	trgData := make(map[string]interface{})
+	trgData["payload"] = string(buf[0:n])
+	trgData["buffer"] = buf[0:n]
+	trgData["address"] = addr.IP.String()
 
-		trgData := make(map[string]interface{})
-		trgData["payload"] = string(buf[0:n])
-		trgData["buffer"] = buf[0:n]
-		trgData["address"] = addr.IP.String()
-
-		//output.Payload = payload
-		//output.Buffer = payloadB
-
-		t.logger.Debug("Processing handlers")
-		for _, handler := range t.handlers {
-			_, err := handler.Handle(context.Background(), trgData)
-			if err != nil {
-				t.logger.Error("Error starting action: ", err.Error())
-			}
-			//t.logger.Debugf("Ran Handler: [%s]", handler)
-			//t.logger.Debugf("Results: [%v]", results)
+	t.logger.Debug("Processing handlers")
+	for _, handler := range t.handlers {
+		_, err := handler.Handle(context.Background(), trgData)
+		if err != nil {
+			t.logger.Error("Error starting action: ", err.Error())
 		}
 	}
 }
