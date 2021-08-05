@@ -7,7 +7,6 @@ import (
 	"net"
 	"strings"
 	"time"
-	"unicode/utf8"
 
 	"github.com/project-flogo/core/data/metadata"
 	"github.com/project-flogo/core/support/log"
@@ -46,7 +45,6 @@ type Trigger struct {
 	handlers    []trigger.Handler
 	listener    net.Listener
 	logger      log.Logger
-	delimiter   byte
 	connections []net.Conn
 }
 
@@ -57,13 +55,6 @@ func (t *Trigger) Initialize(ctx trigger.InitContext) error {
 	port := t.settings.Port
 	t.handlers = ctx.GetHandlers()
 	t.logger = ctx.Logger()
-
-	delimiter := t.settings.Delimiter
-
-	if delimiter != "" {
-		r, _ := utf8.DecodeRuneInString(delimiter)
-		t.delimiter = byte(r)
-	}
 
 	if port == "" {
 		return errors.New("Valid port must be set")

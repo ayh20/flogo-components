@@ -11,12 +11,12 @@ import (
 )
 
 const testConfig string = `{
-	"id": "flogo-tcpudp-trigger",
-	"ref": "github.com/project-flogo/contrib/trigger/tcp",
+	"id": "tcpudp",
+	"ref": "github.com/ayh20/flogo-components/trigger/tcpudp",
 	"settings": {
-      "network": "tcp",
-	  "host": "127.0.0.1",
-      "port": "8982"
+      "network": "udp",
+	  "host": "",
+      "port": "20777"
 	},
 	"handlers": [
 	  {
