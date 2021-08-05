@@ -2,7 +2,7 @@
   "name": "rtbutils",
   "type": "flogo:function",
   "ref": "github.com/ayh20/flogo-components/functions/rtbutils",
-  "version": "0.1.1", 
+  "version": "0.1.2", 
   "title": "Miscellaneous functions for RTB project and others",
   "description": "misc utils",
   "homepage": "https://github.com/ayh20/flogo-components/tree/master/functions/rtbutils",
