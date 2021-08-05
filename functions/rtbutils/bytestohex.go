@@ -17,7 +17,7 @@ type fnbytestohex struct {
 }
 
 func (fnbytestohex) Name() string {
-	return "unzipdata"
+	return "bytestohex"
 }
 
 func (fnbytestohex) Sig() (paramTypes []data.Type, isVariadic bool) {
