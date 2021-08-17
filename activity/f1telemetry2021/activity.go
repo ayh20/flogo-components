@@ -309,7 +309,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		output.Data = outputHeader + arraystring
 
 	case 8: //Final Classification
-		ctx.Logger().Error(unpHeader.PacketID)
+		//ctx.Logger().Error(unpHeader.PacketID)
 		unpFinalClassificationData := &F1FinalClassificationData{}
 		unpFinalClassificationPacket := &F1FinalClassificationPacket{}
 
@@ -376,10 +376,9 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	case 11: //Session History
 
-		ctx.Logger().Error(unpHeader.PacketID)
 		unpF1SessionHistory := &F1SessionHistory{}
-		unpF1LapHistory := &F1LapHistory{}
-		unpF1TyreStintHistory := &F1TyreStintHistory{}
+		// unpF1LapHistory := &F1LapHistory{}
+		// unpF1TyreStintHistory := &F1TyreStintHistory{}
 
 		err = struc.Unpack(buf, unpF1SessionHistory)
 		if err != nil {
@@ -387,31 +386,34 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			return false, err
 		}
 
-		sessHistory := "|" + getStrings(unpF1SessionHistory)
+		// Send all fields
+		output.Data = outputHeader + "|" + getStrings(unpF1SessionHistory)
 
-		arraystring := ""
-		arraystring2 := ""
+		// sessHistory := "|" + getStrings(unpF1SessionHistory)
 
-		for i := 0; i <= 99; i++ {
-			err = struc.Unpack(buf, unpF1LapHistory)
-			if err != nil {
-				ctx.Logger().Debugf("Unpack Fail: F1LapHistory ", err.Error())
-				return false, err
-			}
-			ctx.Logger().Debugf("F1LapHistory unpacked: %v\n%+v\n", i, unpF1LapHistory)
-			arraystring = arraystring + fmt.Sprintf("|%v,", i) + getStrings(unpF1LapHistory)
-		}
+		// arraystring := ""
+		// arraystring2 := ""
 
-		for i := 0; i <= 7; i++ {
-			err = struc.Unpack(buf, unpF1TyreStintHistory)
-			if err != nil {
-				ctx.Logger().Debugf("Unpack Fail: F1TyreStintHistory ", err.Error())
-				return false, err
-			}
-			ctx.Logger().Debugf("F1TyreStintHistory unpacked: %v\n%+v\n", i, unpF1TyreStintHistory)
-			arraystring2 = arraystring2 + fmt.Sprintf("|%v,", i) + getStrings(unpF1TyreStintHistory)
-		}
-		output.Data = outputHeader + sessHistory + arraystring + arraystring2
+		// for i := 0; i <= 99; i++ {
+		// 	err = struc.Unpack(buf, unpF1LapHistory)
+		// 	if err != nil {
+		// 		ctx.Logger().Debugf("Unpack Fail: F1LapHistory ", err.Error())
+		// 		return false, err
+		// 	}
+		// 	ctx.Logger().Debugf("F1LapHistory unpacked: %v\n%+v\n", i, unpF1LapHistory)
+		// 	arraystring = arraystring + fmt.Sprintf("|%v,", i) + getStrings(unpF1LapHistory)
+		// }
+
+		// for i := 0; i <= 7; i++ {
+		// 	err = struc.Unpack(buf, unpF1TyreStintHistory)
+		// 	if err != nil {
+		// 		ctx.Logger().Debugf("Unpack Fail: F1TyreStintHistory ", err.Error())
+		// 		return false, err
+		// 	}
+		// 	ctx.Logger().Debugf("F1TyreStintHistory unpacked: %v\n%+v\n", i, unpF1TyreStintHistory)
+		// 	arraystring2 = arraystring2 + fmt.Sprintf("|%v,", i) + getStrings(unpF1TyreStintHistory)
+		// }
+		// output.Data = outputHeader + sessHistory + arraystring + arraystring2
 
 	default:
 		//fmt.Println("Error")

@@ -433,15 +433,15 @@ type F1CarDamageData struct {
 // a final bulk update of all the session histories for the vehicles in that session will be sent.
 // Frequency: 20 per second but cycling through cars
 type F1SessionHistory struct {
-	CarIdx            uint8 `struc:"uint8,little"` // Index of the car this lap data relates to
-	NumLaps           uint8 `struc:"uint8,little"` // Num laps in the data (including current partial lap)
-	NumTyreStints     uint8 `struc:"uint8,little"` // Number of tyre stints in the data
-	BestLapTimeLapNum uint8 `struc:"uint8,little"` // Lap the best lap time was achieved on
-	BestSector1LapNum uint8 `struc:"uint8,little"` // Lap the best Sector 1 time was achieved on
-	BestSector2LapNum uint8 `struc:"uint8,little"` // Lap the best Sector 2 time was achieved on
-	BestSector3LapNum uint8 `struc:"uint8,little"` // Lap the best Sector 3 time was achieved on
-	//LapHistory       [100]F1LapHistory     `struc:"[100]F1LapHistory"` // 100 laps of data max
-	//TyreStintHistory [8]F1TyreStintHistory `struc:"[8]F1TyreStintHistory"`
+	CarIdx            uint8                 `struc:"uint8,little"`      // Index of the car this lap data relates to
+	NumLaps           uint8                 `struc:"uint8,little"`      // Num laps in the data (including current partial lap)
+	NumTyreStints     uint8                 `struc:"uint8,little"`      // Number of tyre stints in the data
+	BestLapTimeLapNum uint8                 `struc:"uint8,little"`      // Lap the best lap time was achieved on
+	BestSector1LapNum uint8                 `struc:"uint8,little"`      // Lap the best Sector 1 time was achieved on
+	BestSector2LapNum uint8                 `struc:"uint8,little"`      // Lap the best Sector 2 time was achieved on
+	BestSector3LapNum uint8                 `struc:"uint8,little"`      // Lap the best Sector 3 time was achieved on
+	LapHistory        [100]F1LapHistory     `struc:"[100]F1LapHistory"` // 100 laps of data max
+	TyreStintHistory  [8]F1TyreStintHistory `struc:"[8]F1TyreStintHistory"`
 }
 
 type F1LapHistory struct {
