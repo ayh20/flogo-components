@@ -150,16 +150,6 @@
       "return": {
         "type": "string"
       }
-    },
-    {
-      "name": "End",
-      "description": "End Flogo app execution",
-      "args": [
-
-      ], 
-      "return": {
-        "type": "string"
-      }
     }
   ]
 }
