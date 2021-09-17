@@ -1,4 +1,4 @@
-package End
+package end
 
 import (
 	"fmt"

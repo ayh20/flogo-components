@@ -1,5 +1,5 @@
 {
-  "name": "End",
+  "name": "end",
   "version": "0.1.0",
   "ref": "github.com/ayh20/flogo-components/activity/end",
   "type": "flogo:activity",

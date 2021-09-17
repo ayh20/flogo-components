@@ -1,4 +1,4 @@
-package End
+package end
 
 import (
 	"os"
@@ -12,23 +12,23 @@ var activityLog = logger.GetLogger("activity-end")
 
 const ()
 
-// EndActivity is a stub for your Activity implementation
-type EndActivity struct {
+// endActivity is a stub for your Activity implementation
+type endActivity struct {
 	metadata *activity.Metadata
 }
 
 // NewActivity creates a new activity
 func NewActivity(metadata *activity.Metadata) activity.Activity {
-	return &EndActivity{metadata: metadata}
+	return &endActivity{metadata: metadata}
 }
 
 // Metadata implements activity.Activity.Metadata
-func (a *EndActivity) Metadata() *activity.Metadata {
+func (a *endActivity) Metadata() *activity.Metadata {
 	return a.metadata
 }
 
 // Eval implements activity.Activity.Eval
-func (a *EndActivity) Eval(ctx activity.Context) (done bool, err error) {
+func (a *endActivity) Eval(ctx activity.Context) (done bool, err error) {
 	os.Exit(0)
 
 	return true, nil
