@@ -2,7 +2,7 @@
   "name": "rtbutils",
   "type": "flogo:function",
   "ref": "github.com/ayh20/flogo-components/functions/rtbutils",
-  "version": "0.1.2", 
+  "version": "0.1.3", 
   "title": "Miscellaneous functions for RTB project and others",
   "description": "misc utils",
   "homepage": "https://github.com/ayh20/flogo-components/tree/master/functions/rtbutils",
@@ -146,6 +146,16 @@
           "type": "bytes",
           "description" : "The data to be hexified"
         }
+      ], 
+      "return": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "End",
+      "description": "End Flogo app execution",
+      "args": [
+
       ], 
       "return": {
         "type": "string"
