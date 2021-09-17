@@ -2,38 +2,19 @@ package end
 
 import (
 	"fmt"
-	"io/ioutil"
 	"testing"
 
-	"github.com/TIBCOSoftware/flogo-contrib/action/flow/test"
-	"github.com/TIBCOSoftware/flogo-lib/core/activity"
+	"github.com/project-flogo/core/activity"
+	"github.com/project-flogo/core/support/test"
+	"github.com/stretchr/testify/assert"
 )
-
-var activityMetadata *activity.Metadata
-
-func getActivityMetadata() *activity.Metadata {
-
-	if activityMetadata == nil {
-		jsonMetadataBytes, err := ioutil.ReadFile("activity.json")
-		if err != nil {
-			panic("No Json Metadata found for activity.json path")
-		}
-
-		activityMetadata = activity.NewMetadata(string(jsonMetadataBytes))
-	}
-
-	return activityMetadata
-}
 
 func TestCreate(t *testing.T) {
 
-	act := NewActivity(getActivityMetadata())
+	ref := activity.GetRef(&Activity{})
+	act := activity.Get(ref)
 
-	if act == nil {
-		t.Error("Activity Not Created")
-		t.Fail()
-		return
-	}
+	assert.NotNil(t, act)
 }
 
 func TestEval(t *testing.T) {
@@ -45,8 +26,8 @@ func TestEval(t *testing.T) {
 		}
 	}()
 
-	act := NewActivity(getActivityMetadata())
-	tc := test.NewTestActivityContext(getActivityMetadata())
+	act := &Activity{}
+	tc := test.NewActivityContext(act.Metadata())
 
 	done, err := act.Eval(tc)
 	if !done {
