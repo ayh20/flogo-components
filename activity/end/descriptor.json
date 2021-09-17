@@ -1,12 +1,15 @@
 {
   "name": "end",
-  "version": "0.1.0",
-  "ref": "github.com/ayh20/flogo-components/activity/end",
-  "type": "flogo:activity",
-  "title": "End",
-  "description": "End a Flogo process, kill it dead, parrot dead",
   "author": "Andy Hampshire <ahampshi@tibco.com>",
+  "type": "flogo:activity",
+  "ref": "github.com/ayh20/flogo-components/activity/end",
+  "version": "0.1.0",
+  "title": "F1 2021 Telemetry decoder",
+  "description": "End a Flogo process, kill it dead, parrot dead",
+  "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/end",
+
   "inputs":[
+
   ],
   "outputs": [
 
