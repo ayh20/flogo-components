@@ -1,4 +1,4 @@
-module example.com/m/v2
+module github.com/ayh20/flogo-components/activity/end
 
 go 1.16
 
