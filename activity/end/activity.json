@@ -1,0 +1,14 @@
+{
+  "name": "End",
+  "version": "0.1.0",
+  "ref": "github.com/ayh20/flogo-components/activity/end",
+  "type": "flogo:activity",
+  "title": "End",
+  "description": "End a Flogo process, kill it dead, parrot dead",
+  "author": "Andy Hampshire <ahampshi@tibco.com>",
+  "inputs":[
+  ],
+  "outputs": [
+
+  ]
+}
