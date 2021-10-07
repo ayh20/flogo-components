@@ -2,44 +2,25 @@ package jwt
 
 import (
 	"fmt"
-	"io/ioutil"
 	"testing"
 
-	"github.com/TIBCOSoftware/flogo-contrib/action/flow/test"
-	"github.com/TIBCOSoftware/flogo-lib/core/activity"
+	"github.com/project-flogo/core/activity"
+	"github.com/project-flogo/core/support/test"
+	"github.com/stretchr/testify/assert"
 )
 
-var activityMetadata *activity.Metadata
+func TestRegister(t *testing.T) {
 
-func getActivityMetadata() *activity.Metadata {
+	ref := activity.GetRef(&JWT{})
+	act := activity.Get(ref)
 
-	if activityMetadata == nil {
-		jsonMetadataBytes, err := ioutil.ReadFile("activity.json")
-		if err != nil {
-			panic("No Json Metadata found for activity.json path")
-		}
-
-		activityMetadata = activity.NewMetadata(string(jsonMetadataBytes))
-	}
-
-	return activityMetadata
-}
-
-func TestCreate(t *testing.T) {
-
-	act := NewActivity(getActivityMetadata())
-
-	if act == nil {
-		t.Error("Activity Not Created")
-		t.Fail()
-		return
-	}
+	assert.NotNil(t, act)
 }
 
 func TestDecrypt(t *testing.T) {
 
-	act := NewActivity(getActivityMetadata())
-	tc := test.NewTestActivityContext(getActivityMetadata())
+	act := &JWT{}
+	tc := test.NewActivityContext(act.Metadata())
 
 	//fmt.Println("#######   Testing JWT Decrypt")
 
@@ -181,6 +162,8 @@ CKuHRG+AP579dncdUnOMvfXOtkdM4vk0+hWASBQzM9xzVcztCa+koAugjVaLS9A+
 	if tc.GetOutput("token") == nil {
 		fmt.Println("******** Test Failed  ********")
 		t.Fail()
+	} else {
+		fmt.Println("******** Result: ", tc.GetOutput("token"))
 	}
 
 	//Test 7 - validate returned token

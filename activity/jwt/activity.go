@@ -5,30 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/TIBCOSoftware/flogo-lib/core/activity"
-	"github.com/TIBCOSoftware/flogo-lib/logger"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/golang-jwt/jwt"
+	"github.com/project-flogo/core/activity"
 )
-
-// activityLog is the default logger for the Log Activity
-var activityLog = logger.GetLogger("activity-JWT")
-
-const (
-	ivToken   = "token"
-	ivHeader  = "header"
-	ivPayload = "payload"
-	ivSecret  = "secret"
-	ivMode    = "mode"
-	ivAlgo    = "algorithm"
-
-	ovToken  = "token"
-	ovValid  = "valid"
-	ovClaims = "claims"
-)
-
-func init() {
-	activityLog.SetLogLevel(logger.InfoLevel)
-}
 
 // JWT is an Activity that works with JWT Tokens
 // It can create, verify and decrypt JWT tokens
@@ -38,139 +17,155 @@ type JWT struct {
 	metadata *activity.Metadata
 }
 
-// NewActivity creates a new AppActivity
-func NewActivity(metadata *activity.Metadata) activity.Activity {
-	return &JWT{metadata: metadata}
+func init() {
+	_ = activity.Register(&JWT{}, New)
 }
+
+var activityMd = activity.ToMetadata(&Input{}, &Output{})
 
 // Metadata returns the activity's metadata
 func (a *JWT) Metadata() *activity.Metadata {
-	return a.metadata
+	return activityMd
+}
+
+// New create a new  activity
+func New(ctx activity.InitContext) (activity.Activity, error) {
+
+	ctx.Logger().Info("In New activity")
+
+	act := &JWT{}
+	return act, nil
 }
 
 // Eval implements api.Activity.Eval - Logs the Message
 func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 
-	activityLog.Debug("In Eval")
-	// Get the runtime values
-	tokenstring, _ := context.GetInput(ivToken).(string)
-	header, _ := context.GetInput(ivHeader).(string)
-	payload, _ := context.GetInput(ivPayload).(string)
-	secret, _ := context.GetInput(ivSecret).(string)
-	sharedEncryptionKey := []byte(secret)
-	mode, _ := context.GetInput(ivMode).(string)
-	algo, _ := context.GetInput(ivAlgo).(string)
+	context.Logger().Debug("In Eval")
 
-	activityLog.Debug(mode, header, payload, tokenstring, secret)
+	in := &Input{}
+	output := &Output{}
+	err = context.GetInputObject(in)
+	if err != nil {
+		return false, err
+	}
+	// Get the runtime values
+	sharedEncryptionKey := []byte(in.Secret)
+
+	context.Logger().Debug(in.Mode, in.Header, in.Payload, in.Token, in.Secret, in.Algorithm)
 
 	// Determine code path based on mode
-	switch mode {
+	switch in.Mode {
 	case "Decode":
-		context.SetOutput(ovClaims, "")
-		context.SetOutput(ovToken, "")
+		output.Claims = ""
+		output.Token = ""
 
 		// Parse takes the token string and a function for looking up the key. The latter is especially
 		// useful if you use multiple keys for your application.  The standard is to use 'kid' in the
 		// head of the token to identify which key to use, but the parsed token (head and claims) is provided
 		// to the callback, providing flexibility.
 
-		token, err := jwt.Parse(tokenstring, func(token *jwt.Token) (interface{}, error) {
+		token, err := jwt.Parse(in.Token, func(token *jwt.Token) (interface{}, error) {
 			// sharedEncryptionKey contains a plain secret or a public key
 			// we used the passed Algo name to determine the handling of the secret
 			// returning the formatted ES/RS key or secret string
 			return sharedEncryptionKey, nil
 		})
 
-		activityLog.Info("Created Token")
+		context.Logger().Info("Created Token")
 
 		if err != nil {
-			context.SetOutput(ovClaims, fmt.Errorf("Token Error: %v", err))
-			activityLog.Info("Parse Failed - Token Error: ", err)
+			output.Claims = fmt.Errorf("Token Error: %v", err).Error()
+			context.Logger().Info("Parse Failed - Token Error: ", err)
 			return true, nil
 		}
 
-		activityLog.Info("Check for Valid Token")
+		context.Logger().Info("Check for Valid Token")
 		// if the token is invalid then return a false
 		if token.Valid {
-			activityLog.Info(token.Claims, token.Header)
+			context.Logger().Info(token.Claims, token.Header)
 		} else {
-			context.SetOutput(ovClaims, fmt.Errorf("Token Invalid: %v", err))
-			activityLog.Info("Token invalid: ", err)
+			output.Claims = fmt.Errorf("Token Invalid: %v", err).Error()
+			context.Logger().Info("Token invalid: ", err)
 			return true, nil
 		}
 
-		activityLog.Info("Decode Claims")
+		context.Logger().Info("Decode Claims")
 		// Take the decoded claims
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 			claimsJSON, _ := json.Marshal(claims)
-			context.SetOutput(ovClaims, string(claimsJSON))
-			activityLog.Info("Valid Token, claims are: ", string(claimsJSON))
-			context.SetOutput(ovValid, true)
+			output.Claims = string(claimsJSON)
+			context.Logger().Info("Valid Token, claims are: ", string(claimsJSON))
+			output.Valid = true
 			return true, nil
 		} else {
-			activityLog.Info("Claims invalid: ", err)
+			context.Logger().Info("Claims invalid: ", err)
 			return true, nil
 		}
 
 	case "Verify":
 
-		activityLog.Info("In Verify - V0.0.8")
+		context.Logger().Info("In Verify - V0.1.0")
 
 		// Set default responses
-		context.SetOutput(ovValid, false)
-		context.SetOutput(ovClaims, "")
-		context.SetOutput(ovToken, "")
+		output.Valid = false
+		output.Claims = ""
+		output.Token = ""
 
 		// Parse takes the token string and a function for looking up the key. The latter is especially
 		// useful if you use multiple keys for your application.  The standard is to use 'kid' in the
 		// head of the token to identify which key to use, but the parsed token (head and claims) is provided
 		// to the callback, providing flexibility.
 
-		token, err := jwt.Parse(tokenstring, func(token *jwt.Token) (interface{}, error) {
+		token, err := jwt.Parse(in.Token, func(token *jwt.Token) (interface{}, error) {
 			// sharedEncryptionKey contains a plain secret or a public key
 			// we used the passed Algo name to determine the handling of the secret
 			// returning the formatted ES/RS key or secret string
 			if err != nil {
-				context.SetOutput(ovClaims, fmt.Errorf("Parse Error: %v", err))
-				activityLog.Info("Parse Failed - Parse Error: ", err)
+				output.Claims = fmt.Errorf("Parse Error: %v", err).Error()
+				context.Logger().Info("Parse Failed - Parse Error: ", err)
+				context.SetOutputObject(output)
 				return true, nil
 			}
-			if isEs(algo) {
+			if isEs(in.Algorithm) {
 				return jwt.ParseECPublicKeyFromPEM(sharedEncryptionKey)
-			} else if isRs(algo) {
+			} else if isRs(in.Algorithm) {
 				return jwt.ParseRSAPublicKeyFromPEM(sharedEncryptionKey)
 			}
 			return sharedEncryptionKey, nil
 		})
 
-		activityLog.Info("Created Token")
+		context.Logger().Info("Created Token")
 
 		if err != nil {
-			context.SetOutput(ovClaims, fmt.Errorf("Token Error: %v", err))
-			activityLog.Info("Parse Failed - Token Error: ", err)
+			output.Claims = fmt.Errorf("Token Error: %v", err).Error()
+			context.Logger().Info("Parse Failed - Token Error: ", err)
+			context.SetOutputObject(output)
 			return true, nil
 		}
 
-		activityLog.Info("Check for Valid Token")
+		context.Logger().Info("Check for Valid Token")
 		// if the token is invalid then return a false
 		if token.Valid {
-			activityLog.Info(token.Claims, token.Header)
+			context.Logger().Info(token.Claims, token.Header)
 		} else {
-			context.SetOutput(ovClaims, fmt.Errorf("Token Invalid: %v", err))
-			activityLog.Info("Token invalid: ", err)
+			output.Claims = fmt.Errorf("Token Invalid: %v", err).Error()
+			context.Logger().Info("Token invalid: ", err)
+			context.SetOutputObject(output)
 			return true, nil
 		}
 
-		activityLog.Info("Decode Claims")
+		context.Logger().Info("Decode Claims")
 		// Take the decoded claims
 		if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 			claimsJSON, _ := json.Marshal(claims)
-			context.SetOutput(ovClaims, string(claimsJSON))
-			activityLog.Info("Valid Token, claims are: ", string(claimsJSON))
-			context.SetOutput(ovValid, true)
+			output.Claims = string(claimsJSON)
+			context.Logger().Info("Valid Token, claims are: ", string(claimsJSON))
+			output.Valid = true
+			context.SetOutputObject(output)
 			return true, nil
 		} else {
-			activityLog.Info("Claims invalid: ", err)
+			context.Logger().Info("Claims invalid: ", err)
+			context.SetOutputObject(output)
 			return true, nil
 		}
 
@@ -179,41 +174,41 @@ func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 	case "Sign":
 		{
 			// Take the inputed header, payload and secret to create a new JWT
-			activityLog.Debug("In Sign")
+			context.Logger().Debug("In Sign")
 
 			var hdr map[string]interface{}
 			claims := jwt.MapClaims{}
 
 			// take the payload (claims) string and unmarshall it into a byte slice
-			if err := json.Unmarshal([]byte(payload), &claims); err != nil {
-				activityLog.Info("Invalid Payload: ", err)
+			if err := json.Unmarshal([]byte(in.Payload), &claims); err != nil {
+				context.Logger().Info("Invalid Payload: ", err)
 				return false, err
 			}
-			activityLog.Debug("Unmarshalled JSON payload", claims)
+			context.Logger().Debug("Unmarshalled JSON payload", claims)
 
 			// Take the header string and unmarshall
-			if err := json.Unmarshal([]byte(header), &hdr); err != nil {
-				activityLog.Info("Invalid Header: ", err)
+			if err := json.Unmarshal([]byte(in.Header), &hdr); err != nil {
+				context.Logger().Info("Invalid Header: ", err)
 				return false, err
 			}
-			activityLog.Debug("Unmarshalled JSON header ", hdr)
+			context.Logger().Debug("Unmarshalled JSON header ", hdr)
 
 			// get the alg value from the header
 			alg := hdr["alg"].(string)
 
 			// if the header and the passed algo method the same
-			if algo != alg {
-				activityLog.Info("Header algo doesn't match algorithm parm")
+			if in.Algorithm != alg {
+				context.Logger().Info("Header algo doesn't match algorithm parm")
 				return false, nil
 			}
 
 			// use the alg name to get the signing method
 			signwith := jwt.GetSigningMethod(alg)
-			activityLog.Debug("signing: ", signwith)
+			context.Logger().Debug("signing: ", signwith)
 
 			// get the tokens object (this creates the first two parts of the token, based on the determined values, rather that using the passed strings)
 			token := jwt.NewWithClaims(signwith, claims)
-			activityLog.Debug("Token Object created", token)
+			context.Logger().Debug("Token Object created", token)
 
 			var key interface{}
 
@@ -221,13 +216,13 @@ func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 			if isEs(alg) {
 				key, err = jwt.ParseECPrivateKeyFromPEM(sharedEncryptionKey)
 				if err != nil {
-					activityLog.Info("Bad ECDSA key", err)
+					context.Logger().Info("Bad ECDSA key", err)
 					return false, err
 				}
 			} else if isRs(alg) {
 				key, err = jwt.ParseRSAPrivateKeyFromPEM(sharedEncryptionKey)
 				if err != nil {
-					activityLog.Info("Bad RSA key", err)
+					context.Logger().Info("Bad RSA key", err)
 					return false, err
 				}
 			} else {
@@ -239,15 +234,20 @@ func (a *JWT) Eval(context activity.Context) (done bool, err error) {
 
 			// if we don't have an error pass it back
 			if err == nil {
-				activityLog.Debug("Token String created", tokenString)
-				context.SetOutput(ovToken, tokenString)
+				context.Logger().Debug("Token String created", tokenString)
+				output.Token = tokenString
+				context.SetOutputObject(output)
 				return true, nil
 			} else {
-				activityLog.Info("Signing error: ", err)
+				context.Logger().Info("Signing error: ", err)
 				return false, err
 			}
 
 		}
+	}
+	err = context.SetOutputObject(output)
+	if err != nil {
+		return false, err
 	}
 
 	return true, nil
