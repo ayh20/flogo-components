@@ -13,18 +13,18 @@ import (
 // It can create, verify and decrypt JWT tokens
 // inputs : {input1, input2, datatype, comparemode}
 // outputs: result (bool)
-type JWT struct {
+type Activity struct {
 	metadata *activity.Metadata
 }
 
 func init() {
-	_ = activity.Register(&JWT{}, New)
+	_ = activity.Register(&Activity{}, New)
 }
 
 var activityMd = activity.ToMetadata(&Input{}, &Output{})
 
 // Metadata returns the activity's metadata
-func (a *JWT) Metadata() *activity.Metadata {
+func (a *Activity) Metadata() *activity.Metadata {
 	return activityMd
 }
 
@@ -33,12 +33,12 @@ func New(ctx activity.InitContext) (activity.Activity, error) {
 
 	ctx.Logger().Info("In New activity")
 
-	act := &JWT{}
+	act := &Activity{}
 	return act, nil
 }
 
 // Eval implements api.Activity.Eval - Logs the Message
-func (a *JWT) Eval(context activity.Context) (done bool, err error) {
+func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 
 	context.Logger().Debug("In Eval")
 

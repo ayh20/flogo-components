@@ -11,7 +11,7 @@ import (
 
 func TestRegister(t *testing.T) {
 
-	ref := activity.GetRef(&JWT{})
+	ref := activity.GetRef(&Activity{})
 	act := activity.Get(ref)
 
 	assert.NotNil(t, act)
@@ -19,7 +19,7 @@ func TestRegister(t *testing.T) {
 
 func TestDecrypt(t *testing.T) {
 
-	act := &JWT{}
+	act := &Activity{}
 	tc := test.NewActivityContext(act.Metadata())
 
 	//fmt.Println("#######   Testing JWT Decrypt")
