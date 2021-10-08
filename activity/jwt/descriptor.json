@@ -10,7 +10,7 @@
   "display": {
     "description": "JWT Tools",
     "category": "Utility",
-    "uid": "ayh20-jwt",
+    "uid": "jwt",
     "visible": true
  },
   "inputs":[
