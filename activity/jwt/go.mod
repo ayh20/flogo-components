@@ -1,4 +1,4 @@
-module github.com/ayh20/flogo-components/activity/jwt/v2
+module github.com/ayh20/flogo-components/activity/jwt
 
 go 1.16
 
