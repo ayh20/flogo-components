@@ -14,7 +14,7 @@ import (
 // inputs : {input1, input2, datatype, comparemode}
 // outputs: result (bool)
 type Activity struct {
-	metadata *activity.Metadata
+	//metadata *activity.Metadata
 }
 
 func init() {
@@ -74,7 +74,7 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 		context.Logger().Info("Created Token")
 
 		if err != nil {
-			output.Claims = fmt.Errorf("Token Error: %v", err).Error()
+			output.Claims = fmt.Errorf("token rrror: %v", err).Error()
 			context.Logger().Info("Parse Failed - Token Error: ", err)
 			return true, nil
 		}
@@ -84,7 +84,7 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 		if token.Valid {
 			context.Logger().Info(token.Claims, token.Header)
 		} else {
-			output.Claims = fmt.Errorf("Token Invalid: %v", err).Error()
+			output.Claims = fmt.Errorf("token invalid: %v", err).Error()
 			context.Logger().Info("Token invalid: ", err)
 			return true, nil
 		}
@@ -104,7 +104,7 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 
 	case "Verify":
 
-		context.Logger().Info("In Verify - V0.1.0")
+		context.Logger().Info("In Verify")
 
 		// Set default responses
 		output.Valid = false
@@ -121,7 +121,7 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 			// we used the passed Algo name to determine the handling of the secret
 			// returning the formatted ES/RS key or secret string
 			if err != nil {
-				output.Claims = fmt.Errorf("Parse Error: %v", err).Error()
+				output.Claims = fmt.Errorf("parse error: %v", err).Error()
 				context.Logger().Info("Parse Failed - Parse Error: ", err)
 				context.SetOutputObject(output)
 				return true, nil
@@ -137,7 +137,7 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 		context.Logger().Info("Created Token")
 
 		if err != nil {
-			output.Claims = fmt.Errorf("Token Error: %v", err).Error()
+			output.Claims = fmt.Errorf("token error: %v", err).Error()
 			context.Logger().Info("Parse Failed - Token Error: ", err)
 			context.SetOutputObject(output)
 			return true, nil
@@ -148,7 +148,7 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 		if token.Valid {
 			context.Logger().Info(token.Claims, token.Header)
 		} else {
-			output.Claims = fmt.Errorf("Token Invalid: %v", err).Error()
+			output.Claims = fmt.Errorf("token invalid: %v", err).Error()
 			context.Logger().Info("Token invalid: ", err)
 			context.SetOutputObject(output)
 			return true, nil
