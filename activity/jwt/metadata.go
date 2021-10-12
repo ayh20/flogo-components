@@ -60,7 +60,7 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 
 //Output data structure
 type Output struct {
-	Token  string `md:"msgtype"`
+	Token  string `md:"token"`
 	Valid  bool   `md:"valid"`
 	Claims string `md:"claims"`
 }
