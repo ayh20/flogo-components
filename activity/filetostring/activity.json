@@ -1,9 +1,9 @@
 {
   "name": "File Reader",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "ref": "github.com/ayh20/flogo-components/activity/filetostring",
   "type": "flogo:activity",
-  "title": "filetostring",
+  "title": "File To String",
   "description": "Reads the contents of a file into a string removing any newline chars",
   "author": "Andy Hampshire <ahampshi@tibco.com>",
   "inputs":[
