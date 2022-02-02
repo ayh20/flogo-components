@@ -1,0 +1,53 @@
+{
+    "name": "awsgetsecret",
+    "type": "flogo:activity",
+    "ref": "github.com/ayh20/flogo-components/activity/awsgetsecret",
+    "version": "0.1.0",
+    "title": "Amazon Secrets Manager Get",
+    "description": "Get a secret from AWS SecretManager",
+    "author": "ayh20",
+    "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/awsgetsecret",
+    "inputs": [
+        {
+            "name": "awsAccessKeyID",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "awsSecretAccessKey",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "assumeRole",
+            "type": "boolean",
+            "required": true
+        },
+        {
+            "name": "roleARN",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "roleSessionName",
+            "type": "string",
+            "required": false
+        },
+        {
+            "name": "awsRegion",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "secretARN",
+            "type": "string",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "secret",
+            "type": "string"
+        }
+    ]
+}
