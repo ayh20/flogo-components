@@ -3,6 +3,8 @@
 Simple function that retrieves a named secret from AWS Secret manager.
 This version ony supports string secrets but can be extended to do binary secrets properly too (returned as an encoded string in this version).
 
+Running this in a AWS Cli configured environment ie Win/Linux where AWS cli is stetup and credentials file is configured means that you DON'T need to supply key/secret as it's picked up. Running under TCI means you need to supply key/secret.
+
 ## Installation
 
 ```bash
