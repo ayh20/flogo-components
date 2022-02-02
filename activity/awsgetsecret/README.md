@@ -78,7 +78,6 @@ Inputs and Outputs:
 | roleSessionName    | A name for the active session                          |
 | awsRegion          | The AWS region your S3 bucket is in                    |
 | secretARN          | The AWS arn for the secret to be retrieved             |
-| body               | The data to be passed to the Sagemaker deployed model  |
 
 ## Ouputs
 
