@@ -5,7 +5,7 @@
     "version": "0.1.0",
     "title": "Amazon Secrets Manager Get",
     "description": "Get a secret from AWS SecretManager",
-    "author": "ayh20",
+    "author": "Andy Hampshire",
     "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/awsgetsecret",
     "inputs": [
         {

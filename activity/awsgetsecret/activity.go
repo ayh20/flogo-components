@@ -6,14 +6,13 @@ import (
 
 	"encoding/base64"
 
-	"github.com/TIBCOSoftware/flogo-lib/core/activity"
-	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/credentials/stscreds"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/secretsmanager"
+	"github.com/project-flogo/core/activity"
 )
 
 const (
@@ -27,35 +26,41 @@ const (
 	ovResult             = "secret"
 )
 
-// log is the default package logger
-var log = logger.GetLogger("activity-awsgetsecret")
-
-// MyActivity is a stub for your Activity implementation
-type MyActivity struct {
-	metadata *activity.Metadata
+type Activity struct {
+	//metadata *activity.Metadata
 }
 
-// NewActivity creates a new activity
-func NewActivity(metadata *activity.Metadata) activity.Activity {
-	return &MyActivity{metadata: metadata}
+func init() {
+	_ = activity.Register(&Activity{}, New)
 }
 
-// Metadata implements activity.Activity.Metadata
-func (a *MyActivity) Metadata() *activity.Metadata {
-	return a.metadata
+var activityMd = activity.ToMetadata(&Input{}, &Output{})
+
+// Metadata returns the activity's metadata
+func (a *Activity) Metadata() *activity.Metadata {
+	return activityMd
 }
 
-// Eval implements activity.Activity.Eval
-func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
+// New create a new  activity
+func New(ctx activity.InitContext) (activity.Activity, error) {
+
+	ctx.Logger().Info("In New activity")
+
+	act := &Activity{}
+	return act, nil
+}
+
+// Eval implements api.Activity.Eval - Logs the Message
+func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 
 	// Get the values from Flogo
-	log.Debug("Get Parms")
+	context.Logger().Debug("Get Parms")
 	awsSecretARN := context.GetInput(ivSecretARN).(string)
 	awsRegion := context.GetInput(ivAwsRegion).(string)
 	assumerole := context.GetInput(ivAssumeRole).(bool)
 
 	// AWS Credentials, only if needed
-	log.Debug("use Credentials")
+	context.Logger().Debug("use Credentials")
 	var awsAccessKeyID, awsSecretAccessKey = "", ""
 	if context.GetInput(ivAwsAccessKeyID) != nil {
 		awsAccessKeyID = context.GetInput(ivAwsAccessKeyID).(string)
@@ -65,7 +70,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	}
 
 	// Create a session with Credentials only if they are set
-	log.Debug("Create Session")
+	context.Logger().Debug("Create Session")
 	var awsSession *session.Session
 	if awsAccessKeyID != "" && awsSecretAccessKey != "" {
 		// Create new credentials using the accessKey and secretKey
@@ -84,7 +89,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 	}
 	// AssumeRole processing
 	if assumerole {
-		log.Debug("Assume role")
+		context.Logger().Debug("Assume role")
 		rolearn := context.GetInput(ivRoleARN).(string)
 		rolesessioname := context.GetInput(ivRoleSessionName).(string)
 
@@ -96,7 +101,7 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 			p.Duration = time.Duration(900) * time.Second
 		})
 	}
-	log.Debug("Connect to Secrets manager")
+	context.Logger().Debug("Connect to Secrets manager")
 	svc := secretsmanager.New(awsSession,
 		aws.NewConfig().WithRegion(awsRegion))
 	input := &secretsmanager.GetSecretValueInput{
@@ -151,10 +156,10 @@ func (a *MyActivity) Eval(context activity.Context) (done bool, err error) {
 		secretString = string(decodedBinarySecretBytes[:len])
 	}
 
-	log.Debug("Result")
-	log.Debug(result)
-	log.Debug("Secret")
-	log.Debug(secretString)
+	context.Logger().Debug("Result")
+	context.Logger().Debug(result)
+	context.Logger().Debug("Secret")
+	context.Logger().Debug(secretString)
 	// Set the output value in the context
 	context.SetOutput(ovResult, secretString)
 
