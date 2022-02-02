@@ -1,7 +1,7 @@
 # Amazon Get Secret
 
 Simple function that retrieves a named secret from AWS Secret manager.
-This version ony supports string secrets but can be extended to do binary secrets too.
+This version ony supports string secrets but can be extended to do binary secrets properly too (returned as an encoded string in this version).
 
 ## Installation
 
