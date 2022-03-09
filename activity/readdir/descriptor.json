@@ -2,7 +2,7 @@
     "name": "readdir",
     "type": "flogo:activity",
     "ref": "github.com/ayh20/flogo-components/activity/readdir",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "title": "Read directory",
     "description": "Reads contents of a directory",
     "author": "ayh20",
