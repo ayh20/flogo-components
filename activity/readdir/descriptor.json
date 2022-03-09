@@ -1,0 +1,23 @@
+{
+    "name": "readdir",
+    "type": "flogo:activity",
+    "ref": "github.com/ayh20/flogo-components/activity/readdir",
+    "version": "0.1.0",
+    "title": "Read directory",
+    "description": "Reads contents of a directory",
+    "author": "ayh20",
+    "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/readdir",
+    "inputs": [
+        {
+            "name": "dirnamename",
+            "type": "string",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "result",
+            "type": "object"
+        }
+    ]
+}

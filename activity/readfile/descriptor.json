@@ -1,0 +1,23 @@
+{
+    "name": "readfile",
+    "type": "flogo:activity",
+    "ref": "github.com/ayh20/flogo-components/activity/readfile",
+    "version": "0.1.0",
+    "title": "Read a File",
+    "description": "Reads a file",
+    "author": "ayh20",
+    "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/readfile",
+    "inputs": [
+        {
+            "name": "filename",
+            "type": "string",
+            "required": true
+        }
+    ],
+    "outputs": [
+        {
+            "name": "result",
+            "type": "string"
+        }
+    ]
+}
