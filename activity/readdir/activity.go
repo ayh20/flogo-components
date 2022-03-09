@@ -4,7 +4,7 @@ package readdir
 // Imports
 import (
 	//"encoding/json"
-
+	"io/ioutil"
 	"os"
 
 	"github.com/project-flogo/core/activity"
@@ -57,7 +57,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	}
 
 	// Read the file
-	osdirdata, err := os.ReadDir(dirname)
+	osdirdata, err := ioutil.ReadDir(dirname) //os.ReadDir(dirname)
 	if err != nil {
 		ctx.Logger().Debugf("Error while reading file: %s\n", err.Error())
 		return false, err
