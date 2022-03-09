@@ -9,7 +9,7 @@
     "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/readdir",
     "inputs": [
         {
-            "name": "dirnamename",
+            "name": "dirname",
             "type": "string",
             "required": true
         }
