@@ -3,6 +3,7 @@ package readfile
 
 // Imports
 import (
+	"io/ioutil"
 	"os"
 
 	"github.com/project-flogo/core/activity"
@@ -53,7 +54,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	}
 
 	// Read the file
-	fileBytes, err := os.ReadFile(in.Filename)
+	fileBytes, err := ioutil.ReadFile(in.Filename) //os.ReadFile(in.Filename)
 	if err != nil {
 		ctx.Logger().Debugf("Error while reading file: %s\n", err.Error())
 		return false, err

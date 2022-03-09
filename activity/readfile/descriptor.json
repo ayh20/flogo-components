@@ -2,7 +2,7 @@
     "name": "readfile",
     "type": "flogo:activity",
     "ref": "github.com/ayh20/flogo-components/activity/readfile",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "title": "Read a File",
     "description": "Reads a file",
     "author": "ayh20",
