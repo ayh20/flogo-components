@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"reflect"
 
-	//"sort"
+	"sort"
 
 	"github.com/project-flogo/core/data"
 	"github.com/project-flogo/core/data/expression/function"
@@ -44,13 +44,24 @@ func (fnjsontocsv) Eval(params ...interface{}) (interface{}, error) {
 	if err != nil {
 		return "", err
 	}
-	//sort.Sort(pts)
+	sort.Sort(pts)
 	keys := pts.Strings()
-	//header := w.getHeader(pts)
+	header := pts.DotNotations(false)
 
 	var output string
 
 	// write header ?
+	for col, val := range header {
+		if col > 0 {
+			output = output + "," + val
+		} else {
+			if output == "" {
+				output = output + val
+			} else {
+				output = output + "\n" + val
+			}
+		}
+	}
 	//if err := w.Write(header); err != nil {
 	//	return err
 	//}
