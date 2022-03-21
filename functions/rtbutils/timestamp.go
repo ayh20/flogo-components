@@ -28,7 +28,7 @@ func (fntimestamp) Eval(params ...interface{}) (interface{}, error) {
 
 	format, err := coerce.ToString(params[0])
 	if err != nil {
-		return nil, fmt.Errorf("Date Format argument must be string")
+		return nil, fmt.Errorf("date format argument must be string")
 	}
 
 	t := time.Now().Format(format)

@@ -27,11 +27,11 @@ func (fndatetostring) Eval(params ...interface{}) (interface{}, error) {
 
 	date, err := coerce.ToDateTime(params[0])
 	if err != nil {
-		return nil, fmt.Errorf("Format date first argument must be a datetime")
+		return nil, fmt.Errorf("format date first argument must be a datetime")
 	}
 	format, err := coerce.ToString(params[1])
 	if err != nil {
-		return nil, fmt.Errorf("Format date second argument must be string")
+		return nil, fmt.Errorf("format date second argument must be string")
 	}
 
 	t := date.Format(format)

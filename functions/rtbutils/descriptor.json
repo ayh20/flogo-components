@@ -2,7 +2,7 @@
   "name": "rtbutils",
   "type": "flogo:function",
   "ref": "github.com/ayh20/flogo-components/functions/rtbutils",
-  "version": "0.1.3", 
+  "version": "0.1.4", 
   "title": "Miscellaneous functions for RTB project and others",
   "description": "misc utils",
   "homepage": "https://github.com/ayh20/flogo-components/tree/master/functions/rtbutils",
@@ -51,6 +51,20 @@
           "name": "separator",
           "type": "string",
           "description" : "Chars to use to separate items"
+        }
+      ], 
+      "return": {
+        "type": "string"
+    }
+    },
+    {
+      "name": "jsontocsv",
+      "description": "Takes the passed json string and flattens it to a csv string",
+      "args": [
+        {
+          "name": "inputarray",
+          "type": "string",
+          "description" : "The input JSON objkect"
         }
       ], 
       "return": {
