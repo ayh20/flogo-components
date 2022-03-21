@@ -50,22 +50,23 @@ func (fnjsontocsv) Eval(params ...interface{}) (interface{}, error) {
 
 	var output string
 
-	// write header ?
-	for col, val := range header {
-		if col > 0 {
-			output = output + "," + val
-		} else {
-			if output == "" {
-				output = output + val
+	// write header ... don't do the ATM
+	var writeheader bool = false
+	if writeheader {
+		for col, val := range header {
+			if col > 0 {
+				output = output + "," + val
 			} else {
-				output = output + "\n" + val
+				if output == "" {
+					output = output + val
+				} else {
+					output = output + "\n" + val
+				}
 			}
 		}
 	}
-	//if err := w.Write(header); err != nil {
-	//	return err
-	//}
 
+	// process the flattened data... it could be one instance or multiple
 	for _, result := range results {
 		record := toRecord(result, keys)
 		for col, val := range record {
