@@ -64,6 +64,7 @@ func (fnjsontocsv) Eval(params ...interface{}) (interface{}, error) {
 				}
 			}
 		}
+		return output, nil
 	}
 
 	// process the flattened data... it could be one instance or multiple
