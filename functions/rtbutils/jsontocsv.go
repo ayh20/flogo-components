@@ -25,7 +25,7 @@ func (fnjsontocsv) Name() string {
 }
 
 func (fnjsontocsv) Sig() (paramTypes []data.Type, isVariadic bool) {
-	return []data.Type{data.TypeString}, false
+	return []data.Type{data.TypeString, data.TypeBool}, false
 }
 
 func (fnjsontocsv) Eval(params ...interface{}) (interface{}, error) {
@@ -51,7 +51,7 @@ func (fnjsontocsv) Eval(params ...interface{}) (interface{}, error) {
 	var output string
 
 	// write header ... don't do the ATM
-	var writeheader bool = false
+	var writeheader bool = params[1].(bool)
 	if writeheader {
 		for col, val := range header {
 			if col > 0 {

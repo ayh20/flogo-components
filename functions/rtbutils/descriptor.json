@@ -65,6 +65,11 @@
           "name": "inputarray",
           "type": "string",
           "description" : "The input JSON objkect"
+        },
+        {
+          "name": "writehdr",
+          "type": "bool",
+          "description" : "Write a hdr row with the data"
         }
       ], 
       "return": {
