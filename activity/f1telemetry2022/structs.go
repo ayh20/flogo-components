@@ -78,7 +78,7 @@ type F1SessionZone struct {
 	ZoneFlag1  int8    `struc:"int8,little"`    // -1 = invalid/unknown, 0 = none, 1 = green, 2 = blue, 3 = yellow, 4 = red
 }
 type F1SessionWeatherForecast struct {
-	SessionType            uint8 `struc:"uint8,little"` // 0 = unknown, 1 = P1, 2 = P2, 3 = P3, 4 = Short P, 5 = Q1, 6 = Q2, 7 = Q3, 8 = Short Q, 9 = OSQ, 10 = R, 11 = R2,  12 = Time Trial
+	SessionType            uint8 `struc:"uint8,little"` // 0 = unknown, 1 = P1, 2 = P2, 3 = P3, 4 = Short P, 5 = Q1, 6 = Q2, 7 = Q3, 8 = Short Q, 9 = OSQ, 10 = R, 11 = R2,  12 = R3, 13 = Time Trial
 	TimeOffset             uint8 `struc:"uint8,little"` // Time in minutes the forecast is for
 	Weather                uint8 `struc:"uint8,little"` // Weather - 0 = clear, 1 = light cloud, 2 = overcast 3 = light rain, 4 = heavy rain, 5 = storm
 	TrackTemperature       int8  `struc:"int8,little"`  // Track temp. in degrees Celsius
@@ -99,11 +99,11 @@ type F1Session struct {
 	TrackLength         uint16 `struc:"uint16,little"` // Track length in metres
 	SessionType         uint8  `struc:"uint8,little"`  // 0 = unknown, 1 = P1, 2 = P2, 3 = P3, 4 = Short P, 5 = Q1, 6 = Q2, 7 = Q3, 8 = Short Q, 9 = OSQ,  10 = R, 11 = R2, 12 = Time Trial
 	TrackID             int8   `struc:"int8,little"`   // -1 for unknown, 0-21 for tracks, see appendix
-	Formula             uint8  `struc:"uint8,little"`  // Formular, 0 = F1 modern, 1 = F1 classic, 2 - F2, 3 = F1 Generic
+	Formula             uint8  `struc:"uint8,little"`  // Formula, 0 = F1 modern, 1 = F1 classic, 2 - F2, 3 = F1 Generic, 4 = Beta, 5 = Supercars
 	SessionTimeLeft     uint16 `struc:"uint16,little"` // Time left in session in seconds
 	SessionDuration     uint16 `struc:"uint16,little"` // Session duration in seconds
 	PitSpeedLimit       uint8  `struc:"uint8,little"`  // Pit speed limit in kilometres per hour
-	GamePaused          uint8  `struc:"uint8,little"`  // Whether the game is paused
+	GamePaused          uint8  `struc:"uint8,little"`  // Whether the game is paused – network game only
 	IsSpectating        uint8  `struc:"uint8,little"`  // Whether the player is spectating
 	SpectatorCarIndex   uint8  `struc:"uint8,little"`  // Index of the car being spectated
 	SliProNativeSupport uint8  `struc:"uint8,little"`  // SLI Pro support, 0 = inactive, 1 = active
@@ -133,7 +133,10 @@ type F1Session struct {
 	DRSAssist              uint8  `struc:"uint8,little"`  // 0 = off, 1 = on
 	DynamicRacingLine      uint8  `struc:"uint8,little"`  // 0 = off, 1 = corners only, 2 = full
 	DynamicRacingLineType  uint8  `struc:"uint8,little"`  // 0 = 2D, 1 = 3D
-
+	GameMode               uint8  `struc:"uint8,little"`  // Game mode id - see appendix
+	RuleSet                uint8  `struc:"uint8,little"`  // Ruleset - see appendix
+	TimeOfDay              uint32 `struc:"uint32,little"` // Local time of day - minutes since midnight
+	M_sessionLength        uint8  `struc:"uint8,little"`  // 0 = None, 2 = Very Short, 3 = Short, 4 = Medium , 5 = Medium Long, 6 = Long, 7 = Full
 }
 
 // F1LapData (Type 2 x22) - Struct for the unpacking of the UDP data format
@@ -165,6 +168,13 @@ type F1LapData struct {
 	PitStopShouldServePen       uint8   `struc:"uint8,little"`   // Whether the car should serve a penalty at this stop
 }
 
+// F1LapData (Type 2 x1) - Struct for the unpacking of the UDP data format additional fields
+// Frequency: Rate as specified in menus
+type F1LapDataExtra struct {
+	TimeTrialPBCarIdx    uint8 `struc:"uint8,little"` // Index of Personal Best car in time trial (255 if invalid)
+	TimeTrialRivalCarIdx uint8 `struc:"uint8,little"` // Index of Rival car in time trial (255 if invalid)
+}
+
 // F1Event (Type 3 x1) - Struct for the unpacking of the UDP data format
 // Frequency: When the event occurs
 type F1Event struct {
@@ -193,11 +203,12 @@ type F1EventDetailsPenalty struct {
 // F1EventDetailsFastestLap (Type 3 x1) - Struct for the unpacking of the UDP data format
 // Frequency: When the event occurs
 type F1EventDetailsSpeedTrap struct {
-	VehicleIndex            uint8   `struc:"uint8,little"`   // Vehicle index of the vehicle triggering speed trap
-	Speed                   float32 `struc:"float32,little"` // Top speed achieved in kilometres per hour
-	OverallFastestInSession uint8   `struc:"uint8,little"`   // Overall fastest speed in session = 1, otherwise 0
-	DriverFastestInSession  uint8   `struc:"uint8,little"`   // Fastest speed for driver in session = 1, otherwise 0
-
+	VehicleIndex               uint8   `struc:"uint8,little"`   // Vehicle index of the vehicle triggering speed trap
+	Speed                      float32 `struc:"float32,little"` // Top speed achieved in kilometres per hour
+	OverallFastestInSession    uint8   `struc:"uint8,little"`   // Overall fastest speed in session = 1, otherwise 0
+	DriverFastestInSession     uint8   `struc:"uint8,little"`   // Fastest speed for driver in session = 1, otherwise 0
+	FastestVehicleIdxInSession uint8   `struc:"uint8,little"`   // Vehicle index of the vehicle that is the fastest in this session
+	FastestSpeedInSession      float32 `struc:"float32,little"` // Speed of the vehicle that is the fastest in this session
 }
 
 // F1EventDetailStartLights (Type 3 x1) - Struct for the unpacking of the UDP data format
@@ -362,6 +373,7 @@ type F1FinalClassificationData struct {
 	NumTyreStints    uint8    `struc:"uint8,little"`    // Number of tyres stints up to maximum
 	TyreStintsActual [8]uint8 `struc:"[8]uint8,little"` // Actual tyres used by this driver
 	TyreStintsVisual [8]uint8 `struc:"[8]uint8,little"` // Visual tyres used by this driver
+	TyreStintsEndLap [8]uint8 `struc:"[8]uint8,little"` // The lap number stints end on
 }
 
 // F1FinalClassificationPacket - (Type 8 x1) Struct for the unpacking of the UDP data format
@@ -413,6 +425,7 @@ type F1CarDamageData struct {
 	DiffuserDamage       uint8   `struc:"uint8,little"`   // Diffuser damage (percentage)
 	SidepodDamage        uint8   `struc:"uint8,little"`   // Sidepod damage (percentage)
 	DrsFault             uint8   `struc:"uint8,little"`   // Indicator for DRS fault, 0 = OK, 1 = fault
+	ErsFault             uint8   `struc:"uint8,little"`   // Indicator for ERS fault, 0 = OK, 1 = fault
 	GearBoxDamage        uint8   `struc:"uint8,little"`   // Gear box damage (percentage)
 	EngineDamage         uint8   `struc:"uint8,little"`   // Engine damage (percentage)
 	EngineMGUHWear       uint8   `struc:"uint8,little"`   // Engine wear MGU-H (percentage)
@@ -421,6 +434,8 @@ type F1CarDamageData struct {
 	EngineICEWear        uint8   `struc:"uint8,little"`   // Engine wear ICE (percentage)
 	EngineMGUKWear       uint8   `struc:"uint8,little"`   // Engine wear MGU-K (percentage)
 	EngineTCWear         uint8   `struc:"uint8,little"`   // Engine wear TC (percentage)
+	EngineBlown          uint8   `struc:"uint8,little"`   // Engine blown, 0 = OK, 1 = fault
+	EngineSeized         uint8   `struc:"uint8,little"`   // Engine seized, 0 = OK, 1 = fault
 }
 
 // F1SessionHistoryData - (Type 11 x1 x100 x8) Struct for the unpacking of the UDP data format

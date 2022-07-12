@@ -129,6 +129,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 		// Note - Output array is:  Timestamp + array of car CSV data seprated by a "|"
 
 		unpLapdata := &F1LapData{}
+		unpLapdataExtra := &F1LapDataExtra{}
 
 		arraystring := ""
 
@@ -141,7 +142,14 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 			ctx.Logger().Debugf("LapData unpacked: %v\n%+v\n", i, unpLapdata)
 			arraystring = arraystring + fmt.Sprintf("|%v,", i) + getStrings(unpLapdata)
 		}
-		output.Data = outputHeader + arraystring
+
+		err = struc.Unpack(buf, unpLapdataExtra)
+		if err != nil {
+			ctx.Logger().Debugf("Unpack Fail: F1LapDataExtra ", err.Error())
+			return false, err
+		}
+		// Send all fields
+		output.Data = outputHeader + "|" + getStrings(unpLapdataExtra) + arraystring
 
 	case 3: //Event
 		unpEvent := &F1Event{}
