@@ -136,7 +136,7 @@ type F1Session struct {
 	GameMode               uint8  `struc:"uint8,little"`  // Game mode id - see appendix
 	RuleSet                uint8  `struc:"uint8,little"`  // Ruleset - see appendix
 	TimeOfDay              uint32 `struc:"uint32,little"` // Local time of day - minutes since midnight
-	M_sessionLength        uint8  `struc:"uint8,little"`  // 0 = None, 2 = Very Short, 3 = Short, 4 = Medium , 5 = Medium Long, 6 = Long, 7 = Full
+	SessionLength          uint8  `struc:"uint8,little"`  // 0 = None, 2 = Very Short, 3 = Short, 4 = Medium , 5 = Medium Long, 6 = Long, 7 = Full
 }
 
 // F1LapData (Type 2 x22) - Struct for the unpacking of the UDP data format
