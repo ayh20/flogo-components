@@ -100,7 +100,7 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	output := &Output{}
 
-	output.Output = string(jsonBs)
+	output.Result = string(jsonBs)
 
 	err = ctx.SetOutputObject(output)
 	if err != nil {

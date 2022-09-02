@@ -44,6 +44,6 @@ func TestEval(t *testing.T) {
 	err = tc.GetOutputObject(aOutput)
 	assert.Nil(t, err)
 
-	b, _ := json.Marshal(aOutput.Output)
+	b, _ := json.Marshal(aOutput.Result)
 	fmt.Println(string(b))
 }

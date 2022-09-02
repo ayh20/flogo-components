@@ -1,29 +1,30 @@
 {
-  "name": "Parquet File Parser",
+  "name": "parseparquet",
+  "author": "Andy Hampshire",
   "type": "flogo:activity",
-  "version": "0.0.3",
   "ref": "github.com/ayh20/flogo-components/activity/parseparquet",
-  "title": "Parquet File Parser",
-  "description": "Parse Parquet into a Flogo Array (Forked from activity created by Andy Hampshire)",
+  "version": "0.1.0",
+  "title": "parseparquet",
+  "description": "parseparquet",
   "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/parseparquet",
-  "input":[
+  "input": [
     {
-      "name": "parquetFile",
+      "name": "filename",
       "required": true,
       "type": "string"
     },
     {
-      "name": "maxRows",
+      "name": "maxrows",
       "type": "integer"
     },
     {
-      "name": "initRow",
+      "name": "initrow",
       "type": "integer"
     }
   ],
   "output": [
     {
-      "name": "output",
+      "name": "result",
       "type": "string"
     }
   ]
