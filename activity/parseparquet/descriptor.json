@@ -9,18 +9,16 @@
   "input":[
     {
       "name": "parquetFile",
-      "type": "string",
-      "required": true
+      "required": true,
+      "type": "string"
     },
     {
       "name": "maxRows",
-      "type": "integer",
-      "required": false
+      "type": "integer"
     },
     {
       "name": "initRow",
-      "type": "integer",
-      "required": false
+      "type": "integer"
     }
   ],
   "output": [
