@@ -6,8 +6,7 @@
   "title": "Parquet File Parser",
   "description": "Parse Parquet into a Flogo Array (Forked from activity created by Andy Hampshire)",
   "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/parseparquet",
-  "author": "Stefano Pantaloni <spantalo@tibco.com>",
-  "inputs":[
+  "input":[
     {
       "name": "parquetFile",
       "type": "string",
@@ -24,8 +23,7 @@
       "required": false
     }
   ],
-  
-  "outputs": [
+  "output": [
     {
       "name": "output",
       "type": "string"
