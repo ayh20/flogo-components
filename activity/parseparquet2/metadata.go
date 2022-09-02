@@ -1,4 +1,4 @@
-package parseparquet
+package parseparquet2
 
 import "github.com/project-flogo/core/data/coerce"
 

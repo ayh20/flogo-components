@@ -1,12 +1,12 @@
 {
-  "name": "parseparquet",
+  "name": "parseparquet2",
   "author": "Andy Hampshire",
   "type": "flogo:activity",
-  "ref": "github.com/ayh20/flogo-components/activity/parseparquet",
+  "ref": "github.com/ayh20/flogo-components/activity/parseparquet2",
   "version": "0.1.0",
   "title": "parseparquet",
   "description": "parseparquet",
-  "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/parseparquet",
+  "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/parseparquet2",
   "input": [
     {
       "name": "filename",

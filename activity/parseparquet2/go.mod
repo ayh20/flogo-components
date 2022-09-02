@@ -1,4 +1,4 @@
-module parseparquet
+module parseparquet2
 
 go 1.14
 
