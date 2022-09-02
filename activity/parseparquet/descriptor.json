@@ -1,7 +1,7 @@
 {
   "name": "Parquet File Parser",
   "type": "flogo:activity",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "ref": "github.com/ayh20/flogo-components/activity/parseparquet",
   "title": "Parquet File Parser",
   "description": "Parse Parquet into a Flogo Array (Forked from activity created by Andy Hampshire)",
