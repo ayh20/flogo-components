@@ -6,8 +6,8 @@ import (
 
 	// do not use, old version
 	"github.com/project-flogo/core/activity"
-	//"github.com/xitongsys/parquet-go-source/local"
-	//"github.com/xitongsys/parquet-go/reader"
+	"github.com/xitongsys/parquet-go-source/local"
+	"github.com/xitongsys/parquet-go/reader"
 )
 
 // Activity is a Parquet parser
@@ -67,24 +67,23 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 
 	ctx.Logger().Debugf("Processing file: %s, [%s-%s] ", parquetFile, initRow, maxRows)
 
-	// fr, error := local.NewLocalFileReader(parquetFile)
-	// if error != nil {
-	// 	return false, fmt.Errorf("error opening the specified file: %v", error)
-	// }
+	fr, error := local.NewLocalFileReader(parquetFile)
+	if error != nil {
+		return false, fmt.Errorf("error opening the specified file: %v", error)
+	}
 
-	// pr, error := reader.NewParquetReader(fr, nil, 4)
-	// if error != nil {
-	// 	return false, fmt.Errorf("error reading the specified file: %v", error)
-	// }
+	pr, error := reader.NewParquetReader(fr, nil, 4)
+	if error != nil {
+		return false, fmt.Errorf("error reading the specified file: %v", error)
+	}
 
-	//num := int(pr.GetNumRows())
-	res := 1234
+	num := int(pr.GetNumRows())
 
-	// res, error := pr.ReadByNumber(num)
-	// if error != nil {
-	// 	ctx.Logger().Debugf("Read Fail ", error.Error())
-	// 	return false, error
-	// }
+	res, error := pr.ReadByNumber(num)
+	if error != nil {
+		ctx.Logger().Debugf("Read Fail ", error.Error())
+		return false, error
+	}
 
 	jsonBs, error := json.Marshal(res)
 	if error != nil {
@@ -95,8 +94,8 @@ func (a *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	fmt.Println("JSON:")
 	fmt.Println(string(jsonBs))
 
-	//pr.ReadStop()
-	//fr.Close()
+	pr.ReadStop()
+	fr.Close()
 
 	output := &Output{}
 
