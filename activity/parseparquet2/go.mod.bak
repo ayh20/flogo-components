@@ -1,4 +1,4 @@
-module github.com/ayh20/flogo-components/activity/parseparquet2
+module parseparquet2
 
 go 1.14
 
