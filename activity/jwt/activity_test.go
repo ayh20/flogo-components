@@ -22,21 +22,10 @@ func TestDecrypt(t *testing.T) {
 	act := &Activity{}
 	tc := test.NewActivityContext(act.Metadata())
 
-	//fmt.Println("#######   Testing JWT Decrypt")
+	fmt.Println("#######   Testing JWT Decrypt")
 
-	/* 	//test1
-	   	tc.SetInput("token", `eyJhbGciOiJkaXIiLCJlbmMiOiJBMTI4R0NNIn0..jg45D9nmr6-8awml.z-zglLlEw9MVkYHi-Znd9bSwc-oRGbqKzf9WjXqZxno.kqji2DiZHZmh-1bLF6ARPw`)
-	   	tc.SetInput("secret", "itsa16bytesecret")
-	   	tc.SetInput("mode", "Decrypt")
-	   	tc.SetInput("algorithm", "algorithm")
-	   	act.Eval(tc)
-
-	   	if tc.GetOutput("result") == nil {
-	   		t.Fail()
-	   	} */
-
-	//test2
-	fmt.Println("===> Test2")
+	//test1
+	fmt.Println("===> Test1")
 	tc.SetInput("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ")
 	tc.SetInput("secret", "secret")
 	tc.SetInput("mode", "Verify")
@@ -50,8 +39,8 @@ func TestDecrypt(t *testing.T) {
 		fmt.Println("******** Result: ", tc.GetOutput("valid"), tc.GetOutput("claims"))
 	}
 
-	//test2a
-	fmt.Println("===> Test2A")
+	//test2
+	fmt.Println("===> Test2")
 	tc.SetInput("token", "xeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ")
 	tc.SetInput("secret", "secret")
 	tc.SetInput("mode", "Verify")
@@ -128,7 +117,7 @@ func TestDecrypt(t *testing.T) {
 	fmt.Println("===> Test6")
 	tc.SetInput("header", `{"typ":"JWT","alg":"RS256"}`)
 	tc.SetInput("algorithm", "RS256")
-	tc.SetInput("payload", `{"foo":"bar","nbf":1444478400}`)
+	tc.SetInput("payload", `{"foo":"bar2","nbf":987654321}`)
 	tc.SetInput("secret", `-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEA4f5wg5l2hKsTeNem/V41fGnJm6gOdrj8ym3rFkEU/wT8RDtn
 SgFEZOQpHEgQ7JL38xUfU0Y3g6aYw9QT0hJ7mCpz9Er5qLaMXJwZxzHzAahlfA0i
@@ -196,7 +185,7 @@ ODIRe1AuTyHceAbewn8b462yEWKARdpd9AjQW5SIVPfdsz5B6GlYQ5LdYKtznTuy
 
 	//Test 8 - validate token
 	fmt.Println("===> Test8")
-	lasttoken = tc.GetOutput("token").(string)
+	//lasttoken = tc.GetOutput("token").(string)
 	tc.SetInput("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsIng1dCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSIsImtpZCI6IllNRUxIVDBndmIwbXhvU0RvWWZvbWpxZmpZVSJ9.eyJhdWQiOiJodHRwOi8vZmxvZ28udGVzdDEiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC80N2VjMGM4Yy0yMDdkLTQ3NzQtOGNjOS02ZDNmOGRhMzE3OGUvIiwiaWF0IjoxNTg1MTQ5MTE1LCJuYmYiOjE1ODUxNDkxMTUsImV4cCI6MTU4NTE1MzAxNSwiYWlvIjoiNDJkZ1lIZ1NGaXlwdTFVL3lyZDZYV2YvdFZvNUFBPT0iLCJhcHBpZCI6IjNhNjRjNGQ1LTQ1M2ItNGU1Ni05ZGIyLTJmNGFiMzk2OWQ5ZSIsImFwcGlkYWNyIjoiMSIsImlkcCI6Imh0dHBzOi8vc3RzLndpbmRvd3MubmV0LzQ3ZWMwYzhjLTIwN2QtNDc3NC04Y2M5LTZkM2Y4ZGEzMTc4ZS8iLCJvaWQiOiIzNGNkNGQ4Ni1kMmM0LTRkMjQtOWU2My0yY2ZjMmJkMDU4OWYiLCJzdWIiOiIzNGNkNGQ4Ni1kMmM0LTRkMjQtOWU2My0yY2ZjMmJkMDU4OWYiLCJ0aWQiOiI0N2VjMGM4Yy0yMDdkLTQ3NzQtOGNjOS02ZDNmOGRhMzE3OGUiLCJ1dGkiOiJZSExUekVzbW5VYUlyc1c1R1htTEFBIiwidmVyIjoiMS4wIn0.ZAPvx8urJ1vWbUh86lNfzM4I9G2AVIVF522ev2m_ZkLyxo_m6SrXtAHAyxI3U72xt1Q0Z8MyjUSSXnLG5SuyWPzftSUzAY0wRCHLl-Yl9HZPsp258qaW0I5j0UM70oqeEhFnK5Y_gc9HC8IoZnDs71kuIM5vlceKuSYRWhb-XCBUlteUlJ9rO1GxyrCoruxppU-zdqo-c4e8qbQW0zqOA6iavdYyoflWOhaAKRTlOPbb-MpBL_Zt5WvKNi13JCD09ps3mdokCM1dyEo72rUefoSlDZbA4JIaveVz2e2Iq0PL6FcdEaxNkXvr_mIEl0Rj7DElCSdYYa3m0z64cSJVIQ")
 	//tc.SetInput("secret", "secret")
 	tc.SetInput("mode", "Decode")
