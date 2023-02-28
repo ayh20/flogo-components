@@ -71,12 +71,12 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 			return sharedEncryptionKey, nil
 		})
 
-		context.Logger().Info("Created Token")
-
 		if err != nil {
 			output.Claims = fmt.Errorf("token rrror: %v", err).Error()
 			context.Logger().Info("Parse Failed - Token Error: ", err)
 			return true, nil
+		} else {
+			context.Logger().Info("Parsed Token")
 		}
 
 		context.Logger().Info("Check for Valid Token")
@@ -134,13 +134,13 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 			return sharedEncryptionKey, nil
 		})
 
-		context.Logger().Info("Created Token")
-
 		if err != nil {
 			output.Claims = fmt.Errorf("token error: %v", err).Error()
 			context.Logger().Info("Parse Failed - Token Error: ", err)
 			context.SetOutputObject(output)
 			return true, nil
+		} else {
+			context.Logger().Info("Parsed Token")
 		}
 
 		context.Logger().Info("Check for Valid Token")
