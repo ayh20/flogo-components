@@ -2,6 +2,18 @@
 
 This package adds function for encrypting and decrypting using AES GCM.
 
+## Installation
+
+```CLI
+flogo install github.com/ayh20/flogo-components/functions/crypto
+```
+
+Link for TCI:
+
+```
+github.com/ayh20/flogo-components/functions/crypto
+```
+
 ## encrypt()
 Encrypt given byte array with provide 128bit or 256 bit key.
 
