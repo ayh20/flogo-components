@@ -34,7 +34,7 @@ func Encrypt(key []byte, plaintext []byte) ([]byte, error) {
 func EncryptRsa(key []byte, plaintext []byte) ([]byte, error) {
 	block, _ := pem.Decode(key)
 	if block == nil {
-		return nil, errors.New("public key error")
+		return nil, errors.New("public key error: " + string(key))
 	}
 	pubInterface, err := x509.ParsePKIXPublicKey(block.Bytes)
 	if err != nil {
