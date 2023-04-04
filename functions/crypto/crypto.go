@@ -75,5 +75,9 @@ func DecryptRsa(key []byte, ciphertext []byte) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("parse private key error: [%v] ", err)
 	}
-	return rsa.DecryptPKCS1v15(rand.Reader, priv, ciphertext)
+	result, err := rsa.DecryptPKCS1v15(rand.Reader, priv, ciphertext)
+	if err != nil {
+		return nil, fmt.Errorf("decrypt error: [%v] ", err)
+	}
+	return result, nil
 }
