@@ -1,7 +1,7 @@
 {
   "name": "crypto",
   "type": "flogo:function",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "title": "Crypto utility functions",
   "description": "Useful tools and utilities for encryption and decryption",
   "homepage": "https://github.com/ayh20/flogo-components/tree/master/crypto",
