@@ -8,6 +8,7 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"errors"
+	"fmt"
 	"io"
 )
 
@@ -68,10 +69,11 @@ func Decrypt(key []byte, ciphertext []byte) ([]byte, error) {
 func DecryptRsa(key []byte, ciphertext []byte) ([]byte, error) {
 	block, _ := pem.Decode(key)
 	if block == nil {
-		return nil, errors.New("private key error!")
+		return nil, errors.New("private key error: " + string(key))
 	}
 	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	if err != nil {
+		fmt.Printf("%v \n", err)
 		return nil, err
 	}
 	return rsa.DecryptPKCS1v15(rand.Reader, priv, ciphertext)
