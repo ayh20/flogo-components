@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "title": "Crypto utility functions",
   "description": "Useful tools and utilities for encryption and decryption",
-  "homepage": "https://github.com/d-sauer/contrib/function/crypto",
+  "homepage": "https://github.com/ayh20/flogo-components/tree/master/crypto",
   "display": {
     "icon": "crypto-icon.svg"
   },
@@ -38,6 +38,42 @@
         },
         {
           "name": "ciphertext",
+          "type": "bytes"
+        }
+      ],
+      "return": {
+        "type": "bytes"
+      }
+    },
+    {
+      "name": "encryptrsa",
+      "description": "Encrypt payload with public key string (PEM)",
+      "example": "..",
+      "args": [
+        {
+          "name": "key",
+          "type": "bytes"
+        },
+        {
+          "name": "publickey",
+          "type": "bytes"
+        }
+      ],
+      "return": {
+        "type": "bytes"
+      }
+    },
+    {
+      "name": "decryptrsa",
+      "description": "Decrypt payload with private key string (PEM)",
+      "example": "..",
+      "args": [
+        {
+          "name": "key",
+          "type": "bytes"
+        },
+        {
+          "name": "privatekey",
           "type": "bytes"
         }
       ],
