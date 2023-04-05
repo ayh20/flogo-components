@@ -8,6 +8,7 @@ import (
 type Input struct {
 	AwsAccessKeyID     string `md:"awsAccessKeyID"`
 	AwsSecretAccessKey string `md:"awsSecretAccessKey"`
+	AwsSessionToken    string `md:"awsSessionToken"`
 	AssumeRole         string `md:"assumeRole"`
 	RoleARN            string `md:"roleARN"`
 	RoleSessionName    string `md:"roleSessionName"`
@@ -20,6 +21,7 @@ func (i *Input) ToMap() map[string]interface{} {
 	return map[string]interface{}{
 		"awsAccessKeyID":     i.AwsAccessKeyID,
 		"awsSecretAccessKey": i.AwsSecretAccessKey,
+		"awsSessionToken":    i.AwsSessionToken,
 		"assumeRole":         i.AssumeRole,
 		"roleARN":            i.RoleARN,
 		"roleSessionName":    i.RoleSessionName,
@@ -38,6 +40,10 @@ func (i *Input) FromMap(values map[string]interface{}) error {
 		return err
 	}
 	i.AwsSecretAccessKey, err = coerce.ToString(values["awsSecretAccessKey"])
+	if err != nil {
+		return err
+	}
+	i.AwsSessionToken, err = coerce.ToString(values["awsSessionToken"])
 	if err != nil {
 		return err
 	}

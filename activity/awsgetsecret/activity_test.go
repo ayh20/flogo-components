@@ -26,10 +26,10 @@ func TestGetStringSecret(t *testing.T) {
 	tc.SetInput("awsAccessKeyID", "")
 	tc.SetInput("awsSecretAccessKey", "")
 	tc.SetInput("awsRegion", "us-west-2")
-	tc.SetInput("assumeRole", true)
-	tc.SetInput("roleARN", "arn:aws:iam::624719220700:role/TIBCO/Administrator")
+	tc.SetInput("assumeRole", false)
+	//tc.SetInput("roleARN", "arn:aws:iam::624719220700:role/TIBCO/Administrator")
 	tc.SetInput("roleSessionName", "xxxx")
-	tc.SetInput("secretARN", "arn:aws:secretsmanager:us-west-2:624719220700:secret:ProdTCI-unhgur")
+	tc.SetInput("secretARN", "arn:aws:secretsmanager:us-west-2:624719220700:secret:QBE_PKI-AU1aoc")
 	act.Eval(tc)
 
 	//check result attr

@@ -18,6 +18,7 @@ import (
 const (
 	ivAwsAccessKeyID     = "awsAccessKeyID"
 	ivAwsSecretAccessKey = "awsSecretAccessKey"
+	ivAwsSessionToken    = "awsSessionToken"
 	ivAwsRegion          = "awsRegion"
 	ivSecretARN          = "secretARN"
 	ivAssumeRole         = "assumeRole"
@@ -61,12 +62,15 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 
 	// AWS Credentials, only if needed
 	context.Logger().Debug("use Credentials")
-	var awsAccessKeyID, awsSecretAccessKey = "", ""
+	var awsAccessKeyID, awsSecretAccessKey, awsSessionToken = "", "", ""
 	if context.GetInput(ivAwsAccessKeyID) != nil {
 		awsAccessKeyID = context.GetInput(ivAwsAccessKeyID).(string)
 	}
 	if context.GetInput(ivAwsSecretAccessKey) != nil {
 		awsSecretAccessKey = context.GetInput(ivAwsSecretAccessKey).(string)
+	}
+	if context.GetInput(ivAwsSessionToken) != nil {
+		awsSessionToken = context.GetInput(ivAwsSessionToken).(string)
 	}
 
 	// Create a session with Credentials only if they are set
@@ -74,7 +78,7 @@ func (a *Activity) Eval(context activity.Context) (done bool, err error) {
 	var awsSession *session.Session
 	if awsAccessKeyID != "" && awsSecretAccessKey != "" {
 		// Create new credentials using the accessKey and secretKey
-		awsCredentials := credentials.NewStaticCredentials(awsAccessKeyID, awsSecretAccessKey, "")
+		awsCredentials := credentials.NewStaticCredentials(awsAccessKeyID, awsSecretAccessKey, awsSessionToken)
 
 		// Create a new session with AWS credentials
 		awsSession = session.Must(session.NewSession(&aws.Config{

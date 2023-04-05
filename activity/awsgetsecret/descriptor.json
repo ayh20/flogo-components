@@ -2,7 +2,7 @@
     "name": "awsgetsecret",
     "type": "flogo:activity",
     "ref": "github.com/ayh20/flogo-components/activity/awsgetsecret",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "title": "Amazon Secrets Manager Get",
     "description": "Get a secret from AWS SecretManager",
     "author": "Andy Hampshire",
@@ -15,6 +15,11 @@
         },
         {
             "name": "awsSecretAccessKey",
+            "type": "string",
+            "required": true
+        },
+        {
+            "name": "awsSessionToken",
             "type": "string",
             "required": true
         },
