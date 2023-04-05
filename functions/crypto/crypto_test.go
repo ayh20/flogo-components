@@ -1,6 +1,7 @@
 package crypto
 
 import (
+	b64 "encoding/base64"
 	"fmt"
 	"testing"
 
@@ -85,7 +86,7 @@ MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4f5wg5l2hKsTeNem/V41fGnJm6gOdrj8ym3r
 	assert.Nil(t, err)
 	assert.NotNil(t, ciphertextInterface)
 	assert.NotNil(t, encryptedText)
-	fmt.Printf("%v \n", encryptedText)
+	//fmt.Printf("%v \n", encryptedText)
 
 	// Decrypt same text
 	plaintextInterface, err := flogoDecryptRsa.Eval(privkey, encryptedText)
@@ -95,5 +96,18 @@ MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4f5wg5l2hKsTeNem/V41fGnJm6gOdrj8ym3r
 	assert.NotNil(t, ciphertextInterface)
 	assert.NotNil(t, decryptedText)
 	assert.Equal(t, plaintext, decryptedText)
+	//fmt.Printf("%v \n", decryptedText)
+
+	externaltext, _ := b64.StdEncoding.DecodeString(`e/c/TzBXKB2CwGaf5dz71l/seYR2Xjb3eNynVY+d4ymVkvS1RZ5syP0lG4rbOqeDbwU+qbFqfqlZw+ybBQsVZQ5alJJpvwmSBFt12qUIE3N93noNAAkLcCrzJR268qbpzPkwXapl/Zx2ciKhqNN3+sho6QZd3VEpphHL8fEmNjOxVCI+2bnn7jmDOjbWaNYjXUgDI/ojys2UunoUA2XxlEPO8370V2LzqNsS/1EXw6aEE/asr4GYJDfIy9BBff/hwVrhSvxJSsFh8n707aOe3y34Lo3hIqJSU3w2ycejzQdJsLc1dkXQWeNONdDKC9e2IBLodmijvoctb5ckv+j04w==`)
+
+	// Decrypt same text
+	plaintextInterface, err = flogoDecryptRsa.Eval(privkey, externaltext)
+	decryptedText = plaintextInterface.([]byte)
+
+	assert.Nil(t, err)
+	fmt.Printf("Error %v \n", err)
+	//assert.NotNil(t, ciphertextInterface)
+	assert.NotNil(t, decryptedText)
+	//assert.Equal(t, plaintext, decryptedText)
 	fmt.Printf("%v \n", decryptedText)
 }
