@@ -84,7 +84,7 @@ Inputs and Outputs:
 | assumeRole         | Flag to say if you need to switch role to run the task |
 | roleARN            | The Role ARN that is to be switched too                |
 | roleSessionName    | A name for the active session                          |
-| awsRegion          | The AWS region your S3 bucket is in                    |
+| awsRegion          | The AWS region your Secret is in                       |
 | secretARN          | The AWS arn for the secret to be retrieved             |
 
 ## Ouputs
