@@ -1,0 +1,60 @@
+{
+  "name": "jwe",
+  "author": "Andy Hampshire",
+  "type": "flogo:activity",
+  "ref": "github.com/ayh20/flogo-components/activity/jwe",
+  "version": "0.1.0",
+  "title": "Java Web Encryption Activity",
+  "description": "Tool to encrypt a values/payload using JWE",
+  "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/jwe",
+  "inputs": [
+    {
+      "name": "token",
+      "type": "string"
+    },
+    {
+      "name": "header",
+      "type": "string"
+    },
+    {
+      "name": "payload",
+      "type": "string"
+    },
+    {
+      "name": "secret",
+      "type": "string"
+    },
+    {
+      "name": "mode",
+      "required": true,
+      "type": "string",
+      "display": {
+        "type": "dropdown",
+        "selection": "single"
+      },
+      "allowed": [
+        "Verify",
+        "Sign",
+        "Decode"
+      ]
+    },
+    {
+      "name": "algorithm",
+      "type": "string"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "token",
+      "type": "string"
+    },
+    {
+      "name": "valid",
+      "type": "boolean"
+    },
+    {
+      "name": "claims",
+      "type": "string"
+    }
+  ]
+}
