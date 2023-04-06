@@ -35,6 +35,11 @@ Inputs and Outputs:
       "required": true
     },
     {
+      "name": "awsSessionToken",
+      "type": "string",
+      "required": true
+    },
+    {
       "name": "assumeRole",
       "type": "boolean",
       "required": true
@@ -73,8 +78,9 @@ Inputs and Outputs:
 
 | Input              | Description                                            |
 | :----------------- | :----------------------------------------------------- |
-| awsAccessKeyID     | Your AWS Access Key                                    |
-| awsSecretAccessKey | Your AWS Secret Key                                    |
+| awsAccessKeyID     | Your AWS CLI Access Key                                |
+| awsSecretAccessKey | Your AWS CLI Secret Key                                |
+| awsSessionToken    | Your AWS CLI Session Token                             |
 | assumeRole         | Flag to say if you need to switch role to run the task |
 | roleARN            | The Role ARN that is to be switched too                |
 | roleSessionName    | A name for the active session                          |
