@@ -1,0 +1,54 @@
+{
+  "name": "flogo-gremlin",
+  "version": "0.1.0",
+  "title": "Query GraphDB via Gremlin",
+  "type": "flogo:activity",
+  "description": "Query GraphDB via Gremlin",
+  "homepage": "https://github.com/ayh20/flogo-components/tree/master/activity/gremlin",
+  "author": "Andy Hampshire <ahampshi@tibco.com>",
+  "settings": [
+    {
+      "name": "gremlinUrls",
+      "type": "string",
+      "required": true,
+      "display": {
+        "name": "GremlinURL",
+        "appPropertySupport": true
+      },
+      "description": "The Gremlin server to connect to"
+    },
+    {
+      "name": "user",
+      "type": "string",
+      "description": "The user id to use for authentication",
+      "display": {
+        "name": "User",
+        "appPropertySupport": true
+      }
+    },
+    {
+      "name": "password",
+      "type": "string",
+      "description": "The password to use for authentication",
+      "display": {
+        "name": "Password",
+        "appPropertySupport": true
+      }
+    }
+  ],
+  "input": [
+    {
+      "name": "query",
+      "type": "string",
+      "required": true,
+      "description": "The gremlin query to run"
+    }
+  ],
+  "output": [
+    {
+      "name": "result",
+      "type": "object",
+      "description": "The result from the query"
+    }
+  ]
+}
