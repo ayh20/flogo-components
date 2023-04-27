@@ -61,13 +61,18 @@ func (act *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	data, err := act.client.ExecQuery(input.Query)
 
 	//mydata, err := coerce.ToString(data)
-	//fmt.Print(mydata)
+	//fmt.Print(string(data))
 	if err != nil {
 		return false, fmt.Errorf("query failed for reason [%s]", err.Error())
 	}
 
+	//dataout, err := base64.StdEncoding.DecodeString(string(data))
+	//if err != nil {
+	//	return false, fmt.Errorf("decode failed for reason [%s]", //err.Error())
+	//}
+	// return data
 	output := &Output{}
-	output.Result = data
+	output.Result = string(data)
 
 	err = ctx.SetOutputObject(output)
 	if err != nil {
