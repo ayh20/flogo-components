@@ -72,7 +72,7 @@ func (act *Activity) Eval(ctx activity.Context) (done bool, err error) {
 	//}
 	// return data
 	output := &Output{}
-	output.Result = string(data)
+	output.Result = data
 
 	err = ctx.SetOutputObject(output)
 	if err != nil {
