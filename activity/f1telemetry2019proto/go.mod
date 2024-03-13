@@ -6,5 +6,5 @@ require (
 	github.com/lunixbochs/struc v0.0.0-20200707160740-784aaebc1d40
 	github.com/project-flogo/core v1.4.0
 	github.com/stretchr/testify v1.4.0
-	google.golang.org/protobuf v1.25.0
+	google.golang.org/protobuf v1.33.0
 )
